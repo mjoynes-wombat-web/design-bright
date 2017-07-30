@@ -1,9 +1,9 @@
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/app/index.js',
   output: {
-    path: 'dist/scripts',
+    path: `${__dirname}dist/scripts`,
     filename: 'bundle.js',
     publicPath: 'scripts',
   },
@@ -17,7 +17,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
-        loader: ['babel'],
+        loader: 'babel-loader',
         query: {
           presets: ['latest', 'stage-0', 'react'],
         },
