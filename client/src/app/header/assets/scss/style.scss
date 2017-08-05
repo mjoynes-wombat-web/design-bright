@@ -1,7 +1,7 @@
 $graphite: #808080;
 
 header {
-  background-image: url("/assets/img/paper.png");
+  background-image: url("img/paper.png");
   padding: 1.125rem 0;
   position: relative;
 
@@ -39,7 +39,7 @@ header {
             border: none;
             box-shadow: none;
             border-radius: 0.3rem;
-            background: url('/assets/img/search.svg') rgba(255, 255, 255, 0.5);
+            background: url('./assets/img/search.svg') rgba(255, 255, 255, 0.5);
             background-position-x: calc(100% - 0.55rem);
             background-position-y: calc(100% - 50%);
             background-size:1.5625rem;
@@ -47,7 +47,7 @@ header {
             color: #808080;
 
             &:hover {
-              background: url('/assets/img/search-drk.svg') rgba(255, 255, 255, 0.7);
+              background: url('./assets/img/search-drk.svg') rgba(255, 255, 255, 0.7);
               background-position-x: calc(100% - 0.55rem);
               background-position-y: calc(100% - 50%);
               background-size:1.5625rem;
@@ -57,7 +57,7 @@ header {
             &:focus, &:focus:hover {
               position: absolute;
               left:0;
-              background: url('/assets/img/search-wht.svg') #A6A6A6;
+              background: url('./assets/img/search-wht.svg') #A6A6A6;
               background-position-x: calc(100% - 0.55rem);
               background-position-y: calc(100% - 50%);
               background-size:1.5625rem;
@@ -96,7 +96,7 @@ header {
   }
 
   div.orange-line {
-    background-image: url("/assets/img/Orange Line.png");
+    background-image: url("./assets/img/Orange Line.png");
     background-position-x: 50%;
     height: 17px;
     position: absolute;

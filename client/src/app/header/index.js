@@ -1,17 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './scss/style.scss';
 
 // The Header creates links that can be used to navigate
 // between routes.
 const Header = () => (
   <header>
-    <nav>
-      <ul>
-        <li><Link to='/'>Home</Link></li>
-        <li><Link to='/roster'>Roster</Link></li>
-        <li><Link to='/schedule'>Schedule</Link></li>
-      </ul>
-    </nav>
+    <div className="row align-bottom">
+      <div className="logo small-5 columns">
+        <Link to="/">
+        <img src={"/assets/img/logo.png"} alt="Design Bright Logo" />
+        </Link>
+      </div>
+      <nav className="columns">
+        <ul className="row align-right">
+          <li className="shrink columns"><Link to="browser">Explore</Link></li>
+          <li className="small-4 large-2 columns search">
+            <form>
+              <input type="search" name="search" id="search" value="Search" />
+              <button type="submit"></button>
+            </form>
+          </li>
+          <li className="user shrink"><a href=""></a></li>
+        </ul>
+      </nav>
+    </div>
+    <div className="orange-line"></div>
   </header>
 );
 
