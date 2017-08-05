@@ -1,0 +1,168 @@
+$graphite: #808080;
+
+$medium-break: 40.063em;
+$large-break: 64.063em;
+$xlarge-break: 90.063em;
+$xxlarge-break: 120.063em;
+
+header {
+  background-image: url("/assets/img/paper.png");
+  padding: 1.125rem 0;
+  position: relative;
+
+  div.row {
+    margin: auto;
+
+    nav {
+      
+
+      @media screen {
+        padding: 0 0 0.6% 0;
+      }
+
+      @media screen and (min-width: $medium-break) {
+        padding: 0 0 0.76% 0;
+      }
+
+      ul {
+        position: relative;
+        margin:0;
+        padding:0;
+
+        &.row.align-right {
+          max-width: 100%;
+          margin:0;
+        }
+
+        li {
+          display: inline-block;
+          padding: 0;
+          text-align: center;
+          
+          @media screen {
+            margin-right: 0.5rem;
+          }
+
+          @media screen and (min-width: $medium-break) {
+            margin-right: 0.6875rem;
+          }
+
+          &.search {
+            form {
+              height:0;
+            }
+            button {
+              display:none;
+            }
+          }
+
+          #search {
+            border: none;
+            box-shadow: none;
+            border-radius: 0.3rem;
+            background: url('/assets/img/search.svg') rgba(255, 255, 255, 0.5);
+            background-position-x: calc(100% - 0.55rem);
+            background-position-y: calc(100% - 50%);
+            background-repeat: no-repeat;
+            color: #808080;
+            height: auto;
+
+            @media screen {
+              background-size:1.25rem;
+            }
+
+            @media screen and (min-width: $medium-break) {
+              background-size:1.5625rem;
+            }
+
+            &:hover {
+              background: url('/assets/img/search-drk.svg') rgba(255, 255, 255, 0.7);
+              background-position-x: calc(100% - 0.55rem);
+              background-position-y: calc(100% - 50%);
+              background-repeat: no-repeat;
+
+              @media screen {
+                background-size:1.25rem;
+              }
+
+              @media screen and (min-width: $medium-break) {
+                background-size:1.5625rem;
+              }
+            }
+
+            &:focus, &:focus:hover {
+              position: absolute;
+              left:0;
+              background: url('/assets/img/search-wht.svg') #A6A6A6;
+              background-position-x: calc(100% - 0.55rem);
+              background-position-y: calc(100% - 50%);
+              background-size:1.5625rem;
+              background-repeat: no-repeat;
+              color: #ffffff;
+              width: calc(100% - 0.5rem);
+
+              @media screen {
+                background-size:1.25rem;
+              }
+
+              @media screen and (min-width: $medium-break) {
+                background-size:1.5625rem;
+              }
+            }
+          }
+          
+          a, #search {
+            display: inline-block;
+            line-height: 1.5rem;
+            font-weight: 300;
+
+          @media screen {
+            font-size: 1rem;
+            padding: 0.25rem;
+          }
+
+          @media screen and (min-width: $medium-break) {
+            font-size: 1.5rem;
+            padding: .5rem;
+          }
+
+            &:link, &:active, &:visited {
+              color: $graphite;
+              border: none;
+              text-decoration: none;
+            }
+
+            &:hover{
+              color: darken($graphite, 20);
+            }
+          }
+
+          &.user a {
+            font-family: 'font-awesome-light';
+
+            @media screen {
+              font-size:1.25rem;
+            }
+
+            @media screen and (min-width: $medium-break) {
+              font-size: 1.5625rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .logo {
+    max-width:320px;
+  }
+
+  div.orange-line {
+    background-image: url("/assets/img/Orange Line.png");
+    background-position-x: 50%;
+    height: 17px;
+    position: absolute;
+    width: 100%;
+    bottom: -6px;
+  }
+}

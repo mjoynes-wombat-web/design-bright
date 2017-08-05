@@ -7,7 +7,7 @@ module.exports = {
   output: {
     path: path.resolve('dist/assets'),
     filename: 'bundle.js',
-    publicPath: 'assets',
+    publicPath: '/assets',
   },
   devServer: {
     inline: true,
@@ -30,13 +30,20 @@ module.exports = {
         loader: 'json-loader',
       },
       {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader!autoprefixer-loader',
+        test: /\.css$$/,
+        loader: 'style-loader!css-loader',
 
       },
       {
         test: /\.scss/,
-        loader: 'style-loader!css-loader!autoprefixer-loader!sass-loader',
+        loader: 'style-loader!css-loader!sass-loader',
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          'url-loader?limit=10000',
+          'img-loader',
+        ],
       },
     ],
   },
