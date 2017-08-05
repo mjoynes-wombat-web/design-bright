@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist",
   "scripts": {
-    "start": "./node_modules/.bin/webpack-dev-server"
+    "start": "./node_modules/.bin/webpack-dev-server --public 192.168.86.200:3000"
   },
   "author": "Simeon Smith",
   "license": "UNLICENSED",

@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom';
 import Home from '../scenes/home';
 import Roster from '../scenes/roster';
 import Schedule from '../scenes/schedule';
-import './scss/style.scss';
 
 
 // The Main component renders one of the three provided

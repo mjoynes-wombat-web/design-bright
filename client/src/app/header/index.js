@@ -12,10 +12,10 @@ const Header = () => (
         <img src={"/assets/img/logo.png"} alt="Design Bright Logo" />
         </Link>
       </div>
-      <nav className="columns">
+      <nav className="columns expand">
         <ul className="row align-right">
           <li className="shrink columns"><Link to="browser">Explore</Link></li>
-          <li className="small-4 large-2 columns search">
+          <li className="small-6 medium-5 large-4 columns search">
             <form>
               <input type="search" name="search" id="search" value="Search" />
               <button type="submit"></button>

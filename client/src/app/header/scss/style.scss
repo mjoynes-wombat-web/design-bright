@@ -1,5 +1,10 @@
 $graphite: #808080;
 
+$medium-break: 40.063em;
+$large-break: 64.063em;
+$xlarge-break: 90.063em;
+$xxlarge-break: 120.063em;
+
 header {
   background-image: url("/assets/img/paper.png");
   padding: 1.125rem 0;
@@ -9,11 +14,20 @@ header {
     margin: auto;
 
     nav {
-      padding: 0 0 0.76% 0;
+      
+
+      @media screen {
+        padding: 0 0 0.6% 0;
+      }
+
+      @media screen and (min-width: $medium-break) {
+        padding: 0 0 0.76% 0;
+      }
 
       ul {
         position: relative;
         margin:0;
+        padding:0;
 
         &.row.align-right {
           max-width: 100%;
@@ -24,7 +38,14 @@ header {
           display: inline-block;
           padding: 0;
           text-align: center;
-          margin-right: 0.6875rem;
+          
+          @media screen {
+            margin-right: 0.5rem;
+          }
+
+          @media screen and (min-width: $medium-break) {
+            margin-right: 0.6875rem;
+          }
 
           &.search {
             form {
@@ -42,16 +63,31 @@ header {
             background: url('/assets/img/search.svg') rgba(255, 255, 255, 0.5);
             background-position-x: calc(100% - 0.55rem);
             background-position-y: calc(100% - 50%);
-            background-size:1.5625rem;
             background-repeat: no-repeat;
             color: #808080;
+            height: auto;
+
+            @media screen {
+              background-size:1.25rem;
+            }
+
+            @media screen and (min-width: $medium-break) {
+              background-size:1.5625rem;
+            }
 
             &:hover {
               background: url('/assets/img/search-drk.svg') rgba(255, 255, 255, 0.7);
               background-position-x: calc(100% - 0.55rem);
               background-position-y: calc(100% - 50%);
-              background-size:1.5625rem;
               background-repeat: no-repeat;
+
+              @media screen {
+                background-size:1.25rem;
+              }
+
+              @media screen and (min-width: $medium-break) {
+                background-size:1.5625rem;
+              }
             }
 
             &:focus, &:focus:hover {
@@ -63,18 +99,37 @@ header {
               background-size:1.5625rem;
               background-repeat: no-repeat;
               color: #ffffff;
+              width: calc(100% - 0.5rem);
+
+              @media screen {
+                background-size:1.25rem;
+              }
+
+              @media screen and (min-width: $medium-break) {
+                background-size:1.5625rem;
+              }
             }
           }
+          
           a, #search {
             display: inline-block;
-            font-size: 1.5rem;
             line-height: 1.5rem;
-            padding: .5rem;
             font-weight: 300;
+
+          @media screen {
+            font-size: 1rem;
+            padding: 0.25rem;
+          }
+
+          @media screen and (min-width: $medium-break) {
+            font-size: 1.5rem;
+            padding: .5rem;
+          }
 
             &:link, &:active, &:visited {
               color: $graphite;
               border: none;
+              text-decoration: none;
             }
 
             &:hover{
@@ -82,9 +137,16 @@ header {
             }
           }
 
-          &.user {
+          &.user a {
             font-family: 'font-awesome-light';
-            font-size: 1.5625rem;
+
+            @media screen {
+              font-size:1.25rem;
+            }
+
+            @media screen and (min-width: $medium-break) {
+              font-size: 1.5625rem;
+            }
           }
         }
       }
