@@ -1,10 +1,11 @@
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssNano = require('cssnano');
+const path = require('path');
 
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: 'dist/assets',
+    path: path.resolve('dist/assets'),
     filename: 'bundle.js',
     publicPath: 'assets',
   },
