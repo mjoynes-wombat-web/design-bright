@@ -72,15 +72,17 @@ main {
     }
   }
 
-  .link, :link, :visited {
-    color: $light-hydrangea;
-    border-bottom: 0.0625rem solid $light-hydrangea;
-    cursor: pointer;
-    text-decoration: none;
+  a {
+    &:link, &:visited, &:link:hover, &:visited:hover {
+      color: $light-hydrangea;
+      border-bottom: 0.0625rem solid $light-hydrangea;
+      cursor: pointer;
+      text-decoration: none;
 
-    &:hover {
-      color: darken($light-hydrangea, 10);
-      border-color: darken($light-hydrangea, 10);
+      &:hover {
+        color: darken($light-hydrangea, 10);
+        border-color: darken($light-hydrangea, 10);
+      }
     }
   }
 
@@ -90,6 +92,12 @@ main {
 
   section {
     margin-bottom: 2rem;
+  }
+}
+
+a {
+  &:link, &:visited, &:link:hover, &:visited:hover {
+    text-decoration: none;
   }
 }
 

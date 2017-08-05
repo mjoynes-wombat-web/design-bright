@@ -1,5 +1,5 @@
 CSS:
   ☐ Switch CSS loader. Autoprefixer-loader is depreciated.@low
 
-Server Render:
-  ☐ Setup server render to allow refresh, direct linking and SEO. @critical 
+  Footer:
+    ☐ Fix vh issue with sticky footer on mobile. @high 

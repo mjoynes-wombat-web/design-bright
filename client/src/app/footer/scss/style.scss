@@ -1,0 +1,53 @@
+$medium-break: 40.063em;
+$large-break: 64.063em;
+$xlarge-break: 90.063em;
+$xxlarge-break: 120.063em;
+
+footer {
+  background-image: url('/assets/img/Grey Stripe.png');
+  background-position: calc(100% - 50%);
+  background-size: cover;
+  color: #fff;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  height: auto;
+  background-repeat: none;
+  position: absolute;
+  bottom:0;
+  width: 100%;
+
+  a {
+    &:link, &:visited, &:link:hover, &:visited:hover {
+      color: #ffffff;
+      border-bottom: none;
+      font-weight: normal;
+
+      @media screen {
+        font-size: 0.875rem;
+      }
+
+      @media screen and (min-width: $medium-break) {
+        font-size: 1.125rem;
+      }
+    }
+
+    &:link:hover, &visited:hover {
+      border-bottom: 0.06rem solid #ffffff;
+    }
+  }
+  div, p {
+    text-align:center;
+  }
+
+  p {
+    margin:0.5rem 0;
+
+    @media screen {
+      font-size:0.875rem;
+    }
+
+    @media screen and (min-width: $medium-break) {
+      font-size: 1rem;
+    }
+  }
+}
