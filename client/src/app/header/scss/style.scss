@@ -48,8 +48,10 @@ header {
           }
 
           &.search {
+            overflow: visible;
             form {
-              height:0;
+              height:auto;
+              margin: 0;
             }
             button {
               display:none;
@@ -66,6 +68,8 @@ header {
             background-repeat: no-repeat;
             color: #808080;
             height: auto;
+            margin:0;
+            line-height: 1.5rem;
 
             @media screen {
               background-size:1.25rem;
@@ -113,7 +117,7 @@ header {
           
           a, #search {
             display: inline-block;
-            line-height: 1.5rem;
+            line-height: 1.625rem;
             font-weight: 300;
 
           @media screen {
