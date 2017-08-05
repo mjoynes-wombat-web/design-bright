@@ -10,14 +10,14 @@ import advisor from './routes/advisor';
 import help from './routes/help';
 
 // Grabbing Environment Variables
-const { _PORT = 3001, _STATUS } = dotenv.config().parsed;
+const { PORT = 3001, STATUS } = dotenv.config().parsed;
 
 // Setting up the express application.
 const app = express();
 
 // Setting the morgan logger to the development status if it exists
-if (_STATUS !== undefined) {
-  app.use(logger(_STATUS));
+if (STATUS !== undefined) {
+  app.use(logger(STATUS));
 }
 
 // Setting up the API routes.
@@ -27,7 +27,7 @@ app.use('/api/advisor', advisor);
 app.use('/api/help', help);
 
 // Starting the API server using the environment port.
-app.listen(_PORT, () => {
-  logger(`Design Bright API running on port ${_PORT}.`);
+app.listen(PORT, () => {
+  console.log(`Design Bright API running on port ${PORT}.`);
 },
 );
