@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Home from '../scenes/home';
+import Register from '../scenes/register';
 
 
 // The Main component renders one of the three provided
@@ -12,6 +13,7 @@ const Routes = () => (
   <div>
     <Switch>
       <Route exact path='/' component={Home}/>
+      <Route exact path='/register' component={Register}/>
     </Switch>
   </div>
 );

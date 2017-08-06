@@ -91,7 +91,7 @@ main {
     font-weight: 900;
   }
 
-  section {
+  section:not(:last-child) {
     margin-bottom: 2rem;
   }
 }
@@ -99,25 +99,6 @@ main {
 a {
   &:link, &:visited, &:link:hover, &:visited:hover {
     text-decoration: none;
-  }
-}
-
-button, button[type='submit'] {
-  &.primary {
-    font-family: 'Lato', sans-serif;
-    font-size: 1.5rem;
-    color: #fff;
-    background-image: url('/assets/img/Blue Stripe.png');
-    background-size: 100% 100%;
-    padding: 1.5rem;
-    width: 100%;
-    margin-top: 1.5rem;
-    cursor: pointer;
-
-    &:hover {
-      background-image: url('/assets/img/Blue Stripe-drk.png');
-      background-size: 100% 100%;
-    }
   }
 }
 
