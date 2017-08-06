@@ -1,0 +1,27 @@
+$light-graphite: #999999;
+$maui-orange: #ffbe00;
+$graphite: #808080;
+
+label, legend {
+  color: $light-graphite;
+  font-size: 1.25rem;
+  font-family: 'Lato', sans-serif;  
+  font-weight: 300;
+
+  span {
+    color: $maui-orange;
+    font-weight: normal;
+  }
+}
+
+input[type="text"], input[type="number"], select {
+  color: $graphite;
+  font-family: 'Lato', sans-serif;
+  font-size: 1.375rem;
+  height: 2.75rem;
+  line-height: normal;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.375);
+}

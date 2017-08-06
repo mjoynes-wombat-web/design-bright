@@ -10,7 +10,8 @@
 
 $blue-hydrangea: #4097ff;
 $light-hydrangea: #8CC0FF;
-$maui-orange: #ffbe00;
+// $maui-orange: #ffbe00;
+$maui-orange: #ffaa00;
 $graphite: #808080;
 
 body {
@@ -126,4 +127,5 @@ hr {
     border-bottom: none;
     background: url('/assets/img/Grey Line.png');
     background-size: 100% 100%;
+    border: none;
   }

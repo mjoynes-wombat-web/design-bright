@@ -7,7 +7,7 @@ const Header = () => (
     <div className="row align-bottom">
       <div className="logo small-5 columns">
         <Link to="/">
-        <img src={"/assets/img/logo.png"} alt="Design Bright Logo" />
+          <img src="/assets/img/logo.png" alt="Design Bright Logo" />
         </Link>
       </div>
       <nav className="columns expand">
