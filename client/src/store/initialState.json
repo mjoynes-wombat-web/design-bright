@@ -1,0 +1,51 @@
+{
+  "user": {
+    "loggedIn": false,
+    "authentication": "",
+    "profile": {
+      "picture": "",
+      "name": "",
+      "email": "",
+      "passwordChange": "",
+      "userType": "",
+      "nonProfit": "",
+      "streetAddress": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "ein": null,
+      "campaigns": [
+        {
+          "name": "",
+          "length": null,
+          "startDate": "",
+          "fundingNeed": null,
+          "funded": null,
+          "content": "",
+          "mainImg": "",
+          "intro": ""
+        }
+      ],
+      "currentDonation": {
+        "amount": null,
+        "cardNumber": null,
+        "expirationDate": "",
+        "CSV": null,
+        "zip": null
+      }
+    }
+  },
+  "searchTerm": "",
+  "sortFilter": "",
+  "campaignResults": [
+    {
+      "name": "",
+      "length": null,
+      "startDate": "",
+      "fundingNeed": null,
+      "funded": null,
+      "mainImg": "",
+      "intro": ""
+    }
+  ]
+}

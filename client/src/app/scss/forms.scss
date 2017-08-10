@@ -1,5 +1,5 @@
 $light-graphite: #999999;
-$maui-orange: #ffbe00;
+$maui-orange: #ffaa00;
 $graphite: #808080;
 
 form {
@@ -23,15 +23,22 @@ form {
     &.terms {
       text-align: center;
       margin-top: 2rem;
+      font-size: 1.125rem;
+
+      input[type="checkbox"] + span {
+        top: 0.2rem;
+      }
     }
   }
 
-  input[type="text"], input[type="number"], select {
+  input[type=text], input[type=number], input[type=password], input[type=email], select {
     color: $graphite;
     font-family: 'Lato', sans-serif;
     font-size: 1.375rem;
     height: 2.75rem;
     line-height: normal;
+    box-shadow: none;
+        border: 0.09rem solid #999999;
   }
 
   // input[type="checkbox"] {

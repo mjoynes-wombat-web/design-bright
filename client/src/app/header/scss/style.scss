@@ -104,6 +104,7 @@ header {
               background-repeat: no-repeat;
               color: #ffffff;
               width: calc(100% - 0.5rem);
+              z-index: 100;
 
               @media screen {
                 background-size:1.25rem;
@@ -113,6 +114,10 @@ header {
                 background-size:1.5625rem;
               }
             }
+          }
+
+          a {
+            cursor: pointer;
           }
           
           a, #search {
@@ -141,15 +146,59 @@ header {
             }
           }
 
-          &.user a {
-            font-family: 'font-awesome-light';
+          &.user {
+            position: relative;
+            > a {
+              font-family: 'font-awesome-light';
 
-            @media screen {
-              font-size:1.25rem;
+              @media screen {
+                font-size:1.25rem;
+              }
+
+              @media screen and (min-width: $medium-break) {
+                font-size: 1.5625rem;
+              }
             }
 
-            @media screen and (min-width: $medium-break) {
-              font-size: 1.5625rem;
+            ul.user-menu {
+              display: none;
+              position: absolute;
+              right: 0;
+              background-color: #fff;
+              background-image: url("/assets/img/Grey Stripe.png");
+              background-size: cover;
+              background-position: 50% 50%;
+              z-index: 300;
+
+              li {
+                margin: 0;
+
+                a {
+                  width: 20rem;
+                  color: #fff;
+                  padding: 1rem;
+                  font-size: 1.5rem;
+                  cursor: pointer;
+
+                  &:hover {
+                    background-color: rgba(0, 0, 0, 0.2);
+                  }
+                }
+              }
+            }
+            
+            &:hover {
+              background-color: #fff;
+              background-image: url("/assets/img/Grey Stripe.png");
+              background-size: cover;
+              background-position: 50% 50%;
+              a{
+                color: #ffffff;
+              }
+
+              ul.user-menu {
+                display: block;
+              }
             }
           }
         }

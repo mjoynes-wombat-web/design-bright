@@ -22,9 +22,7 @@ router.get('/', (req, res) => {
 
 // Accepts a new user information. Returns a confirmation message.
 router.post('/create', (req, res) => {
-  res.send(`
-  Accepts a new user. Returns a confirmation that that user was created.
-  `);
+  res.json(req.body);
 });
 
 // Accepts a user login info. Returns authorization credentials.

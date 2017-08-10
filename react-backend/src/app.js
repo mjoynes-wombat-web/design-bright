@@ -2,6 +2,8 @@
 import express from 'express';
 import logger from 'morgan';
 import dotenv from 'dotenv';
+import cors from 'cors';
+import BodyParser from 'body-parser'
 
 // Import Routes
 import users from './routes/users';
@@ -19,6 +21,24 @@ const app = express();
 if (STATUS !== undefined) {
   app.use(logger(STATUS));
 }
+
+const whitelist = [
+  'http://192.168.86.200:3000',
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
+
+app.use(BodyParser.json());
 
 // Setting up the API routes.
 app.use('/api/users', users);
