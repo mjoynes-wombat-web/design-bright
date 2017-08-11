@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Home from '../scenes/home';
-import Register from '../scenes/register';
-import Login from '../scenes/login';
+import Register from '../scenes/sign/scenes/register';
+import Login from '../scenes/sign/scenes/login';
 
 
 // The Main component renders one of the three provided

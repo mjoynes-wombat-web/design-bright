@@ -22,14 +22,14 @@ router.get('/', (req, res) => {
 
 // Accepts a new user information. Returns a confirmation message.
 router.post('/create', (req, res) => {
+  console.log(req.body.firstName);
   res.json(req.body);
 });
 
 // Accepts a user login info. Returns authorization credentials.
 router.post('/login', (req, res) => {
-  res.send(`
-  Accepts a email and password. Returns authorization credentials.
-  `);
+  console.log(req.body.email);
+  res.json(req.body);
 });
 
 // Returns the user info with the userId param. Requires authorization.
