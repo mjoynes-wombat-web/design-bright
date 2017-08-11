@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import './scss/style.scss';
 
 const Register = ({ onSubmitUser = f => f }) => {
-
   const newUser = {
     firstName: '',
     lastName: '',
@@ -111,6 +110,7 @@ const Register = ({ onSubmitUser = f => f }) => {
                 <label htmlFor="non-profit">
                   <input
                     ref={input => newUser.userTypeNonProfit = input}
+                    onBlur = {() => selectUserType(this)}
                     type="checkbox"
                     name="userTypeNonProfit"
                     value="non-profit"

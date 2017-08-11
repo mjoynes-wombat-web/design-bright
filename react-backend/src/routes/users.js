@@ -28,6 +28,7 @@ router.post('/create', (req, res) => {
 
 // Accepts a user login info. Returns authorization credentials.
 router.post('/login', (req, res) => {
+  console.log('You are attempting to login with: ');
   console.log(req.body.email);
   res.json(req.body);
 });

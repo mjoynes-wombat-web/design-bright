@@ -73,7 +73,7 @@ class Header extends React.Component {
                 </form>
               </li>
               <li className="user shrink">
-                <a href=""></a>
+                <a></a>
                 <ul className="user-menu">
                   <li><Link to="/register">Register</Link></li>
                   <li><Link to="/login">Login</Link></li>

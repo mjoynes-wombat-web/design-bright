@@ -12,6 +12,9 @@ const mapDispatchToProps = dispatch => ({
       createUser(newUser),
     );
   },
+  onSelectUserType(type) {
+    console.log(type);
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

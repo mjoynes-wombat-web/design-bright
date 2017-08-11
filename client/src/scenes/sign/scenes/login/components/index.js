@@ -23,9 +23,9 @@ const Login = ({ onLogin = f => f }) => {
           </div>
           <div className="row align-center">
             <div className="small-12 columns">
-              <label for="email">Email: <span className="required">*</span></label>
+              <label htmlFor="email">Email: <span className="required">*</span></label>
               <input type="email" name="email" id="email" ref={input => loginInfo.email = input} required />
-              <label for="password">Password: <span className="required">*</span></label>
+              <label htmlFor="password">Password: <span className="required">*</span></label>
               <input type="password" name="password" id="password" ref={input => loginInfo.password = input} required />
             </div>
           </div>
