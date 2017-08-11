@@ -24,6 +24,8 @@ if (STATUS !== undefined) {
 
 const whitelist = [
   'http://192.168.86.200:3000',
+  undefined,
+  'http://www.designbright.org',
 ];
 
 const corsOptions = {
@@ -31,6 +33,8 @@ const corsOptions = {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log(whitelist);
+      console.log(origin);
       callback(new Error('Not allowed by CORS'));
     }
   },

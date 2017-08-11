@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { reduxFormReducer } from 'redux-form';
 
 import C from '../constants';
 

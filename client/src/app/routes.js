@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Home from '../scenes/home';
-import Register from '../scenes/sign/scenes/register';
+import Register from '../scenes/sign/scenes/register/components';
 import Login from '../scenes/sign/scenes/login';
 
 

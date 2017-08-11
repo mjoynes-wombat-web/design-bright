@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
+import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 import './scss/style.scss';
 
-const Register = ({ onSubmitUser = f => f }) => {
+const Register = (props) => {
   const newUser = {
     firstName: '',
     lastName: '',
@@ -56,17 +57,18 @@ const Register = ({ onSubmitUser = f => f }) => {
                 <label htmlFor="first-name">
                   First Name: <span className="required">*</span>
                 </label>
-                <input
-                  ref={input => newUser.firstName = input}
-                  type="text"
+                <Field 
                   name="firstName"
-                  id="first-name"
+                  component="input"
+                  type="text"
+                  placeholder="John"
+                  id="last-name"
                   required />
                 <label htmlFor="last-name">
                   Last Name: <span className="required">*</span>
                 </label>
-                <input
-                  ref={input => newUser.lastName = input}
+                <Field
+                  component="input"
                   type="text"
                   name="lastName"
                   id="last-name"
@@ -74,8 +76,8 @@ const Register = ({ onSubmitUser = f => f }) => {
                 <label htmlFor="email">
                   Email: <span className="required">*</span>
                 </label>
-                <input
-                  ref={input => newUser.email = input}
+                <Field
+                  component="input"
                   type="email"
                   name="email"
                   required
@@ -85,8 +87,8 @@ const Register = ({ onSubmitUser = f => f }) => {
               <label htmlFor="password">
                 Password: <span className="required">*</span>
               </label>
-              <input
-                ref={input => newUser.password = input}
+              <Field
+                component="input"
                 type="password"
                 name="password"
                 id="password"
@@ -94,8 +96,8 @@ const Register = ({ onSubmitUser = f => f }) => {
               <label htmlFor="confirm-password">
                 Confirm Password: <span className="required">*</span>
               </label>
-              <input
-                ref={input => newUser.confirmPassword = input}
+              <Field
+                component="input"
                 type="password"
                 name="confirmPassword"
                 id="confirm-password"
@@ -108,32 +110,31 @@ const Register = ({ onSubmitUser = f => f }) => {
                   Are you a donor or non-profit? <span className="required">*</span>
                 </legend>
                 <label htmlFor="non-profit">
-                  <input
-                    ref={input => newUser.userTypeNonProfit = input}
-                    onBlur = {() => selectUserType(this)}
+                  <Field
+                    component="input"
                     type="checkbox"
                     name="userTypeNonProfit"
                     value="non-profit"
                     id="non-profit" />
                   <span></span>
                   Non-Profit
-                  </label>
+                </label>
                 <label htmlFor="donor">
-                  <input
-                    ref={input => newUser.userTypeDonor = input}
+                  <Field
+                    component="input"
                     type="checkbox"
                     name="userTypeDonor"
                     value="donor"
                     id="donor" />
                   <span></span>
                   Donor
-                  </label>
+                </label>
               </fieldset>
               <label htmlFor="position">
                 Position at Non-Profit: <span className="required">*</span>
               </label>
-              <input
-                ref={input => newUser.position = input}
+              <Field
+                component="input"
                 type="text"
                 name="position"
                 id="position"
@@ -141,8 +142,8 @@ const Register = ({ onSubmitUser = f => f }) => {
               <label htmlFor="non-profit-name">
                 Non-Profit Name: <span className="required">*</span>
               </label>
-              <input
-                ref={input => newUser.nonProfitName = input}
+              <Field
+                component="input"
                 type="text"
                 name="nonProfitName"
                 id="non-profit-name"
@@ -150,8 +151,8 @@ const Register = ({ onSubmitUser = f => f }) => {
               <label htmlFor="ein">
                 Employer Identification Number (EIN): <span className="required">*</span>
               </label>
-              <input
-                ref={input => newUser.ein = input}
+              <Field
+                component="input"
                 type="text"
                 name="ein"
                 id="ein"
@@ -162,8 +163,8 @@ const Register = ({ onSubmitUser = f => f }) => {
               <label htmlFor="address">
                 Address: <span className="required">*</span>
               </label>
-              <input
-                ref={input => newUser.address = input}
+              <Field
+                component="input"
                 type="text"
                 name="address"
                 id="address"
@@ -171,8 +172,8 @@ const Register = ({ onSubmitUser = f => f }) => {
               <label htmlFor="city">
                 City: <span className="required">*</span>
               </label>
-              <input
-                ref={input => newUser.city = input}
+              <Field
+                component="input"
                 type="text"
                 name="city"
                 id="city"
@@ -180,8 +181,8 @@ const Register = ({ onSubmitUser = f => f }) => {
               <label htmlFor="state">
                 State: <span className="required">*</span>
               </label>
-              <select
-                ref={input => newUser.state = input}
+              <Field
+                component="select"
                 name="st"
                 id="state"
                 required>
@@ -190,12 +191,12 @@ const Register = ({ onSubmitUser = f => f }) => {
                 <option value="ak">Alaska</option>
                 <option value="az">Arizona</option>
                 <option value="ar">Arkansas</option>
-              </select>
+              </Field>
               <label htmlFor="zip">
                 Zip: <span className="required">*</span>
               </label>
-              <input
-                ref={input => newUser.zip = input}
+              <Field
+                component="input"
                 type="text"
                 name="zip"
                 id="zip"
@@ -204,8 +205,8 @@ const Register = ({ onSubmitUser = f => f }) => {
           </div>
           <div className="row align-center">
             <label htmlFor="terms" className="small-12 columns terms">
-              <input
-                ref={input => newUser.agreed = input}
+              <Field
+                component="input"
                 type="checkbox"
                 name="agreed"
                 id="terms"
@@ -218,13 +219,13 @@ const Register = ({ onSubmitUser = f => f }) => {
               className="primary small-11 medium-10 large-8"
               type="submit">
               Submit Request
-              </button>
+            </button>
           </div>
         </form>
       </section>
     </main>
-  )
-}
+  );
+};
 
 // class Register extends React.Component {
 // constructor(props) {
@@ -467,4 +468,6 @@ const Register = ({ onSubmitUser = f => f }) => {
 //   createUser: PropTypes.func.isRequired,
 // };
 
-export default Register;
+export default reduxForm({
+  form: 'register',
+})(Register);
