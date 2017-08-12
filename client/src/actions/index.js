@@ -2,8 +2,6 @@ import axios from 'axios';
 import C from '../constants';
 
 export const login = loginInfo => (dispatch, getState) => {
-  console.log(loginInfo);
-
   axios.post('http://localhost:3001/api/users/login', loginInfo);
 
   dispatch({
@@ -17,8 +15,20 @@ export const login = loginInfo => (dispatch, getState) => {
   };
 };
 
-export const createUser = newUser => (dispatch, getState) => {
-  console.log(newUser);
+export const createUser = ({firstName, lastName, email, password, position, nonProfitName, ein, address, city, state, zip }) => (dispatch, getState) => {
+  const newUser = {
+    firstName,
+    lastName,
+    email,
+    password,
+    position,
+    nonProfitName,
+    ein,
+    address,
+    city,
+    state,
+    zip,
+  }
   axios.post('http://localhost:3001/api/users/create', newUser);
 
   dispatch({

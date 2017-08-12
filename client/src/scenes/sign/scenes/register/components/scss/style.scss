@@ -1,1 +1,18 @@
 @import '../../../../../../app/scss/forms';
+
+.pass-match {
+  display: none;
+  float: right;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.bad-pass {
+  color: #ff5800;
+  border-width: 0.2rem;
+  font-weight: normal;
+
+  &.pass-match {
+    display: initial;
+  }
+}
