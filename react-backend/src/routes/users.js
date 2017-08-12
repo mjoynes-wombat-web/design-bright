@@ -1,5 +1,6 @@
 // Create API Users Router
 import { Router } from 'express';
+import { add } from '../models/users';
 
 const router = Router();
 
@@ -7,23 +8,11 @@ const router = Router();
 ******USER ROUTES******
 */
 
-router.get('/', (req, res) => {
-  res.json([
-    {
-      id: 1,
-      username: 'test',
-    },
-    {
-      id: 2,
-      username: 'test',
-    },
-  ]);
-});
-
 // Accepts a new user information. Returns a confirmation message.
 router.post('/create', (req, res) => {
-  console.log(req.body);
-  res.json(req.body);
+  add(req.body,
+    test => res.json(test),
+    test => res.send(test));
 });
 
 // Accepts a user login info. Returns authorization credentials.

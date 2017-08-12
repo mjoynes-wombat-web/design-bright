@@ -3,7 +3,7 @@ import express from 'express';
 import logger from 'morgan';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import BodyParser from 'body-parser'
+import BodyParser from 'body-parser';
 
 // Import Routes
 import users from './routes/users';
