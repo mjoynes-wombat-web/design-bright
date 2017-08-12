@@ -8,7 +8,6 @@ const mapStateToProps = (state, props) => ({});
 
 const mapDispatchToProps = dispatch => ({
   onSubmitUser(newUser) {
-    
     dispatch(
       createUser(newUser),
     );

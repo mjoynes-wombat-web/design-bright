@@ -15,12 +15,14 @@ export const login = loginInfo => (dispatch, getState) => {
   };
 };
 
-export const createUser = ({firstName, lastName, email, password, position, nonProfitName, ein, address, city, state, zip }) => (dispatch, getState) => {
+export const createUser = ({firstName, lastName, email, password, userTypeNonProfit, userTypeDonor, position, nonProfitName, ein, address, city, state, zip }) => (dispatch, getState) => {
   const newUser = {
     firstName,
     lastName,
     email,
     password,
+    userTypeDonor,
+    userTypeNonProfit,
     position,
     nonProfitName,
     ein,
@@ -28,7 +30,8 @@ export const createUser = ({firstName, lastName, email, password, position, nonP
     city,
     state,
     zip,
-  }
+  };
+
   axios.post('http://localhost:3001/api/users/create', newUser);
 
   dispatch({
