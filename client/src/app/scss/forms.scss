@@ -6,15 +6,17 @@ form {
   label, legend {
     color: $light-graphite;
     font-size: 1.25rem;
-    font-family: 'Lato', sans-serif;  
+    font-family: 'Lato', sans-serif;
+    line-height: initial;  
     font-weight: 300;
+    margin-bottom: 0.375rem;
 
     span.required {
       color: $maui-orange;
       font-weight: normal;
     }
 
-    input[type="checkbox"] {
+    input[type="radio"], input[type="checkbox"] {
       margin-right: 0.75rem;
     }
   }
@@ -25,7 +27,7 @@ form {
       margin-top: 2rem;
       font-size: 1.125rem;
 
-      input[type="checkbox"] + span {
+      input[type="radio"] + span, input[type="checkbox"] + span {
         top: 0.2rem;
       }
     }
@@ -41,22 +43,11 @@ form {
         border: 0.09rem solid #999999;
   }
 
-  // input[type="checkbox"] {
-  //   transform: scale(1.375);
-  //   position: relative;
-  //   top: -0.125rem;
-  //   margin-right: 0.125rem;
-  //   height: 0.9rem;
-  //   margin-left: 0.2rem;
-  //   width: 0.9rem;
-  //   cursor: pointer;
-  //   margin-bottom: 0;
-  // }
-  input[type="checkbox"] {
+  input[type="radio"], input[type="checkbox"] {
     display: none;
   }
 
-  input[type="checkbox"] + span {
+  input[type="radio"] + span, input[type="checkbox"] + span {
     display: inline-block;
     width: 1.25rem;
     height: 1.25rem;
@@ -67,7 +58,7 @@ form {
     margin-right: 0.375rem;
   }
 
-  input[type="checkbox"]:checked + span {
+  input[type="radio"]:checked + span, input[type="checkbox"]:checked + span  {
     background:url("/assets/img/check-square.svg");
     background-repeat: no-repeat;
   }
@@ -101,5 +92,24 @@ form {
         background-size: 100% 100%;
       }
     }
+  }
+}
+
+.error {
+  display: none;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.invalid:not(.empty) {
+  color: #ff5800;
+  border-width: 0.2rem;
+  font-weight: normal;
+
+  > div:last-child{
+    text-align: left;
+  }
+  .error {
+    display: initial;
   }
 }

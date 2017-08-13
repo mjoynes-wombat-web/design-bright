@@ -2,4 +2,4 @@ CSS:
   ☐ Switch CSS loader. Autoprefixer-loader is depreciated.@low
 
   Footer:
-    ☐ Fix vh issue with sticky footer on mobile. @high 
+    ✔ Fix vh issue with sticky footer on mobile. @high @done (8/12/2017, 5:23:27 PM)

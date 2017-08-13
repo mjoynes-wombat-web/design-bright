@@ -24,6 +24,7 @@ if (STATUS !== undefined) {
 
 const whitelist = [
   'http://192.168.86.200:3000',
+  'http://192.168.1.9:3000',
 ];
 
 const corsOptions = {

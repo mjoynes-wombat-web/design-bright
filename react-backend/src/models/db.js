@@ -23,111 +23,314 @@ export const sequelize = new Sequelize(
   },
 );
 
-export const users = sequelize.define('users', {
-  userId: {
-    type: Sequelize.INTEGER(11),
-    allowNull: false,
-    primaryKey: true,
-    autoIncrement: true,
-    field: 'user_id',
-  },
-  firstName: {
-    type: Sequelize.STRING(75),
-    allowNull: false,
-    field: 'first_name',
-  },
-  lastName: {
-    type: Sequelize.STRING(75),
-    allowNull: false,
-    field: 'last_name',
-  },
-  email: {
-    type: Sequelize.STRING(100),
-    allowNull: false,
-    unique: true,
-    field: 'email',
-  },
-  userTypeId: {
-    type: Sequelize.INTEGER(11),
-    allowNull: false,
-    references: {
-      model: 'user_types',
-      key: 'id',
-    },
-    field: 'user_type_id',
-  },
-  password: {
-    type: Sequelize.STRING(75),
-    allowNull: false,
-    field: 'password',
-  },
-  passwordDate: {
-    type: Sequelize.DATE,
-    allowNull: false,
-    field: 'password_date',
-  },
-  profileImgUrl: {
-    type: Sequelize.TEXT,
-    allowNull: false,
-    field: 'profile_img_url',
-  },
-  createdAt: {
-    type: Sequelize.DATE,
-    allowNull: false,
-    field: 'createdAt',
-  },
-  updatedAt: {
-    type: Sequelize.DATE,
-    allowNull: false,
-    field: 'updatedAt',
-  },
-},
-{
-  tableName: 'users',
-});
-
-export const userTypes = sequelize.define('user_types',
+export const users = sequelize.define('users',
   {
-    name: {
-      type: Sequelize.STRING,
+    userId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      field: 'user_id',
+    },
+    firstName: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'first_name',
+    },
+    lastName: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'last_name',
+    },
+    email: {
+      type: Sequelize.STRING(100),
+      allowNull: false,
+      unique: true,
+      field: 'email',
+    },
+    userType: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'user_type',
+    },
+    password: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'password',
+    },
+    passwordDate: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      field: 'password_date',
+    },
+    profileImgUrl: {
+      type: Sequelize.TEXT,
+      allowNull: true,
+      field: 'profile_img_url',
     },
   },
   {
-    timestamps: false,
+    tableName: 'users',
   },
 );
 
-export const usersNonProfit = sequelize.define('users_nonprofits',
+export const usersNonProfit = sequelize.define('users_nonprofit',
   {
+    userId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'users',
+        key: 'user_id',
+      },
+      field: 'user_id',
+    },
     position: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'position',
     },
-    nonprofit_id: {
-      type: Sequelize.INTEGER,
+    nonprofitId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'nonprofits',
+        key: 'nonprofit_id',
+      },
+      field: 'nonprofit_id',
     },
+  },
+  {
+    tableName: 'users_nonprofit',
   },
 );
 
-export const nonprofits = sequelize.define('nonprofits',
+export const nonProfits = sequelize.define('nonprofits',
   {
+    nonprofitId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      field: 'nonprofit_id',
+    },
     name: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'name',
     },
     address: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'address',
     },
     city: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'city',
     },
-    state_id: {
-      type: Sequelize.INTEGER,
+    state: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'state',
     },
     zip: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      field: 'zip',
     },
     ein: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      unique: true,
+      field: 'ein',
     },
+  }, {
+    tableName: 'nonprofits',
+  },
+);
+
+export const campaigns = sequelize.define('campaigns',
+  {
+    campaignId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      field: 'campaign_id',
+    },
+    name: {
+      type: Sequelize.STRING(100),
+      allowNull: false,
+      unique: true,
+      field: 'name',
+    },
+    nonprofitId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'nonprofits',
+        key: 'nonprofit_id',
+      },
+      field: 'nonprofit_id',
+    },
+    length: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      field: 'length',
+    },
+    fundingNeeded: {
+      type: Sequelize.DECIMAL,
+      allowNull: false,
+      field: 'funding_needed',
+    },
+    donationsMade: {
+      type: Sequelize.DECIMAL,
+      allowNull: false,
+      field: 'donations_made',
+    },
+    startDate: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      field: 'start_date',
+    },
+    endDate: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      field: 'end_date',
+    },
+  },
+  {
+    tableName: 'campaigns',
+  },
+);
+
+export const campaignImages = sequelize.define('campaign_images',
+  {
+    imageId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      field: 'image_id',
+    },
+    contentId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'campaign_content',
+        key: 'content_id',
+      },
+      field: 'content_id',
+    },
+    imageDescription: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'image_description',
+    },
+    imageUrl: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      field: 'image_url',
+    },
+  },
+  {
+    tableName: 'campaign_images',
+  },
+);
+
+export const campaignContent = sequelize.define('campaign_content',
+  {
+    contentId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      field: 'content_id',
+    },
+    campaignId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'campaigns',
+        key: 'campaign_id',
+      },
+      field: 'campaign_id',
+    },
+    content: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      field: 'content',
+    },
+    contentStatus: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'content_status',
+    },
+    createdDate: {
+      type: Sequelize.DATE,
+      allowNull: false,
+      field: 'created_date',
+    },
+  },
+  {
+    tableName: 'campaign_content',
+  },
+);
+
+export const advisors = sequelize.define('advisors',
+  {
+    advisorId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      field: 'advisor_id',
+    },
+    firstName: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'first_name',
+    },
+    lastName: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'last_name',
+    },
+    email: {
+      type: Sequelize.STRING(100),
+      allowNull: false,
+      unique: true,
+      field: 'email',
+    },
+    position: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'position',
+    },
+    yearsExperience: {
+      type: Sequelize.DECIMAL,
+      allowNull: false,
+      field: 'years_experience',
+    },
+    advisorStatus: {
+      type: Sequelize.STRING(75),
+      allowNull: false,
+      field: 'advisor_status',
+    },
+    nonprofitId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      references: {
+        model: 'nonprofits',
+        key: 'nonprofit_id',
+      },
+      unique: true,
+      field: 'nonprofit_id',
+    },
+  },
+  {
+    tableName: 'advisors',
   },
 );
 

@@ -1,6 +1,6 @@
 // Create API Users Router
 import { Router } from 'express';
-import { add } from '../models/users';
+import { addDonor, addNonProfitUser } from '../models/users';
 
 const router = Router();
 
@@ -10,9 +10,48 @@ const router = Router();
 
 // Accepts a new user information. Returns a confirmation message.
 router.post('/create', (req, res) => {
-  add(req.body,
-    test => res.json(test),
-    test => res.send(test));
+  const User = ({ firstName, lastName, email, password, userType }) => ({
+    firstName,
+    lastName,
+    email,
+    password,
+    userType,
+  });
+
+  if (req.body.userType === 'non-profit') {
+    const newNonProfitUser = User(req.body);
+    const newNonProfitUserPosition = req.body.position;
+
+    const NonProfit = ({ nonProfitName, ein, address, city, state, zip }) => ({
+      name: nonProfitName,
+      ein,
+      address,
+      city,
+      state,
+      zip,
+    });
+
+    const newNonProfit = NonProfit(req.body);
+
+    // console.log(newNonProfitUser);
+    // console.log(newNonProfitUserPosition);
+    // console.log(newNonProfit);
+
+    addNonProfitUser(
+      newNonProfitUser,
+      newNonProfitUserPosition,
+      newNonProfit,
+      response => console.log('Added non-profit user.'),
+      error => console.log(error),
+    );
+  } else {
+    const newUser = User(req.body);
+
+    addDonor(newUser, response => console.log('Added donor user.'), error => console.log(error));
+  }
+  // add(req.body,
+  //   test => res.json(test),
+  //   test => res.send(test));
 });
 
 // Accepts a user login info. Returns authorization credentials.

@@ -14,33 +14,3 @@ export const login = loginInfo => (dispatch, getState) => {
     payload: loginInfo,
   };
 };
-
-export const createUser = ({firstName, lastName, email, password, userTypeNonProfit, userTypeDonor, position, nonProfitName, ein, address, city, state, zip }) => (dispatch, getState) => {
-  const newUser = {
-    firstName,
-    lastName,
-    email,
-    password,
-    userTypeDonor,
-    userTypeNonProfit,
-    position,
-    nonProfitName,
-    ein,
-    address,
-    city,
-    state,
-    zip,
-  };
-
-  axios.post('http://localhost:3001/api/users/create', newUser);
-
-  dispatch({
-    type: C.CREATE_USER,
-    payload: newUser,
-  });
-
-  return {
-    type: C.CREATE_USER,
-    payload: newUser,
-  };
-};
