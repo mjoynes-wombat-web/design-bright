@@ -4,6 +4,8 @@ import logger from 'morgan';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import BodyParser from 'body-parser';
+import fs from 'fs';
+import https from 'https';
 
 // Import Routes
 import users from './routes/users';
@@ -12,7 +14,7 @@ import advisor from './routes/advisor';
 import help from './routes/help';
 
 // Grabbing Environment Variables
-const { PORT = 3001, STATUS } = dotenv.config().parsed;
+const { PORT = 3001, STATUS, HOST } = dotenv.config().parsed;
 
 // Setting up the express application.
 const app = express();
@@ -23,8 +25,9 @@ if (STATUS !== undefined) {
 }
 
 const whitelist = [
-  'http://192.168.86.200:3000',
-  'http://192.168.1.9:3000',
+  'https://192.168.86.200:3000',
+  'https://192.168.1.9:3000',
+  'https://www.designbright.com',
 ];
 
 const corsOptions = {
@@ -48,7 +51,15 @@ app.use('/api/advisor', advisor);
 app.use('/api/help', help);
 
 // Starting the API server using the environment port.
-app.listen(PORT, () => {
-  console.log(`Design Bright API running on port ${PORT}.`);
+// app.listen(PORT, '192.168.86.200', () => {
+//   console.log(`Design Bright API running on port ${PORT}.`);
+// },
+// );
+
+https.createServer({
+  key: fs.readFileSync('./private.key'),
+  cert: fs.readFileSync('./certificate.pem'),
+}, app).listen(PORT, HOST, () => {
+  console.log(`Design Bright API running on ${HOST}:${PORT}.`);
 },
 );

@@ -48,6 +48,7 @@ class Register extends React.Component {
   }
 
   onSubmit(e) {
+    console.log(this.state);
     e.preventDefault();
     if (
       doPasswordsMatch(this.state.password, this.state.confirmPassword)
@@ -56,7 +57,8 @@ class Register extends React.Component {
       && ((isNumber(this.state.ein) && numLength(this.state.ein, 9))
         || this.state.userType === 'donor')
     ) {
-      axios.post('http://localhost:3001/api/users/create', this.state);
+      console.log(this.state);
+      axios.post('https://192.168.86.200:3001/api/users/create', this.state);
     } else {
       console.log('You missed a field');
     }
