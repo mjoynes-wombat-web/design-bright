@@ -2,8 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+
 import './scss/style.scss';
 import states from '../../../../helpers/states';
+
+const AUTH0_CLIENT_ID = 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh';
+const AUTH0_CONNECTION = 'Username-Password-Authentication';
 
 const doPasswordsMatch = (pass, confPass) => pass === confPass;
 const isNumber = (num) => {
@@ -48,7 +52,6 @@ class Register extends React.Component {
   }
 
   onSubmit(e) {
-    console.log(this.state);
     e.preventDefault();
     if (
       doPasswordsMatch(this.state.password, this.state.confirmPassword)
@@ -57,8 +60,34 @@ class Register extends React.Component {
       && ((isNumber(this.state.ein) && numLength(this.state.ein, 9))
         || this.state.userType === 'donor')
     ) {
-      console.log(this.state);
-      axios.post('https://192.168.86.200:3001/api/users/create', this.state);
+      const User = (clientId, { email, password, firstName, lastName, userType, position }, nonprofitId, connection) => {
+        return {
+          client_id: clientId,
+          email,
+          password,
+          connection,
+          user_metadata: {
+            first_name: firstName,
+            last_name: lastName,
+            user_type: userType,
+            password_date: new Date(),
+            position,
+            nonprofit_id: nonprofitId,
+          },
+        };
+      };
+      const newUser = User(
+        AUTH0_CLIENT_ID,
+        this.state,
+        '1',
+        AUTH0_CONNECTION,
+      );
+      console.log(JSON.stringify(newUser));
+      axios.post(
+        'https://designbright.auth0.com/dbconnections/signup',
+        newUser,
+      ).catch(er => console.log(er));
+      // axios.post('https://192.168.86.200:3001/api/users/create', this.state);
     } else {
       console.log('You missed a field');
     }

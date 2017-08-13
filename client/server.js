@@ -16,6 +16,7 @@ if (STATUS !== undefined) {
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/', (req, res) => {
+  console.log('test');
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
@@ -27,6 +28,6 @@ https.createServer({
   key: fs.readFileSync('./private.key'),
   cert: fs.readFileSync('./certificate.pem'),
 }, app).listen(PORT, HOST, () => {
-  console.log(`Design Bright API running on ${HOST}:${PORT}.`);
+  console.log(`Design Bright site running on ${HOST}:${PORT}.`);
 },
 );

@@ -29782,6 +29782,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var AUTH0_CLIENT_ID = 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh';
+var AUTH0_CONNECTION = 'Username-Password-Authentication';
+
 var doPasswordsMatch = function doPasswordsMatch(pass, confPass) {
   return pass === confPass;
 };
@@ -29838,11 +29841,37 @@ var Register = function (_React$Component) {
   }, {
     key: 'onSubmit',
     value: function onSubmit(e) {
-      console.log(this.state);
       e.preventDefault();
       if (doPasswordsMatch(this.state.password, this.state.confirmPassword) && (isNumber(this.state.zip) && numLength(this.state.zip, 5) || this.state.userType === 'donor') && (isNumber(this.state.ein) && numLength(this.state.ein, 9) || this.state.userType === 'donor')) {
-        console.log(this.state);
-        _axios2.default.post('https://192.168.86.200:3001/api/users/create', this.state);
+        var User = function User(clientId, _ref, nonprofitId, connection) {
+          var email = _ref.email,
+              password = _ref.password,
+              firstName = _ref.firstName,
+              lastName = _ref.lastName,
+              userType = _ref.userType,
+              position = _ref.position;
+
+          return {
+            client_id: clientId,
+            email: email,
+            password: password,
+            connection: connection,
+            user_metadata: {
+              first_name: firstName,
+              last_name: lastName,
+              user_type: userType,
+              password_date: new Date(),
+              position: position,
+              nonprofit_id: nonprofitId
+            }
+          };
+        };
+        var newUser = User(AUTH0_CLIENT_ID, this.state, '1', AUTH0_CONNECTION);
+        console.log(JSON.stringify(newUser));
+        _axios2.default.post('https://designbright.auth0.com/dbconnections/signup', newUser).catch(function (er) {
+          return console.log(er);
+        });
+        // axios.post('https://192.168.86.200:3001/api/users/create', this.state);
       } else {
         console.log('You missed a field');
       }
@@ -31236,7 +31265,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var login = exports.login = function login(loginInfo) {
   return function (dispatch, getState) {
-    _axios2.default.post('http://localhost:3001/api/users/login', loginInfo);
+    _axios2.default.post('https://192.168.86.200:3001/api/users/login', loginInfo);
 
     dispatch({
       type: _constants2.default.LOGIN,

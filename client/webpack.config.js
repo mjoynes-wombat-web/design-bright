@@ -4,6 +4,10 @@ const path = require('path');
 
 module.exports = {
   entry: './src/index.js',
+  target: 'web',
+  node: {
+    fs: 'empty',
+  },
   output: {
     path: path.resolve('dist/assets'),
     filename: 'bundle.js',
