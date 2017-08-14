@@ -12,6 +12,7 @@
   "author": "Simeon Smith",
   "license": "UNLICENSED",
   "dependencies": {
+    "auth0-js": "^8.9.1",
     "axios": "^0.16.2",
     "dotenv": "^4.0.0",
     "express": "^4.15.4",
@@ -29,6 +30,7 @@
     "react-router-dom": "^4.1.2",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
+    "request": "^2.81.0",
     "url-loader": "^0.5.9"
   },
   "devDependencies": {
