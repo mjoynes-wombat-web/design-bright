@@ -1,4 +1,3 @@
-import Sequelize from 'sequelize';
 import * as db from './db';
 import encryptPass from '../utils/encryptPass';
 

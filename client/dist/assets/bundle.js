@@ -29841,6 +29841,8 @@ var Register = function (_React$Component) {
   }, {
     key: 'onSubmit',
     value: function onSubmit(e) {
+      var _this2 = this;
+
       e.preventDefault();
       if (doPasswordsMatch(this.state.password, this.state.confirmPassword) && (isNumber(this.state.zip) && numLength(this.state.zip, 5) || this.state.userType === 'donor') && (isNumber(this.state.ein) && numLength(this.state.ein, 9) || this.state.userType === 'donor')) {
         var User = function User(clientId, _ref, nonprofitId, connection) {
@@ -29850,27 +29852,60 @@ var Register = function (_React$Component) {
               lastName = _ref.lastName,
               userType = _ref.userType,
               position = _ref.position;
-
           return {
             client_id: clientId,
             email: email,
             password: password,
             connection: connection,
             user_metadata: {
-              first_name: firstName,
-              last_name: lastName,
-              user_type: userType,
-              password_date: new Date(),
+              firstName: firstName,
+              lastName: lastName,
+              userType: userType,
+              passwordDate: new Date(),
               position: position,
-              nonprofit_id: nonprofitId
+              nonprofitId: nonprofitId
             }
           };
         };
-        var newUser = User(AUTH0_CLIENT_ID, this.state, '1', AUTH0_CONNECTION);
-        console.log(JSON.stringify(newUser));
-        _axios2.default.post('https://designbright.auth0.com/dbconnections/signup', newUser).catch(function (er) {
-          return console.log(er);
-        });
+
+        if (this.state.userType === 'donor') {
+          _axios2.default.post('https://designbright.auth0.com/dbconnections/signup', User(AUTH0_CLIENT_ID, this.state, '', AUTH0_CONNECTION)).then(function (results) {
+            return console.log(results);
+          }).catch(function (er) {
+            return console.log(er);
+          });
+        } else {
+          var NonProfit = function NonProfit(_ref2) {
+            var nonProfitName = _ref2.nonProfitName,
+                address = _ref2.address,
+                city = _ref2.city,
+                state = _ref2.state,
+                zip = _ref2.zip,
+                ein = _ref2.ein;
+            return {
+              name: nonProfitName,
+              address: address,
+              city: city,
+              state: state,
+              zip: zip,
+              ein: ein
+            };
+          };
+
+          var newNonProfit = NonProfit(this.state);
+
+          console.log(newNonProfit);
+
+          _axios2.default.post('https://192.168.86.200:3001/api/nonprofits/create', NonProfit(this.state)).then(function (nonprofit) {
+            _axios2.default.post('https://designbright.auth0.com/dbconnections/signup', User(AUTH0_CLIENT_ID, _this2.state, String(nonprofit.data.nonprofitId), AUTH0_CONNECTION)).then(function (results) {
+              return console.log(results);
+            }).catch(function (er) {
+              return console.log(er);
+            });
+          }).catch(function (er) {
+            return console.log(er);
+          });
+        }
         // axios.post('https://192.168.86.200:3001/api/users/create', this.state);
       } else {
         console.log('You missed a field');

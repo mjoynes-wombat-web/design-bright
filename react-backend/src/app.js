@@ -9,6 +9,7 @@ import https from 'https';
 
 // Import Routes
 import users from './routes/users';
+import nonprofits from './routes/nonprofits';
 import campaigns from './routes/campaigns';
 import advisor from './routes/advisor';
 import help from './routes/help';
@@ -46,6 +47,7 @@ app.use(BodyParser.json());
 
 // Setting up the API routes.
 app.use('/api/users', users);
+app.use('/api/nonprofits', nonprofits);
 app.use('/api/campaigns', campaigns);
 app.use('/api/advisor', advisor);
 app.use('/api/help', help);

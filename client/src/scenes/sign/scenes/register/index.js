@@ -60,33 +60,63 @@ class Register extends React.Component {
       && ((isNumber(this.state.ein) && numLength(this.state.ein, 9))
         || this.state.userType === 'donor')
     ) {
-      const User = (clientId, { email, password, firstName, lastName, userType, position }, nonprofitId, connection) => {
-        return {
-          client_id: clientId,
-          email,
-          password,
-          connection,
-          user_metadata: {
-            first_name: firstName,
-            last_name: lastName,
-            user_type: userType,
-            password_date: new Date(),
-            position,
-            nonprofit_id: nonprofitId,
-          },
-        };
-      };
-      const newUser = User(
-        AUTH0_CLIENT_ID,
-        this.state,
-        '1',
-        AUTH0_CONNECTION,
-      );
-      console.log(JSON.stringify(newUser));
-      axios.post(
-        'https://designbright.auth0.com/dbconnections/signup',
-        newUser,
-      ).catch(er => console.log(er));
+      const User = (clientId, { email, password, firstName, lastName, userType, position }, nonprofitId, connection) => ({
+        client_id: clientId,
+        email,
+        password,
+        connection,
+        user_metadata: {
+          firstName,
+          lastName,
+          userType,
+          passwordDate: new Date(),
+          position,
+          nonprofitId,
+        },
+      });
+
+      if (this.state.userType === 'donor') {
+        axios.post(
+          'https://designbright.auth0.com/dbconnections/signup',
+          User(
+            AUTH0_CLIENT_ID,
+            this.state,
+            '',
+            AUTH0_CONNECTION,
+          ))
+          .then(results => console.log(results))
+          .catch(er => console.log(er));
+      } else {
+        const NonProfit = ({nonProfitName, address, city, state, zip, ein}) => ({
+          name: nonProfitName,
+          address,
+          city,
+          state,
+          zip,
+          ein,
+        });
+
+        const newNonProfit = NonProfit(this.state);
+
+        console.log(newNonProfit);
+
+        axios.post(
+          'https://192.168.86.200:3001/api/nonprofits/create',
+          NonProfit(this.state))
+          .then((nonprofit) => {
+            axios.post(
+              'https://designbright.auth0.com/dbconnections/signup',
+              User(
+                AUTH0_CLIENT_ID,
+                this.state,
+                String(nonprofit.data.nonprofitId),
+                AUTH0_CONNECTION,
+              ))
+              .then(results => console.log(results))
+              .catch(er => console.log(er));
+          })
+          .catch(er => console.log(er));
+      }
       // axios.post('https://192.168.86.200:3001/api/users/create', this.state);
     } else {
       console.log('You missed a field');
