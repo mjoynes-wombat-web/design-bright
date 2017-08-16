@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import storeFactory from './store';
 import App from './app';
 import jsonState from './store/initialState.json';
+console.log('test');
 
 const initialState = (localStorage['redux-store']) ? JSON.parse(localStorage['redux-store']) : jsonState;
 

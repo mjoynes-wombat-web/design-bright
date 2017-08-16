@@ -16240,8 +16240,10 @@ var _initialState2 = _interopRequireDefault(_initialState);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var initialState = localStorage['redux-store'] ? JSON.parse(localStorage['redux-store']) : _initialState2.default; /* eslint-env browser */
+console.log('test'); /* eslint-env browser */
 
+
+var initialState = localStorage['redux-store'] ? JSON.parse(localStorage['redux-store']) : _initialState2.default;
 
 var store = (0, _store2.default)(initialState);
 
