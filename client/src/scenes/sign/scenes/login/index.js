@@ -1,14 +1,25 @@
 import { connect } from 'react-redux';
-import { login } from '../../../../actions';
+import { browserHistory } from 'react-router';
 
+
+import { login, logout } from '../../../../actions';
 import Login from './components';
 
-const mapStateToProps = (state, props) => ({});
+const mapStateToProps = state => ({
+  userAuth: state.userAuth,
+});
 
 const mapDispatchToProps = dispatch => ({
-  onLogin(loginInfo) {
+  onLogin(loginInfo, callback) {
     dispatch(
-      login(loginInfo),
+      login(loginInfo,
+        (err) => callback(err),
+      ),
+    );
+  },
+  onLogout() {
+    dispatch(
+      logout(),
     );
   },
 });

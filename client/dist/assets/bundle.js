@@ -1280,24 +1280,25 @@ module.exports = { debugTool: debugTool };
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MemoryRouter__ = __webpack_require__(245);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__MemoryRouter__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MemoryRouter", function() { return __WEBPACK_IMPORTED_MODULE_0__MemoryRouter__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Prompt__ = __webpack_require__(247);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__Prompt__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Prompt", function() { return __WEBPACK_IMPORTED_MODULE_1__Prompt__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Redirect__ = __webpack_require__(248);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__Redirect__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Redirect", function() { return __WEBPACK_IMPORTED_MODULE_2__Redirect__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Route__ = __webpack_require__(112);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_3__Route__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return __WEBPACK_IMPORTED_MODULE_3__Route__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(70);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_4__Router__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return __WEBPACK_IMPORTED_MODULE_4__Router__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__StaticRouter__ = __webpack_require__(251);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_5__StaticRouter__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "StaticRouter", function() { return __WEBPACK_IMPORTED_MODULE_5__StaticRouter__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Switch__ = __webpack_require__(252);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_6__Switch__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Switch", function() { return __WEBPACK_IMPORTED_MODULE_6__Switch__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__matchPath__ = __webpack_require__(71);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_7__matchPath__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "matchPath", function() { return __WEBPACK_IMPORTED_MODULE_7__matchPath__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__withRouter__ = __webpack_require__(253);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_8__withRouter__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "withRouter", function() { return __WEBPACK_IMPORTED_MODULE_8__withRouter__["a"]; });
 
 
 
@@ -13633,7 +13634,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var constants = {
   CREATE_USER: 'CREATE_USER',
-  LOGIN: 'LOGIN',
+  USER_AUTH: 'USER_AUTH',
   EDIT_PROFILE: 'EDIT_PROFILE',
   ADD_PROFILE_PIC: 'ADD_PROFILE_PIC',
   SEARCH_CAMPAIGNS: 'SEARCH_CAMPAIGNS',
@@ -16233,10 +16234,14 @@ var _app = __webpack_require__(295);
 
 var _app2 = _interopRequireDefault(_app);
 
+var _initialState = __webpack_require__(373);
+
+var _initialState2 = _interopRequireDefault(_initialState);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* eslint-env browser */
-var initialState = localStorage['redux-store'] ? JSON.parse(localStorage['redux-store']) : {};
+var initialState = localStorage['redux-store'] ? JSON.parse(localStorage['redux-store']) : _initialState2.default; /* eslint-env browser */
+
 
 var store = (0, _store2.default)(initialState);
 
@@ -28408,7 +28413,7 @@ var BrowserRouter = function (_React$Component) {
   }
 
   BrowserRouter.prototype.render = function render() {
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_router__["e" /* Router */], { history: this.history, children: this.props.children });
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_router__["Router"], { history: this.history, children: this.props.children });
   };
 
   return BrowserRouter;
@@ -30182,7 +30187,7 @@ var HashRouter = function (_React$Component) {
   }
 
   HashRouter.prototype.render = function render() {
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_router__["e" /* Router */], { history: this.history, children: this.props.children });
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_router__["Router"], { history: this.history, children: this.props.children });
   };
 
   return HashRouter;
@@ -30534,7 +30539,7 @@ exports.default = createHashHistory;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["MemoryRouter"]; });
 
 
 /***/ }),
@@ -30574,7 +30579,7 @@ var NavLink = function NavLink(_ref) {
       getIsActive = _ref.isActive,
       rest = _objectWithoutProperties(_ref, ['to', 'exact', 'strict', 'location', 'activeClassName', 'className', 'activeStyle', 'style', 'isActive']);
 
-  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router__["d" /* Route */], {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router__["Route"], {
     path: (typeof to === 'undefined' ? 'undefined' : _typeof(to)) === 'object' ? to.pathname : to,
     exact: exact,
     strict: strict,
@@ -30620,7 +30625,7 @@ NavLink.defaultProps = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["Prompt"]; });
 
 
 /***/ }),
@@ -30629,7 +30634,7 @@ NavLink.defaultProps = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["c"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["Redirect"]; });
 
 
 /***/ }),
@@ -30638,7 +30643,7 @@ NavLink.defaultProps = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["d"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["Route"]; });
 
 
 /***/ }),
@@ -30647,7 +30652,7 @@ NavLink.defaultProps = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["e"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["Router"]; });
 
 
 /***/ }),
@@ -30656,7 +30661,7 @@ NavLink.defaultProps = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["f"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["StaticRouter"]; });
 
 
 /***/ }),
@@ -30665,7 +30670,7 @@ NavLink.defaultProps = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["g"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["Switch"]; });
 
 
 /***/ }),
@@ -30674,7 +30679,7 @@ NavLink.defaultProps = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["h"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["matchPath"]; });
 
 
 /***/ }),
@@ -30683,7 +30688,7 @@ NavLink.defaultProps = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["i"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0_react_router__["withRouter"]; });
 
 
 /***/ }),
@@ -31995,14 +32000,14 @@ var _constants2 = _interopRequireDefault(_constants);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var login = function login() {
+var userAuth = function userAuth() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var action = arguments[1];
-  return action.type === _constants2.default.LOGIN ? action.payload : state;
+  return action.type === _constants2.default.USER_AUTH ? action.payload : state;
 };
 
 exports.default = (0, _redux.combineReducers)({
-  login: login
+  userAuth: userAuth
 });
 
 /***/ }),
@@ -32624,9 +32629,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var AUTH0_CLIENT_ID = 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh';
-var AUTH0_CONNECTION = 'Username-Password-Authentication';
-
 var doPasswordsMatch = function doPasswordsMatch(pass, confPass) {
   return pass === confPass;
 };
@@ -32683,72 +32685,51 @@ var Register = function (_React$Component) {
   }, {
     key: 'onSubmit',
     value: function onSubmit(e) {
-      var _this2 = this;
-
       e.preventDefault();
       if (doPasswordsMatch(this.state.password, this.state.confirmPassword) && (isNumber(this.state.zip) && numLength(this.state.zip, 5) || this.state.userType === 'donor') && (isNumber(this.state.ein) && numLength(this.state.ein, 9) || this.state.userType === 'donor')) {
-        var User = function User(clientId, _ref, nonprofitId, connection) {
+        var User = function User(_ref) {
           var email = _ref.email,
               password = _ref.password,
               firstName = _ref.firstName,
               lastName = _ref.lastName,
               userType = _ref.userType,
-              position = _ref.position;
+              position = _ref.position,
+              nonProfitName = _ref.nonProfitName,
+              ein = _ref.ein,
+              address = _ref.address,
+              city = _ref.city,
+              state = _ref.state,
+              zip = _ref.zip;
           return {
-            client_id: clientId,
-            email: email,
-            password: password,
-            connection: connection,
-            user_metadata: {
-              firstName: firstName,
-              lastName: lastName,
-              userType: userType,
-              passwordDate: new Date(),
-              position: position,
-              nonprofitId: nonprofitId
+            userInfo: {
+              email: email,
+              password: password,
+              user_metadata: {
+                firstName: firstName,
+                lastName: lastName,
+                passwordDate: new Date(),
+                position: position
+              },
+              app_metadata: {
+                userType: userType
+              }
+            },
+            nonProfitInfo: {
+              name: nonProfitName,
+              ein: ein,
+              address: address,
+              city: city,
+              state: state,
+              zip: zip
             }
           };
         };
 
-        if (this.state.userType === 'donor') {
-          _axios2.default.post('https://designbright.auth0.com/dbconnections/signup', User(AUTH0_CLIENT_ID, this.state, '', AUTH0_CONNECTION)).then(function (results) {
-            return console.log(results);
-          }).catch(function (er) {
-            return console.log(er);
-          });
-        } else {
-          var NonProfit = function NonProfit(_ref2) {
-            var nonProfitName = _ref2.nonProfitName,
-                address = _ref2.address,
-                city = _ref2.city,
-                state = _ref2.state,
-                zip = _ref2.zip,
-                ein = _ref2.ein;
-            return {
-              name: nonProfitName,
-              address: address,
-              city: city,
-              state: state,
-              zip: zip,
-              ein: ein
-            };
-          };
-
-          var newNonProfit = NonProfit(this.state);
-
-          console.log(newNonProfit);
-
-          _axios2.default.post('https://192.168.86.200:3001/api/nonprofits/create', NonProfit(this.state)).then(function (nonprofit) {
-            _axios2.default.post('https://designbright.auth0.com/dbconnections/signup', User(AUTH0_CLIENT_ID, _this2.state, String(nonprofit.data.nonprofitId), AUTH0_CONNECTION)).then(function (results) {
-              return console.log(results);
-            }).catch(function (er) {
-              return console.log(er);
-            });
-          }).catch(function (er) {
-            return console.log(er);
-          });
-        }
-        // axios.post('https://192.168.86.200:3001/api/users/create', this.state);
+        _axios2.default.post('https://192.168.86.200:3000/api/users/create', User(this.state)).then(function (results) {
+          return console.log(results);
+        }).catch(function (er) {
+          return console.log(er);
+        });
       } else {
         console.log('You missed a field');
       }
@@ -34072,7 +34053,7 @@ exports = module.exports = __webpack_require__(37)(undefined);
 
 
 // module
-exports.push([module.i, "form label, form legend {\n  color: #999999;\n  font-size: 1.125rem;\n  font-family: 'Lato', sans-serif;\n  line-height: initial;\n  font-weight: 300;\n  margin-bottom: 0.375rem; }\n  @media screen and (min-width: 40.063em) {\n    form label, form legend {\n      font-size: 1.25rem; } }\n  form label span.required, form legend span.required {\n    color: #ffaa00;\n    font-weight: normal; }\n  form label input[type=\"radio\"], form label input[type=\"checkbox\"], form legend input[type=\"radio\"], form legend input[type=\"checkbox\"] {\n    margin-right: 0.75rem; }\n\nform label.terms {\n  text-align: center;\n  margin-top: 2rem;\n  font-size: 1.125rem; }\n  form label.terms input[type=\"radio\"] + span, form label.terms input[type=\"checkbox\"] + span {\n    top: 0.2rem; }\n\nform input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n  color: #808080;\n  font-family: 'Lato', sans-serif;\n  font-size: 1.125rem;\n  height: 2.5rem;\n  line-height: normal;\n  box-shadow: none;\n  border: 0.09rem solid #999999; }\n  @media screen and (min-width: 40.063em) {\n    form input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n      height: 2.75rem;\n      font-size: 1.375rem; } }\n\nform input[type=\"radio\"], form input[type=\"checkbox\"] {\n  display: none; }\n\nform input[type=\"radio\"] + span, form input[type=\"checkbox\"] + span {\n  display: inline-block;\n  width: 1.25rem;\n  height: 1.25rem;\n  background-image: url(\"/assets/img/square.svg\");\n  background-repeat: no-repeat;\n  position: relative;\n  top: 0.15rem;\n  margin-right: 0.375rem; }\n\nform input[type=\"radio\"]:checked + span, form input[type=\"checkbox\"]:checked + span {\n  background: url(\"/assets/img/check-square.svg\");\n  background-repeat: no-repeat; }\n\nform hr {\n  margin: 1.5rem 0.75rem; }\n\nform fieldset.user-type label {\n  display: inline-block;\n  margin-right: 2rem;\n  margin-bottom: 1rem; }\n\nform button.primary, form button[type='submit'].primary {\n  font-family: 'Lato', sans-serif;\n  font-size: 1.25rem;\n  color: #fff;\n  background-image: url(\"/assets/img/Blue Stripe.png\");\n  background-size: 100% 100%;\n  padding: 1.25rem;\n  width: 100%;\n  margin-top: 2rem;\n  cursor: pointer; }\n  @media screen and (min-width: 40.063em) {\n    form button.primary, form button[type='submit'].primary {\n      padding: 1.5rem;\n      font-size: 1.5rem; } }\n  form button.primary:hover, form button[type='submit'].primary:hover {\n    background-image: url(\"/assets/img/Blue Stripe-drk.png\");\n    background-size: 100% 100%; }\n\n.error {\n  display: none;\n  font-size: 0.75rem;\n  margin-top: 0.25rem; }\n\n.invalid:not(.empty) {\n  color: #ff5800;\n  border-width: 0.2rem;\n  font-weight: normal; }\n  .invalid:not(.empty) > div:last-child {\n    text-align: left; }\n  .invalid:not(.empty) .error {\n    display: initial; }\n", ""]);
+exports.push([module.i, "form label, form legend {\n  color: #999999;\n  font-size: 1.125rem;\n  font-family: 'Lato', sans-serif;\n  line-height: initial;\n  font-weight: 300;\n  margin-bottom: 0.375rem; }\n  @media screen and (min-width: 40.063em) {\n    form label, form legend {\n      font-size: 1.25rem; } }\n  form label span.required, form legend span.required {\n    color: #ffaa00;\n    font-weight: normal; }\n  form label input[type=\"radio\"], form label input[type=\"checkbox\"], form legend input[type=\"radio\"], form legend input[type=\"checkbox\"] {\n    margin-right: 0.75rem; }\n  form label span.error, form legend span.error {\n    display: none;\n    font-size: 0.75rem;\n    margin-top: 0.25rem; }\n  form label.invalid:not(.empty), form legend.invalid:not(.empty) {\n    color: #ff5800;\n    border-width: 0.2rem;\n    font-weight: normal; }\n    form label.invalid:not(.empty) > div:last-child, form legend.invalid:not(.empty) > div:last-child {\n      text-align: left; }\n    form label.invalid:not(.empty) span.error, form legend.invalid:not(.empty) span.error {\n      display: initial; }\n\nform label.terms {\n  text-align: center;\n  margin-top: 2rem;\n  font-size: 1.125rem; }\n  form label.terms input[type=\"radio\"] + span, form label.terms input[type=\"checkbox\"] + span {\n    top: 0.2rem; }\n\nform input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n  color: #808080;\n  font-family: 'Lato', sans-serif;\n  font-size: 1.125rem;\n  height: 2.5rem;\n  line-height: normal;\n  box-shadow: none;\n  border: 0.09rem solid #999999; }\n  @media screen and (min-width: 40.063em) {\n    form input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n      height: 2.75rem;\n      font-size: 1.375rem; } }\n\nform input[type=\"radio\"], form input[type=\"checkbox\"] {\n  display: none; }\n\nform input[type=\"radio\"] + span, form input[type=\"checkbox\"] + span {\n  display: inline-block;\n  width: 1.25rem;\n  height: 1.25rem;\n  background-image: url(\"/assets/img/square.svg\");\n  background-repeat: no-repeat;\n  position: relative;\n  top: 0.15rem;\n  margin-right: 0.375rem; }\n\nform input[type=\"radio\"]:checked + span, form input[type=\"checkbox\"]:checked + span {\n  background: url(\"/assets/img/check-square.svg\");\n  background-repeat: no-repeat; }\n\nform hr {\n  margin: 1.5rem 0.75rem; }\n\nform fieldset.user-type label {\n  display: inline-block;\n  margin-right: 2rem;\n  margin-bottom: 1rem; }\n\nform button.primary, form button[type='submit'].primary {\n  font-family: 'Lato', sans-serif;\n  font-size: 1.25rem;\n  color: #fff;\n  background-image: url(\"/assets/img/Blue Stripe.png\");\n  background-size: 100% 100%;\n  padding: 1.25rem;\n  width: 100%;\n  margin-top: 2rem;\n  cursor: pointer; }\n  @media screen and (min-width: 40.063em) {\n    form button.primary, form button[type='submit'].primary {\n      padding: 1.5rem;\n      font-size: 1.5rem; } }\n  form button.primary:hover, form button[type='submit'].primary:hover {\n    background-image: url(\"/assets/img/Blue Stripe-drk.png\");\n    background-size: 100% 100%; }\n\np.error {\n  font-size: 0.75rem;\n  margin-top: 0.25rem;\n  color: #ff5800;\n  border-width: 0.2rem;\n  font-weight: normal; }\n", ""]);
 
 // exports
 
@@ -34102,6 +34083,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _reactRedux = __webpack_require__(114);
 
+var _reactRouter = __webpack_require__(12);
+
 var _actions = __webpack_require__(328);
 
 var _components = __webpack_require__(367);
@@ -34110,14 +34093,21 @@ var _components2 = _interopRequireDefault(_components);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var mapStateToProps = function mapStateToProps(state, props) {
-  return {};
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    userAuth: state.userAuth
+  };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    onLogin: function onLogin(loginInfo) {
-      dispatch((0, _actions.login)(loginInfo));
+    onLogin: function onLogin(loginInfo, callback) {
+      dispatch((0, _actions.login)(loginInfo, function (err) {
+        return callback(err);
+      }));
+    },
+    onLogout: function onLogout() {
+      dispatch((0, _actions.logout)());
     }
   };
 };
@@ -34134,18 +34124,19 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _constants = __webpack_require__(123);
-
-var _constants2 = _interopRequireDefault(_constants);
+exports.getCampaigns = exports.logout = exports.login = undefined;
 
 var _auth0Js = __webpack_require__(329);
 
 var _auth0Js2 = _interopRequireDefault(_auth0Js);
 
+var _constants = __webpack_require__(123);
+
+var _constants2 = _interopRequireDefault(_constants);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var login = function login(loginInfo) {
+var login = exports.login = function login(loginInfo, callback) {
   return function (dispatch, getState) {
     var webAuth = new _auth0Js2.default.WebAuth({
       domain: 'designbright.auth0.com',
@@ -34159,30 +34150,36 @@ var login = function login(loginInfo) {
       scope: 'user_metadata'
     }, function (err, authResults) {
       if (err) {
-        throw new Error(err);
+        callback(err);
+
+        return dispatch({
+          type: _constants2.default.USER_AUTH,
+          payload: {
+            error: err.description
+          }
+        });
       }
 
-      webAuth.client.userInfo(authResults.accessToken, function (userErr, user) {
-        if (userErr) {
-          throw new Error(userErr);
-        }
-        console.log(user);
+      return dispatch({
+        type: _constants2.default.USER_AUTH,
+        payload: authResults
       });
     });
-
-    dispatch({
-      type: _constants2.default.LOGIN,
-      payload: loginInfo
-    });
-
-    return {
-      type: _constants2.default.LOGIN,
-      payload: loginInfo
-    };
   };
 };
 
-exports.default = login;
+var logout = exports.logout = function logout() {
+  return function (dispatch, getState) {
+    dispatch({
+      type: _constants2.default.USER_AUTH,
+      payload: {}
+    });
+  };
+};
+
+var getCampaigns = exports.getCampaigns = function getCampaigns() {
+  console.log('Gets campaigns.');
+};
 
 /***/ }),
 /* 329 */
@@ -40654,102 +40651,229 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Login = function Login(_ref) {
-  var _ref$onLogin = _ref.onLogin,
-      onLogin = _ref$onLogin === undefined ? function (f) {
-    return f;
-  } : _ref$onLogin;
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-  var loginInfo = {
-    email: '',
-    password: ''
-  };
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  var submit = function submit(e) {
-    e.preventDefault();
-    onLogin({
-      email: loginInfo.email.value,
-      password: loginInfo.password.value
-    });
-  };
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-  return _react2.default.createElement(
-    'main',
-    { className: 'login' },
-    _react2.default.createElement(
-      'section',
-      { className: 'row align-center' },
-      _react2.default.createElement(
-        'form',
-        { className: 'small-12 large-6 columns', onSubmit: submit },
-        _react2.default.createElement(
-          'div',
-          { className: 'row' },
-          _react2.default.createElement(
-            'h1',
-            { className: 'small-12 columns' },
-            _react2.default.createElement(
-              'span',
-              { className: 'underlined' },
-              'Login'
-            )
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'row align-center' },
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Login = function (_React$Component) {
+  _inherits(Login, _React$Component);
+
+  function Login(props) {
+    _classCallCheck(this, Login);
+
+    var _this = _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this, props));
+
+    _this.state = {
+      email: '',
+      password: ''
+    };
+
+    _this.onChange = _this.onChange.bind(_this);
+    _this.onLogin = _this.onLogin.bind(_this);
+    _this.onLogout = _this.onLogout.bind(_this);
+    return _this;
+  }
+
+  _createClass(Login, [{
+    key: 'onChange',
+    value: function onChange(event) {
+      var target = event.target;
+      var value = target.value;
+      var name = target.name;
+
+      this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: 'onLogin',
+    value: function onLogin(event) {
+      event.preventDefault();
+
+      this.props.onLogin({
+        email: this.state.email,
+        password: this.state.password
+      }, function (err) {
+        return console.log(err);
+      });
+
+      this.state.password = '';
+    }
+  }, {
+    key: 'onLogout',
+    value: function onLogout(e) {
+      e.preventDefault();
+
+      this.props.onLogout();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      if (this.props.userAuth.accessToken) {
+        return _react2.default.createElement(
+          'form',
+          { className: 'small-12 large-6 columns', onSubmit: this.onLogout },
           _react2.default.createElement(
             'div',
-            { className: 'small-12 columns' },
+            { className: 'row align-center' },
             _react2.default.createElement(
-              'label',
-              { htmlFor: 'email' },
-              'Email: ',
-              _react2.default.createElement(
-                'span',
-                { className: 'required' },
-                '*'
-              )
-            ),
-            _react2.default.createElement('input', { type: 'email', name: 'email', id: 'email', ref: function ref(input) {
-                return loginInfo.email = input;
-              }, required: true }),
-            _react2.default.createElement(
-              'label',
-              { htmlFor: 'password' },
-              'Password: ',
-              _react2.default.createElement(
-                'span',
-                { className: 'required' },
-                '*'
-              )
-            ),
-            _react2.default.createElement('input', { type: 'password', name: 'password', id: 'password', ref: function ref(input) {
-                return loginInfo.password = input;
-              }, required: true })
+              'button',
+              {
+                className: 'primary small-11 medium-10 large-10',
+                type: 'submit' },
+              'Logout'
+            )
           )
-        ),
+        );
+      }
+      return _react2.default.createElement(
+        'main',
+        { className: 'login' },
         _react2.default.createElement(
-          'div',
+          'section',
           { className: 'row align-center' },
           _react2.default.createElement(
-            'button',
-            {
-              className: 'primary small-11 medium-10 large-10',
-              type: 'submit' },
-            'Login'
+            'form',
+            { className: 'small-12 large-6 columns', onSubmit: this.onLogin },
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'h1',
+                { className: 'small-12 columns' },
+                _react2.default.createElement(
+                  'span',
+                  { className: 'underlined' },
+                  'Login'
+                )
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row align-center' },
+              _react2.default.createElement(
+                'div',
+                { className: 'small-12 columns' },
+                _react2.default.createElement(
+                  'label',
+                  { htmlFor: 'email', className: 'row' + (this.props.userAuth.error ? ' invalid' : '') },
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'small-12 columns' },
+                    'Email: ',
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'required' },
+                      '*'
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'small-12 columns' },
+                    this.props.userAuth.error ? _react2.default.createElement(
+                      'span',
+                      { className: 'error' },
+                      this.props.userAuth.error
+                    ) : ''
+                  )
+                ),
+                _react2.default.createElement('input', {
+                  type: 'email',
+                  name: 'email',
+                  id: 'email',
+                  value: this.state.email,
+                  onChange: this.onChange,
+                  required: true }),
+                _react2.default.createElement(
+                  'label',
+                  { htmlFor: 'password', className: this.props.userAuth.error ? 'invalid' : '' },
+                  'Password: ',
+                  _react2.default.createElement(
+                    'span',
+                    { className: 'required' },
+                    '*'
+                  )
+                ),
+                _react2.default.createElement('input', {
+                  type: 'password',
+                  name: 'password',
+                  id: 'password',
+                  value: this.state.password,
+                  onChange: this.onChange,
+                  required: true })
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row align-center' },
+              _react2.default.createElement(
+                'button',
+                {
+                  className: 'primary small-11 medium-10 large-10',
+                  type: 'submit' },
+                'Login'
+              )
+            )
           )
         )
-      )
-    )
-  );
-};
+      );
+    }
+  }]);
+
+  return Login;
+}(_react2.default.Component);
+
+// const Login = ({ onLogin }) => {
+//   const loginInfo = {
+//     email: '',
+//     password: '',
+//   };
+
+//   const submit = (e) => {
+//     e.preventDefault();
+//     onLogin({
+//       email: loginInfo.email.value,
+//       password: loginInfo.password.value,
+//     });
+//   };
+
+//   return (
+//     <main className="login">
+//       <section className="row align-center">
+//         <form className="small-12 large-6 columns" onSubmit={submit}>
+//           <div className="row">
+//             <h1 className="small-12 columns"><span className="underlined">Login</span></h1>
+//           </div>
+//           <div className="row align-center">
+//             <div className="small-12 columns">
+//               <label htmlFor="email">Email: <span className="required">*</span></label>
+//               <input type="email" name="email" id="email" ref={input => loginInfo.email = input} required />
+//               <label htmlFor="password">Password: <span className="required">*</span></label>
+//               <input type="password" name="password" id="password" ref={input => loginInfo.password = input} required />
+//             </div>
+//           </div>
+//           <div className="row align-center">
+//             <button
+//               className="primary small-11 medium-10 large-10"
+//               type="submit">
+//               Login
+//         </button>
+//           </div>
+//         </form>
+//       </section>
+//     </main>
+//   )
+// };
 
 exports.default = Login;
 
@@ -40903,6 +41027,12 @@ exports.push([module.i, "@font-face {\n  font-family: 'font-awesome-light';\n  s
 
 // exports
 
+
+/***/ }),
+/* 373 */
+/***/ (function(module, exports) {
+
+module.exports = {"userAuth":{"accessToken":""}}
 
 /***/ })
 /******/ ]);

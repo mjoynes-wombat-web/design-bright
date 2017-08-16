@@ -2,11 +2,11 @@ import { combineReducers } from 'redux';
 
 import C from '../constants';
 
-const login = (state = {}, action) => (
-  (action.type === C.LOGIN) ? action.payload : state
+const userAuth = (state = {}, action) => (
+  (action.type === C.USER_AUTH) ? action.payload : state
 );
 
 
 export default combineReducers({
-  login,
+  userAuth,
 });

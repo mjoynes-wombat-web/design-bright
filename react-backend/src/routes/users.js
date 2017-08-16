@@ -1,6 +1,7 @@
 // Create API Users Router
 import { Router } from 'express';
-import { addDonor, addNonProfitUser } from '../models/users';
+import { addNonProfit } from '../models/nonprofits';
+import { createNewUser } from '../models/Auth0';
 
 const router = Router();
 
@@ -10,59 +11,39 @@ const router = Router();
 
 // Accepts a new user information. Returns a confirmation message.
 router.post('/create', (req, res) => {
-  const User = ({ firstName, lastName, email, password, userType }) => ({
-    firstName,
-    lastName,
-    email,
-    password,
-    userType,
-  });
-
-  if (req.body.userType === 'non-profit') {
-    const newNonProfitUser = User(req.body);
-    const newNonProfitUserPosition = req.body.position;
-
-    const NonProfit = ({ nonProfitName, ein, address, city, state, zip }) => ({
-      name: nonProfitName,
+  if (req.body.userInfo.app_metadata.userType === 'non-profit') {
+    const NonProfit = ({ name, ein, address, city, state, zip }) => ({
+      name,
       ein,
       address,
       city,
       state,
       zip,
     });
+    const newNonProfit = NonProfit(req.body.nonProfitInfo);
 
-    const newNonProfit = NonProfit(req.body);
-
-    // console.log(newNonProfitUser);
-    // console.log(newNonProfitUserPosition);
-    // console.log(newNonProfit);
-
-    addNonProfitUser(
-      newNonProfitUser,
-      newNonProfitUserPosition,
+    addNonProfit(
       newNonProfit,
-      response => console.log('Added non-profit user.'),
-      error => console.log(error),
+      (nonprofit) => {
+        const newUser = req.body.userInfo;
+        newUser.app_metadata.nonProfitID = String(nonprofit.dataValues.nonprofitId);
+        createNewUser(newUser);
+        // If user fails delete non-profit if new.
+      },
+      (err) => {
+        throw new Error(err);
+      },
     );
   } else {
-    const newUser = User(req.body);
-
-    addDonor(newUser, response => console.log('Added donor user.'), error => console.log(error));
+    const newUser = req.body.userInfo;
+    newUser.app_metadata.nonProfitID = '';
+    createNewUser(newUser);
   }
-  // add(req.body,
-  //   test => res.json(test),
-  //   test => res.send(test));
-});
-
-// Accepts a user login info. Returns authorization credentials.
-router.post('/login', (req, res) => {
-  console.log('You are attempting to login with: ');
-  console.log(req.body.email);
-  res.json(req.body);
 });
 
 // Returns the user info with the userId param. Requires authorization.
-router.get('/:userId', (req, res) => {
+router.get('/:authToken', (req, res) => {
+  console.log(req.params.authToken);
   res.send(`
   Returns the user information from the user with the id of ${req.params.userId}. 
   Requires authorization.

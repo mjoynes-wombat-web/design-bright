@@ -28,6 +28,25 @@ form {
     input[type="radio"], input[type="checkbox"] {
       margin-right: 0.75rem;
     }
+
+    span.error {
+      display: none;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+    
+    &.invalid:not(.empty) {
+      color: #ff5800;
+      border-width: 0.2rem;
+      font-weight: normal;
+    
+      > div:last-child{
+        text-align: left;
+      }
+      span.error {
+        display: initial;
+      }
+    }
   }
 
   label {
@@ -114,21 +133,10 @@ form {
   }
 }
 
-.error {
-  display: none;
+p.error {
   font-size: 0.75rem;
   margin-top: 0.25rem;
-}
-
-.invalid:not(.empty) {
   color: #ff5800;
   border-width: 0.2rem;
   font-weight: normal;
-
-  > div:last-child{
-    text-align: left;
-  }
-  .error {
-    display: initial;
-  }
 }

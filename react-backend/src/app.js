@@ -26,8 +26,9 @@ if (STATUS !== undefined) {
 }
 
 const whitelist = [
-  'https://192.168.86.200:3000',
-  'https://192.168.1.9:3000',
+  'https://192.168.86.200:3002',
+  'https://192.168.1.9:3002',
+  '*',
   'https://www.designbright.com',
 ];
 
@@ -51,12 +52,6 @@ app.use('/api/nonprofits', nonprofits);
 app.use('/api/campaigns', campaigns);
 app.use('/api/advisor', advisor);
 app.use('/api/help', help);
-
-// Starting the API server using the environment port.
-// app.listen(PORT, '192.168.86.200', () => {
-//   console.log(`Design Bright API running on port ${PORT}.`);
-// },
-// );
 
 https.createServer({
   key: fs.readFileSync('./private.key'),

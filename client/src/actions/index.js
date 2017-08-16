@@ -1,7 +1,8 @@
-import C from '../constants';
 import auth0 from 'auth0-js';
 
-const login = loginInfo => (dispatch, getState) => {
+import C from '../constants';
+
+export const login = (loginInfo, callback) => (dispatch, getState) => {
   const webAuth = new auth0.WebAuth({
     domain: 'designbright.auth0.com',
     clientID: 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh',
@@ -14,26 +15,30 @@ const login = loginInfo => (dispatch, getState) => {
     scope: 'user_metadata',
   }, (err, authResults) => {
     if (err) {
-      throw new Error(err);
+      callback(err);
+
+      return dispatch({
+        type: C.USER_AUTH,
+        payload: {
+          error: err.description,
+        },
+      });
     }
 
-    webAuth.client.userInfo(authResults.accessToken, (userErr, user) => {
-      if (userErr) {
-        throw new Error(userErr);
-      }
-      console.log(user);
+    return dispatch({
+      type: C.USER_AUTH,
+      payload: authResults,
     });
   });
-
-  dispatch({
-    type: C.LOGIN,
-    payload: loginInfo,
-  });
-
-  return {
-    type: C.LOGIN,
-    payload: loginInfo,
-  };
 };
 
-export default login;
+export const logout = () => (dispatch, getState) => {
+  dispatch({
+    type: C.USER_AUTH,
+    payload: {},
+  });
+};
+
+export const getCampaigns = () => {
+  console.log('Gets campaigns.');
+};

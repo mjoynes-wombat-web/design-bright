@@ -5,8 +5,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import storeFactory from './store';
 import App from './app';
+import jsonState from './store/initialState.json';
 
-const initialState = (localStorage['redux-store']) ? JSON.parse(localStorage['redux-store']) : {};
+const initialState = (localStorage['redux-store']) ? JSON.parse(localStorage['redux-store']) : jsonState;
 
 const store = storeFactory(initialState);
 
