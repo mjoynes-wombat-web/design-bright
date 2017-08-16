@@ -3,8 +3,8 @@ const cssNano = require('cssnano');
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js',
-  target: 'web',
+  entry: './server.js',
+  target: 'node',
   node: {
     fs: 'empty',
   },

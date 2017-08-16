@@ -15,7 +15,7 @@ import advisor from './routes/advisor';
 import help from './routes/help';
 
 // Grabbing Environment Variables
-const { PORT = 3001, STATUS, HOST } = dotenv.config().parsed;
+const { API_PORT = 3000, STATUS, HOST = '0.0.0.0' } = dotenv.config().parsed;
 
 // Setting up the express application.
 const app = express();
@@ -56,7 +56,7 @@ app.use('/api/help', help);
 https.createServer({
   key: fs.readFileSync('./private.key'),
   cert: fs.readFileSync('./certificate.pem'),
-}, app).listen(PORT, HOST, () => {
-  console.log(`Design Bright API running on ${HOST}:${PORT}.`);
+}, app).listen(API_PORT, HOST, () => {
+  console.log(`Design Bright API running on ${HOST}:${API_PORT}.`);
 },
 );

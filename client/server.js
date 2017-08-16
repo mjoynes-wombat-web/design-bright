@@ -6,7 +6,7 @@ import fs from 'fs';
 import http from 'http';
 import https from 'https';
 
-const { HTTP_PORT = 3001, HTTPS_PORT = 3002, STATUS, HOST = '0.0.0.0' } = dotenv.config().parsed;
+const { HTTP_PORT = 80, HTTPS_PORT = 437, STATUS, HOST = '0.0.0.0' } = dotenv.config().parsed;
 
 const app = express();
 
