@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
+import serverParams from '../../../../../serverParams.json';
 import './scss/style.scss';
 import states from '../../../../helpers/states';
 
@@ -80,9 +81,9 @@ class Register extends React.Component {
           zip,
         },
       });
-      
+
       axios.post(
-        'https://192.168.86.200:3000/api/users/create',
+        `${serverParams.hostname}:3000/api/users/create`,
         User(this.state))
         .then(results => console.log(results))
         .catch(er => console.log(er));
