@@ -9,8 +9,8 @@ module.exports = {
     fs: 'empty',
   },
   output: {
-    path: path.resolve('dist'),
-    filename: 'server.js',
+    path: path.resolve('./'),
+    filename: 'server-bundle.js',
     publicPath: '/assets',
   },
   devServer: {
