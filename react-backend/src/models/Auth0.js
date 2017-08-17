@@ -42,10 +42,8 @@ export const createNewUser = (
             'content-type': 'application/json',
           },
         })
-        .then((newUser) => {
-          console.log(newUser);
-        })
-        .catch(userErr => console.log(userErr));
+        .then(newUser => newUser)
+        .catch(userErr => userErr);
     })
     .catch(err => err);
 };

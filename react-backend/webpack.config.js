@@ -1,4 +1,14 @@
 const path = require('path');
+const fs = require('fs');
+
+const nodeModules = {};
+fs.readdirSync('node_modules')
+  .filter((x) => {
+    return ['.bin'].indexOf(x) === -1;
+  })
+  .forEach((mod) => {
+    nodeModules[mod] = `commonjs ${mod}`;
+  });
 
 module.exports = {
   entry: './src/app.js',
@@ -8,15 +18,20 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        exclude: /(node_modules)/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['latest', 'stage-0', 'react'],
+        include: [
+          path.resolve(__dirname, 'src'),
+        ],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['latest', 'stage-0', 'react'],
+          },
         },
       },
     ],
   },
+  externals: nodeModules,
 };

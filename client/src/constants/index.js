@@ -5,6 +5,7 @@ const constants = {
   ADD_PROFILE_PIC: 'ADD_PROFILE_PIC',
   SEARCH_CAMPAIGNS: 'SEARCH_CAMPAIGNS',
   FILTER_CAMPAIGNS: 'FILTER_CAMPAIGNS',
+  ERROR: 'ERROR',
 };
 
 export default constants;

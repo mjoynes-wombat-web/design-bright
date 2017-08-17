@@ -5,6 +5,7 @@
   "main": "dist",
   "scripts": {
     "start": "nodemon ./server.js --exec babel-node",
+    "build-run": "webpack -w & webpack -w --config clientServer.webpack.config.js & nodemon ./server-bundle.js",
     "build-watch": "webpack -w",
     "webpack-dev-server": "./node_modules/.bin/webpack-dev-server --host 192.168.86.200",
     "webpack-dev-server-caleb": "./node_modules/.bin/webpack-dev-server --host 192.168.1.9"

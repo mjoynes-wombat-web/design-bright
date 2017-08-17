@@ -13638,7 +13638,8 @@ var constants = {
   EDIT_PROFILE: 'EDIT_PROFILE',
   ADD_PROFILE_PIC: 'ADD_PROFILE_PIC',
   SEARCH_CAMPAIGNS: 'SEARCH_CAMPAIGNS',
-  FILTER_CAMPAIGNS: 'FILTER_CAMPAIGNS'
+  FILTER_CAMPAIGNS: 'FILTER_CAMPAIGNS',
+  ERROR: 'ERROR'
 };
 
 exports.default = constants;
@@ -32008,8 +32009,15 @@ var userAuth = function userAuth() {
   return action.type === _constants2.default.USER_AUTH ? action.payload : state;
 };
 
+var error = function error() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+  return action.type === _constants2.default.ERROR ? action.payload : state;
+};
+
 exports.default = (0, _redux.combineReducers)({
-  userAuth: userAuth
+  userAuth: userAuth,
+  error: error
 });
 
 /***/ }),
@@ -34023,7 +34031,7 @@ module.exports = function spread(callback) {
 /* 324 */
 /***/ (function(module, exports) {
 
-module.exports = {"hostname":"https://165.227.7.212"}
+module.exports = {"hostname":"https://192.168.86.200"}
 
 /***/ }),
 /* 325 */
@@ -34136,7 +34144,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getCampaigns = exports.logout = exports.login = undefined;
+exports.getCampaigns = exports.error = exports.logout = exports.login = undefined;
 
 var _auth0Js = __webpack_require__(330);
 
@@ -34148,7 +34156,7 @@ var _constants2 = _interopRequireDefault(_constants);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var login = exports.login = function login(loginInfo, callback) {
+var login = exports.login = function login(loginInfo) {
   return function (dispatch, getState) {
     var webAuth = new _auth0Js2.default.WebAuth({
       domain: 'designbright.auth0.com',
@@ -34160,14 +34168,12 @@ var login = exports.login = function login(loginInfo, callback) {
       username: loginInfo.email,
       password: loginInfo.password,
       scope: 'user_metadata'
-    }, function (err, authResults) {
-      if (err) {
-        callback(err);
-
+    }, function (errMsg, authResults) {
+      if (errMsg) {
         return dispatch({
-          type: _constants2.default.USER_AUTH,
+          type: _constants2.default.ERROR,
           payload: {
-            error: err.description
+            error: errMsg.description
           }
         });
       }
@@ -34185,6 +34191,15 @@ var logout = exports.logout = function logout() {
     dispatch({
       type: _constants2.default.USER_AUTH,
       payload: {}
+    });
+  };
+};
+
+var error = exports.error = function error(errMsg) {
+  return function (dispatch, getState) {
+    dispatch({
+      type: _constants2.default.ERROR,
+      payload: errMsg
     });
   };
 };

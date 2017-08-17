@@ -1,62 +1,32 @@
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const cssNano = require('cssnano');
 const path = require('path');
+const fs = require('fs');
+
+const nodeModules = {};
+fs.readdirSync('node_modules')
+  .filter(x => ['.bin'].indexOf(x) === -1)
+  .forEach((mod) => {
+    nodeModules[mod] = `commonjs ${mod}`;
+  });
 
 module.exports = {
   entry: './server.js',
   target: 'node',
-  node: {
-    fs: 'empty',
-  },
   output: {
-    path: path.resolve('./'),
     filename: 'server-bundle.js',
-    publicPath: '/assets',
-  },
-  devServer: {
-    inline: true,
-    contentBase: './dist',
-    port: 3000,
+    path: path.resolve(__dirname, './'),
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        exclude: /(node_modules)/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['latest', 'stage-0', 'react'],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['latest', 'stage-0', 'react'],
+          },
         },
-      },
-      {
-        test: /\.json$/,
-        exclude: /(node_modules)/,
-        loader: 'json-loader',
-      },
-      {
-        test: /\.css$$/,
-        loader: 'style-loader!css-loader',
-
-      },
-      {
-        test: /\.scss/,
-        loader: 'style-loader!css-loader!sass-loader',
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        use: [
-          'url-loader?limit=10000',
-          'img-loader',
-        ],
       },
     ],
   },
-  plugins: [
-    new OptimizeCssAssetsPlugin({
-      assetNameRegExp: /\.optimize\.css$/g,
-      cssProcessor: cssNano,
-      cssProcessorOptions: { discardComments: { removeAll: true } },
-      canPrint: true,
-    }),
-  ],
+  externals: nodeModules,
 };

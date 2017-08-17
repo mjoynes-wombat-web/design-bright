@@ -2,7 +2,7 @@ import auth0 from 'auth0-js';
 
 import C from '../constants';
 
-export const login = (loginInfo, callback) => (dispatch, getState) => {
+export const login = loginInfo => (dispatch, getState) => {
   const webAuth = new auth0.WebAuth({
     domain: 'designbright.auth0.com',
     clientID: 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh',
@@ -13,14 +13,12 @@ export const login = (loginInfo, callback) => (dispatch, getState) => {
     username: loginInfo.email,
     password: loginInfo.password,
     scope: 'user_metadata',
-  }, (err, authResults) => {
-    if (err) {
-      callback(err);
-
+  }, (errMsg, authResults) => {
+    if (errMsg) {
       return dispatch({
-        type: C.USER_AUTH,
+        type: C.ERROR,
         payload: {
-          error: err.description,
+          error: errMsg.description,
         },
       });
     }
@@ -36,6 +34,13 @@ export const logout = () => (dispatch, getState) => {
   dispatch({
     type: C.USER_AUTH,
     payload: {},
+  });
+};
+
+export const error = errMsg => (dispatch, getState) => {
+  dispatch({
+    type: C.ERROR,
+    payload: errMsg,
   });
 };
 

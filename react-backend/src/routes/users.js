@@ -11,7 +11,6 @@ const router = Router();
 
 // Accepts a new user information. Returns a confirmation message.
 router.post('/create', (req, res) => {
-  console.log(req.hostname);
   if (req.body.userInfo.app_metadata.userType === 'non-profit') {
     const NonProfit = ({ name, ein, address, city, state, zip }) => ({
       name,
