@@ -1,6 +1,4 @@
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
-
 
 import { login, logout } from '../../../../actions';
 import Login from './components';

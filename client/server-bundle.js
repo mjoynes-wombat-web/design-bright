@@ -68,7 +68,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(__dirname) {
+
 
 var _express = __webpack_require__(1);
 
@@ -115,15 +115,15 @@ if (STATUS !== undefined) {
   app.use((0, _morgan2.default)(STATUS));
 }
 
-app.use(_express2.default.static(_path2.default.join(__dirname, 'dist')));
+app.use(_express2.default.static('./dist'));
 
 app.get('/', function (req, res) {
   console.log('test');
-  res.sendFile(_path2.default.join(__dirname, 'dist', 'index.html'));
+  res.sendFile('./dist', 'index.html');
 });
 
 app.get('/*', function (req, res) {
-  res.sendFile(_path2.default.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(_path2.default.resolve('./dist', 'index.html'));
 });
 
 _http2.default.createServer(function (req, res) {
@@ -141,7 +141,6 @@ _https2.default.createServer({
 }, app).listen(HTTPS_PORT, HOST, function () {
   console.log('Design Bright site running on ' + HOST + ':' + HTTPS_PORT + '.');
 });
-/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ }),
 /* 1 */

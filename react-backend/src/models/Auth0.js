@@ -12,6 +12,8 @@ const clientWebAuth = new auth0.WebAuth({
 
 export const createNewUser = (
   { email, password, user_metadata, app_metadata },
+  success,
+  error,
 ) => {
   axios.post(
     'https://designbright.auth0.com/oauth/token',
@@ -42,10 +44,10 @@ export const createNewUser = (
             'content-type': 'application/json',
           },
         })
-        .then(newUser => newUser)
-        .catch(userErr => userErr);
+        .then(newUser => success(newUser))
+        .catch(userErr => error(userErr));
     })
-    .catch(err => err);
+    .catch(authErr => error(authErr));
 };
 
 export const getUserInfo = (accessToken) => {

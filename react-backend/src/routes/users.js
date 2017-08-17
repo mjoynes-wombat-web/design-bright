@@ -1,7 +1,9 @@
 // Create API Users Router
 import { Router } from 'express';
+
 import { addNonProfit } from '../models/nonprofits';
 import { createNewUser } from '../models/Auth0';
+import jsonResponse from '../helpers/response';
 
 const router = Router();
 
@@ -21,23 +23,36 @@ router.post('/create', (req, res) => {
       zip,
     });
     const newNonProfit = NonProfit(req.body.nonProfitInfo);
-
     addNonProfit(
       newNonProfit,
       (nonprofit) => {
         const newUser = req.body.userInfo;
         newUser.app_metadata.nonProfitID = String(nonprofit.dataValues.nonprofitId);
-        createNewUser(newUser);
+        createNewUser(
+          newUser,
+          createdUser => jsonResponse(201, createdUser.data, 'Your user was successfully created.'),
+          (error) => {
+            const { statusCode, message } = error.response.data;
+    
+            return jsonResponse(statusCode, newUser.email, message, res);
+          },
+        );
         // If user fails delete non-profit if new.
       },
-      (err) => {
-        throw new Error(err);
-      },
+      addNonProfitError => jsonResponse(500, addNonProfitError, 'There was an error adding the non-profit to the database.'),
     );
   } else {
     const newUser = req.body.userInfo;
     newUser.app_metadata.nonProfitID = '';
-    createNewUser(newUser);
+    createNewUser(
+      newUser,
+      createdUser => jsonResponse(201, createdUser.data, 'Your user was successfully created.'),
+      (error) => {
+        const { statusCode, message } = error.response.data;
+
+        return jsonResponse(statusCode, newUser.email, message, res);
+      },
+    );
   }
 });
 

@@ -14,15 +14,15 @@ if (STATUS !== undefined) {
   app.use(logger(STATUS));
 }
 
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static('./dist'));
 
 app.get('/', (req, res) => {
   console.log('test');
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile('./dist', 'index.html');
 });
 
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.resolve('./dist', 'index.html'));
 });
 
 http.createServer((req, res) => {

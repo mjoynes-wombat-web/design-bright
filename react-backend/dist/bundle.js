@@ -201,6 +201,7 @@ var whitelist = ['https://192.168.86.200:3002', 'https://192.168.1.9:3002', 'htt
 
 var corsOptions = {
   origin: function origin(_origin, callback) {
+    console.log(_origin);
     if (whitelist.indexOf(_origin) !== -1) {
       callback(null, true);
     } else {
@@ -274,6 +275,13 @@ var _nonprofits = __webpack_require__(2);
 
 var _Auth = __webpack_require__(12);
 
+var _response = __webpack_require__(19);
+
+var _response2 = _interopRequireDefault(_response);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Create API Users Router
 var router = (0, _express.Router)();
 
 /*
@@ -281,7 +289,6 @@ var router = (0, _express.Router)();
 */
 
 // Accepts a new user information. Returns a confirmation message.
-// Create API Users Router
 router.post('/create', function (req, res) {
   if (req.body.userInfo.app_metadata.userType === 'non-profit') {
     var NonProfit = function NonProfit(_ref) {
@@ -301,19 +308,36 @@ router.post('/create', function (req, res) {
       };
     };
     var newNonProfit = NonProfit(req.body.nonProfitInfo);
-
     (0, _nonprofits.addNonProfit)(newNonProfit, function (nonprofit) {
       var newUser = req.body.userInfo;
       newUser.app_metadata.nonProfitID = String(nonprofit.dataValues.nonprofitId);
-      (0, _Auth.createNewUser)(newUser);
+      (0, _Auth.createNewUser)(newUser, function (createdUser) {
+        return (0, _response2.default)(201, createdUser.data, 'Your user was successfully created.');
+      }, function (error) {
+        var _error$response$data = error.response.data,
+            statusCode = _error$response$data.statusCode,
+            message = _error$response$data.message;
+
+
+        return (0, _response2.default)(statusCode, newUser.email, message, res);
+      });
       // If user fails delete non-profit if new.
-    }, function (err) {
-      throw new Error(err);
+    }, function (addNonProfitError) {
+      return (0, _response2.default)(500, addNonProfitError, 'There was an error adding the non-profit to the database.');
     });
   } else {
     var newUser = req.body.userInfo;
     newUser.app_metadata.nonProfitID = '';
-    (0, _Auth.createNewUser)(newUser);
+    (0, _Auth.createNewUser)(newUser, function (createdUser) {
+      return (0, _response2.default)(201, createdUser.data, 'Your user was successfully created.');
+    }, function (error) {
+      var _error$response$data2 = error.response.data,
+          statusCode = _error$response$data2.statusCode,
+          message = _error$response$data2.message;
+
+
+      return (0, _response2.default)(statusCode, newUser.email, message, res);
+    });
   }
 });
 
@@ -636,7 +660,7 @@ var clientWebAuth = new _auth0Js2.default.WebAuth({
   clientID: AUTH0_CLIENT_ID
 });
 
-var createNewUser = exports.createNewUser = function createNewUser(_ref) {
+var createNewUser = exports.createNewUser = function createNewUser(_ref, success, error) {
   var email = _ref.email,
       password = _ref.password,
       user_metadata = _ref.user_metadata,
@@ -664,12 +688,12 @@ var createNewUser = exports.createNewUser = function createNewUser(_ref) {
         'content-type': 'application/json'
       }
     }).then(function (newUser) {
-      return newUser;
+      return success(newUser);
     }).catch(function (userErr) {
-      return userErr;
+      return error(userErr);
     });
-  }).catch(function (err) {
-    return err;
+  }).catch(function (authErr) {
+    return error(authErr);
   });
 };
 
@@ -846,6 +870,28 @@ router.post('/', function (req, res) {
 
 // Exporting router as default.
 exports.default = router;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var jsonResponse = function jsonResponse(statusCode, data, message, res) {
+  var response = {
+    statusCode: statusCode,
+    data: data,
+    message: message
+  };
+
+  return res.status(response.statusCode).json(response);
+};
+
+exports.default = jsonResponse;
 
 /***/ })
 /******/ ]);

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon ./src/app.js --exec babel-node",
     "build": "webpack",
-    "build-run": "webpack & nodemon ./dist/bundle.js",
+    "build-run": "webpack -w & nodemon ./dist/bundle.js",
     "start": "nodemon ./dist/bundle.js",
     "start-prod": "node ./dist/bundle.js"
   },
