@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from '../scenes/home';
 import Register from '../scenes/sign/scenes/register';
 import Login from '../scenes/sign/scenes/login';
-
+import Profile from '../scenes/userProfile';
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -16,6 +16,7 @@ const Routes = () => (
       <Route exact path='/' component={Home}/>
       <Route exact path='/register' component={Register}/>
       <Route exact path='/login' component={Login}/>
+      <Route path='/profile' component={Profile}/>
     </Switch>
   </div>
 );
