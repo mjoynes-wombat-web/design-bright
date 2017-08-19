@@ -13682,7 +13682,8 @@ var constants = {
   ADD_PROFILE_PIC: 'ADD_PROFILE_PIC',
   SEARCH_CAMPAIGNS: 'SEARCH_CAMPAIGNS',
   FILTER_CAMPAIGNS: 'FILTER_CAMPAIGNS',
-  ERROR: 'ERROR'
+  ERROR: 'ERROR',
+  MESSAGE: 'MESSAGE'
 };
 
 exports.default = constants;
@@ -32009,14 +32010,21 @@ var userAuth = function userAuth() {
 };
 
 var error = function error() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
   var action = arguments[1];
   return action.type === _constants2.default.ERROR ? action.payload : state;
 };
 
+var message = function message() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var action = arguments[1];
+  return action.type === _constants2.default.MESSAGE ? action.payload : state;
+};
+
 exports.default = (0, _redux.combineReducers)({
   userAuth: userAuth,
-  error: error
+  error: error,
+  message: message
 });
 
 /***/ }),
@@ -32061,11 +32069,10 @@ var App = function App() {
     'div',
     null,
     _react2.default.createElement(_header2.default, null),
-    _react2.default.createElement(_routes2.default, null),
+    _react2.default.createElement(_routes2.default, { onChange: window.scrollTo(0, 0) }),
     _react2.default.createElement(_footer2.default, null)
   );
-};
-
+}; /* eslint-env browser */
 exports.default = App;
 
 /***/ }),
@@ -32431,547 +32438,40 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _reactRedux = __webpack_require__(72);
 
-var _react = __webpack_require__(4);
+var _actions = __webpack_require__(329);
 
-var _react2 = _interopRequireDefault(_react);
+var _components = __webpack_require__(391);
 
-var _reactRouterDom = __webpack_require__(19);
-
-var _propTypes = __webpack_require__(8);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _axios = __webpack_require__(306);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-__webpack_require__(325);
-
-var _states = __webpack_require__(327);
-
-var _states2 = _interopRequireDefault(_states);
+var _components2 = _interopRequireDefault(_components);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var doPasswordsMatch = function doPasswordsMatch(pass, confPass) {
-  return pass === confPass;
-};
-var isNumber = function isNumber(num) {
-  var numbers = num.match('[0-9]+');
-  if (numbers) {
-    return numbers[0] === num;
-  }
-  return false;
-};
-var numLength = function numLength(num, length) {
-  return String(num).length === length;
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    userAuth: state.userAuth
+  };
 };
 
-var Register = function (_React$Component) {
-  _inherits(Register, _React$Component);
-
-  function Register(props) {
-    _classCallCheck(this, Register);
-
-    var _this = _possibleConstructorReturn(this, (Register.__proto__ || Object.getPrototypeOf(Register)).call(this, props));
-
-    _this.state = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      userType: 'donor',
-      position: '',
-      nonProfitName: '',
-      ein: '',
-      address: '',
-      city: '',
-      state: '',
-      zip: '',
-      agreed: false
-    };
-
-    _this.onChange = _this.onChange.bind(_this);
-    _this.onSubmit = _this.onSubmit.bind(_this);
-    return _this;
-  }
-
-  _createClass(Register, [{
-    key: 'onChange',
-    value: function onChange(e) {
-      var target = e.target;
-      var value = target.type === 'checkbox' ? target.checked : target.value;
-      var name = target.name;
-
-      this.setState(_defineProperty({}, name, value));
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    onNewError: function onNewError(errorMsg) {
+      dispatch((0, _actions.newError)(errorMsg));
+    },
+    onClearError: function onClearError() {
+      dispatch((0, _actions.clearError)());
+    },
+    onNewMessage: function onNewMessage(msg) {
+      dispatch((0, _actions.newMessage)(msg));
+    },
+    onClearMessage: function onClearMessage() {
+      dispatch((0, _actions.clearMessage)());
     }
-  }, {
-    key: 'onSubmit',
-    value: function onSubmit(e) {
-      e.preventDefault();
-      if (doPasswordsMatch(this.state.password, this.state.confirmPassword) && (isNumber(this.state.zip) && numLength(this.state.zip, 5) || this.state.userType === 'donor') && (isNumber(this.state.ein) && numLength(this.state.ein, 9) || this.state.userType === 'donor')) {
-        var User = function User(_ref) {
-          var email = _ref.email,
-              password = _ref.password,
-              firstName = _ref.firstName,
-              lastName = _ref.lastName,
-              userType = _ref.userType,
-              position = _ref.position,
-              nonProfitName = _ref.nonProfitName,
-              ein = _ref.ein,
-              address = _ref.address,
-              city = _ref.city,
-              state = _ref.state,
-              zip = _ref.zip;
-          return {
-            userInfo: {
-              email: email,
-              password: password,
-              user_metadata: {
-                firstName: firstName,
-                lastName: lastName,
-                passwordDate: new Date(),
-                position: position
-              },
-              app_metadata: {
-                userType: userType
-              }
-            },
-            nonProfitInfo: {
-              name: nonProfitName,
-              ein: ein,
-              address: address,
-              city: city,
-              state: state,
-              zip: zip
-            }
-          };
-        };
+  };
+};
 
-        _axios2.default.post('https://' + window.location.hostname + ':3000/api/users/create', User(this.state)).then(function (results) {
-          return console.log(results);
-        }).catch(function (er) {
-          return console.log(er);
-        });
-      } else {
-        console.log('You missed a field');
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'main',
-        { className: 'register' },
-        _react2.default.createElement(
-          'section',
-          { className: 'row align-center' },
-          _react2.default.createElement(
-            'form',
-            { className: 'small-12 columns', onSubmit: this.onSubmit },
-            _react2.default.createElement(
-              'div',
-              { className: 'row' },
-              _react2.default.createElement(
-                'h1',
-                { className: 'small-12 columns' },
-                _react2.default.createElement(
-                  'span',
-                  { className: 'underlined' },
-                  'Register'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'row align-center' },
-              _react2.default.createElement(
-                'div',
-                { className: 'small-12 large-4 columns' },
-                _react2.default.createElement(
-                  'fieldset',
-                  null,
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'first-name' },
-                    'First Name: ',
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'required' },
-                      '*'
-                    )
-                  ),
-                  _react2.default.createElement('input', {
-                    value: this.state.firstName,
-                    onChange: this.onChange,
-                    type: 'text',
-                    name: 'firstName',
-                    id: 'first-name',
-                    required: true }),
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'last-name' },
-                    'Last Name: ',
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'required' },
-                      '*'
-                    )
-                  ),
-                  _react2.default.createElement('input', {
-                    value: this.state.lastName,
-                    onChange: this.onChange,
-                    type: 'text',
-                    name: 'lastName',
-                    id: 'last-name',
-                    required: true }),
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'email' },
-                    'Email: ',
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'required' },
-                      '*'
-                    )
-                  ),
-                  _react2.default.createElement('input', {
-                    value: this.state.email,
-                    onChange: this.onChange,
-                    type: 'email',
-                    name: 'email',
-                    required: true,
-                    id: 'email' })
-                ),
-                _react2.default.createElement('hr', null),
-                _react2.default.createElement(
-                  'label',
-                  { htmlFor: 'password' },
-                  'Password: ',
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'required' },
-                    '*'
-                  )
-                ),
-                _react2.default.createElement('input', {
-                  value: this.state.password,
-                  onChange: this.onChange,
-                  type: 'password',
-                  name: 'password',
-                  id: 'password',
-                  required: true }),
-                _react2.default.createElement(
-                  'label',
-                  { htmlFor: 'confirm-password', className: 'row' + (doPasswordsMatch(this.state.password, this.state.confirmPassword) ? '' : ' invalid') },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'small-12 columns' },
-                    'Confirm Password: ',
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'required' },
-                      '*'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: ' small-12 columns' },
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'error' },
-                      'Your passwords don\'t match.'
-                    )
-                  )
-                ),
-                _react2.default.createElement('input', {
-                  value: this.state.confirmPassword,
-                  onChange: this.onChange,
-                  type: 'password',
-                  name: 'confirmPassword',
-                  id: 'confirm-password',
-                  required: true }),
-                _react2.default.createElement('hr', { className: 'hide-for-large' })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'small-12 large-4 columns' },
-                _react2.default.createElement(
-                  'fieldset',
-                  { className: 'user-type' },
-                  _react2.default.createElement(
-                    'legend',
-                    null,
-                    'Are you a donor or non-profit? ',
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'required' },
-                      '*'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'donor' },
-                    _react2.default.createElement('input', {
-                      onChange: this.onChange,
-                      onClick: this.onClick,
-                      type: 'radio',
-                      checked: this.state.userType === 'donor',
-                      name: 'userType',
-                      value: 'donor',
-                      id: 'donor' }),
-                    _react2.default.createElement('span', null),
-                    'Donor'
-                  ),
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'non-profit' },
-                    _react2.default.createElement('input', {
-                      onChange: this.onChange,
-                      onClick: this.onClick,
-                      checked: this.state.userType === 'non-profit',
-                      type: 'radio',
-                      name: 'userType',
-                      value: 'non-profit',
-                      id: 'non-profit' }),
-                    _react2.default.createElement('span', null),
-                    'Non-Profit'
-                  )
-                ),
-                _react2.default.createElement(
-                  'div',
-                  { className: this.state.userType === 'non-profit' ? '' : 'hide' },
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'position' },
-                    'Position at Non-Profit: ',
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'required' },
-                      '*'
-                    )
-                  ),
-                  _react2.default.createElement('input', {
-                    value: this.state.position,
-                    onChange: this.onChange,
-                    type: 'text',
-                    name: 'position',
-                    id: 'position',
-                    required: this.state.userType === 'non-profit' }),
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'non-profit-name' },
-                    'Non-Profit Name: ',
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'required' },
-                      '*'
-                    )
-                  ),
-                  _react2.default.createElement('input', {
-                    value: this.state.nonProfitName,
-                    onChange: this.onChange,
-                    type: 'text',
-                    name: 'nonProfitName',
-                    id: 'non-profit-name',
-                    required: this.state.userType === 'non-profit' }),
-                  _react2.default.createElement(
-                    'label',
-                    {
-                      htmlFor: 'ein',
-                      className: 'row align-bottom' + (isNumber(this.state.ein) && numLength(this.state.ein, 9) ? '' : ' invalid') + (numLength(this.state.ein, 0) ? ' empty' : '') },
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'small-12 columns' },
-                      'Employer Identification Number (EIN): ',
-                      _react2.default.createElement(
-                        'span',
-                        { className: 'required' },
-                        '*'
-                      )
-                    ),
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'small-12 columns' },
-                      _react2.default.createElement(
-                        'span',
-                        { className: 'error' },
-                        'You entered an invlaid EIN.'
-                      )
-                    )
-                  ),
-                  _react2.default.createElement('input', {
-                    value: this.state.ein,
-                    onChange: this.onChange,
-                    type: 'text',
-                    name: 'ein',
-                    id: 'ein',
-                    required: this.state.userType === 'non-profit' }),
-                  _react2.default.createElement('hr', { className: 'hide-for-large' })
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'small-12 large-4 columns' },
-                _react2.default.createElement(
-                  'div',
-                  { className: this.state.userType === 'non-profit' ? '' : 'hide' },
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'address' },
-                    'Address: ',
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'required' },
-                      '*'
-                    )
-                  ),
-                  _react2.default.createElement('input', {
-                    value: this.state.address,
-                    onChange: this.onChange,
-                    type: 'text',
-                    name: 'address',
-                    id: 'address',
-                    required: this.state.userType === 'non-profit' }),
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'city' },
-                    'City: ',
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'required' },
-                      '*'
-                    )
-                  ),
-                  _react2.default.createElement('input', {
-                    value: this.state.city,
-                    onChange: this.onChange,
-                    type: 'text',
-                    name: 'city',
-                    id: 'city',
-                    required: this.state.userType === 'non-profit' }),
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'state' },
-                    'State: ',
-                    _react2.default.createElement(
-                      'span',
-                      { className: 'required' },
-                      '*'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'select',
-                    {
-                      value: this.state.state,
-                      onChange: this.onChange,
-                      name: 'state',
-                      id: 'state',
-                      required: this.state.userType === 'non-profit' },
-                    _react2.default.createElement(
-                      'option',
-                      { value: '', disabled: true },
-                      'Choose Your State'
-                    ),
-                    _states2.default.map(function (state, i) {
-                      return _react2.default.createElement(
-                        'option',
-                        { value: state.abbreviation, key: i },
-                        state.name
-                      );
-                    })
-                  ),
-                  _react2.default.createElement(
-                    'label',
-                    { htmlFor: 'zip', className: 'row ' + (isNumber(this.state.zip) && numLength(this.state.zip, 5) ? '' : 'invalid') + (numLength(this.state.zip, 0) ? ' empty' : '') },
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'small-12 columns' },
-                      'Zip: ',
-                      _react2.default.createElement(
-                        'span',
-                        { className: 'required' },
-                        '*'
-                      )
-                    ),
-                    _react2.default.createElement(
-                      'div',
-                      { className: 'small-12 columns' },
-                      _react2.default.createElement(
-                        'span',
-                        { className: 'error' },
-                        'You entered an invlaid Zip Code.'
-                      )
-                    )
-                  ),
-                  _react2.default.createElement('input', {
-                    value: this.state.zip,
-                    onChange: this.onChange,
-                    type: 'text',
-                    name: 'zip',
-                    id: 'zip',
-                    required: this.state.userType === 'non-profit' })
-                )
-              )
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'row align-center' },
-              _react2.default.createElement(
-                'label',
-                { htmlFor: 'terms', className: 'small-12 columns terms' },
-                _react2.default.createElement('input', {
-                  checked: this.state.agreed,
-                  onChange: this.onChange,
-                  type: 'checkbox',
-                  name: 'agreed',
-                  id: 'terms',
-                  required: true }),
-                _react2.default.createElement('span', null),
-                ' ',
-                this.state.userType === 'non-profit' ? 'I am authorized to represent the non-profit listed above and' : 'I ',
-                ' agree to the Design Bright ',
-                _react2.default.createElement(
-                  _reactRouterDom.Link,
-                  { to: '/help/terms' },
-                  'terms of service.'
-                ),
-                ' ',
-                _react2.default.createElement(
-                  'span',
-                  { className: 'required' },
-                  '*'
-                )
-              ),
-              _react2.default.createElement(
-                'button',
-                {
-                  className: 'primary small-11 medium-10 large-8',
-                  type: 'submit' },
-                'Submit Request'
-              )
-            )
-          )
-        )
-      );
-    }
-  }]);
-
-  return Register;
-}(_react2.default.Component);
-
-exports.default = Register;
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_components2.default);
 
 /***/ }),
 /* 306 */
@@ -33848,51 +33348,8 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 325 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(326);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(31)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/sass-loader/lib/loader.js!./style.scss", function() {
-			var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/sass-loader/lib/loader.js!./style.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 326 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(30)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "form label, form legend {\n  color: #999999;\n  font-size: 1.125rem;\n  font-family: 'Lato', sans-serif;\n  line-height: initial;\n  font-weight: 300;\n  margin-bottom: 0.375rem; }\n  @media screen and (min-width: 40.063em) {\n    form label, form legend {\n      font-size: 1.25rem; } }\n  form label span.required, form legend span.required {\n    color: #ffaa00;\n    font-weight: normal; }\n  form label input[type=\"radio\"], form label input[type=\"checkbox\"], form legend input[type=\"radio\"], form legend input[type=\"checkbox\"] {\n    margin-right: 0.75rem; }\n  form label span.error, form legend span.error {\n    display: none;\n    font-size: 0.75rem;\n    margin-top: 0.25rem; }\n  form label.invalid:not(.empty), form legend.invalid:not(.empty) {\n    color: #ff5800;\n    border-width: 0.2rem;\n    font-weight: normal; }\n    form label.invalid:not(.empty) > div:last-child, form legend.invalid:not(.empty) > div:last-child {\n      text-align: left; }\n    form label.invalid:not(.empty) span.error, form legend.invalid:not(.empty) span.error {\n      display: initial; }\n\nform label.terms {\n  text-align: center;\n  margin-top: 2rem;\n  font-size: 1.125rem; }\n  form label.terms input[type=\"radio\"] + span, form label.terms input[type=\"checkbox\"] + span {\n    top: 0.2rem; }\n\nform input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n  color: #808080;\n  font-family: 'Lato', sans-serif;\n  font-size: 1.125rem;\n  height: 2.5rem;\n  line-height: normal;\n  box-shadow: none;\n  border: 0.09rem solid #999999; }\n  @media screen and (min-width: 40.063em) {\n    form input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n      height: 2.75rem;\n      font-size: 1.375rem; } }\n\nform input[type=\"radio\"], form input[type=\"checkbox\"] {\n  display: none; }\n\nform input[type=\"radio\"] + span, form input[type=\"checkbox\"] + span {\n  display: inline-block;\n  width: 1.25rem;\n  height: 1.25rem;\n  background-image: url(\"/assets/img/square.svg\");\n  background-repeat: no-repeat;\n  position: relative;\n  top: 0.15rem;\n  margin-right: 0.375rem; }\n\nform input[type=\"radio\"]:checked + span, form input[type=\"checkbox\"]:checked + span {\n  background: url(\"/assets/img/check-square.svg\");\n  background-repeat: no-repeat; }\n\nform hr {\n  margin: 1.5rem 0.75rem; }\n\nform fieldset.user-type label {\n  display: inline-block;\n  margin-right: 2rem;\n  margin-bottom: 1rem; }\n\nform button.primary, form button[type='submit'].primary {\n  font-family: 'Lato', sans-serif;\n  font-size: 1.25rem;\n  color: #fff;\n  background-image: url(\"/assets/img/Blue Stripe.png\");\n  background-size: 100% 100%;\n  padding: 1.25rem;\n  width: 100%;\n  margin-top: 2rem;\n  cursor: pointer; }\n  @media screen and (min-width: 40.063em) {\n    form button.primary, form button[type='submit'].primary {\n      padding: 1.5rem;\n      font-size: 1.5rem; } }\n  form button.primary:hover, form button[type='submit'].primary:hover {\n    background-image: url(\"/assets/img/Blue Stripe-drk.png\");\n    background-size: 100% 100%; }\n\np.error {\n  font-size: 0.75rem;\n  margin-top: 0.25rem;\n  color: #ff5800;\n  border-width: 0.2rem;\n  font-weight: normal; }\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 325 */,
+/* 326 */,
 /* 327 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -33937,9 +33394,6 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
       dispatch((0, _actions.login)(loginInfo, function (err) {
         return callback(err);
       }));
-    },
-    onLogout: function onLogout() {
-      dispatch((0, _actions.logout)());
     }
   };
 };
@@ -33956,7 +33410,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getCampaigns = exports.clearError = exports.newError = exports.logout = exports.login = undefined;
+exports.getCampaigns = exports.clearMessage = exports.newMessage = exports.clearError = exports.newError = exports.logout = exports.login = undefined;
 
 var _auth0Js = __webpack_require__(330);
 
@@ -33967,8 +33421,6 @@ var _constants = __webpack_require__(124);
 var _constants2 = _interopRequireDefault(_constants);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var login = exports.login = function login(loginInfo) {
   return function (dispatch, getState) {
@@ -34013,18 +33465,34 @@ var newError = exports.newError = function newError(errMsg) {
   return function (dispatch, getState) {
     dispatch({
       type: _constants2.default.ERROR,
-      payload: [].concat(_toConsumableArray(getState().error), [errMsg])
+      payload: errMsg
     });
   };
 };
 
-var clearError = exports.clearError = function clearError(delError) {
+var clearError = exports.clearError = function clearError() {
   return function (dispatch, getState) {
     dispatch({
       type: _constants2.default.ERROR,
-      payload: getState.error.filter(function (errMsg) {
-        return errMsg !== delError;
-      })
+      payload: ''
+    });
+  };
+};
+
+var newMessage = exports.newMessage = function newMessage(msg) {
+  return function (dispatch, getState) {
+    dispatch({
+      type: _constants2.default.MESSAGE,
+      payload: msg
+    });
+  };
+};
+
+var clearMessage = exports.clearMessage = function clearMessage() {
+  return function (dispatch, getState) {
+    dispatch({
+      type: _constants2.default.MESSAGE,
+      payload: ''
     });
   };
 };
@@ -41370,6 +40838,635 @@ exports = module.exports = __webpack_require__(30)(undefined);
 
 // module
 exports.push([module.i, "header {\n  background-image: url(\"/assets/img/paper.png\");\n  padding: 1.125rem 0;\n  position: relative; }\n  header div.row {\n    margin: auto; }\n    @media screen {\n      header div.row nav {\n        padding: 0 0 0.6% 0; } }\n    @media screen and (min-width: 40.063em) {\n      header div.row nav {\n        padding: 0 0 0.76% 0; } }\n    header div.row nav ul {\n      position: relative;\n      margin: 0;\n      padding: 0; }\n      header div.row nav ul.row.align-right {\n        max-width: 100%;\n        margin: 0; }\n      header div.row nav ul li {\n        display: inline-block;\n        padding: 0;\n        text-align: center; }\n        @media screen {\n          header div.row nav ul li {\n            margin-right: 0.5rem; } }\n        @media screen and (min-width: 40.063em) {\n          header div.row nav ul li {\n            margin-right: 0.6875rem; } }\n        header div.row nav ul li.search {\n          overflow: visible; }\n          header div.row nav ul li.search form {\n            height: auto;\n            margin: 0; }\n          header div.row nav ul li.search button {\n            display: none; }\n        header div.row nav ul li #search {\n          border: none;\n          box-shadow: none;\n          border-radius: 0.3rem;\n          background: url(\"/assets/img/search.svg\") rgba(255, 255, 255, 0.5);\n          background-position-x: calc(100% - 0.55rem);\n          background-position-y: calc(100% - 50%);\n          background-repeat: no-repeat;\n          color: #808080;\n          height: auto;\n          margin: 0;\n          line-height: 1.5rem; }\n          @media screen {\n            header div.row nav ul li #search {\n              background-size: 1.25rem; } }\n          @media screen and (min-width: 40.063em) {\n            header div.row nav ul li #search {\n              background-size: 1.5625rem; } }\n          header div.row nav ul li #search:hover {\n            background: url(\"/assets/img/search-drk.svg\") rgba(255, 255, 255, 0.7);\n            background-position-x: calc(100% - 0.55rem);\n            background-position-y: calc(100% - 50%);\n            background-repeat: no-repeat; }\n            @media screen {\n              header div.row nav ul li #search:hover {\n                background-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li #search:hover {\n                background-size: 1.5625rem; } }\n          header div.row nav ul li #search:focus, header div.row nav ul li #search:focus:hover {\n            position: absolute;\n            left: 0;\n            background: url(\"/assets/img/search-wht.svg\") #A6A6A6;\n            background-position-x: calc(100% - 0.55rem);\n            background-position-y: calc(100% - 50%);\n            background-size: 1.5625rem;\n            background-repeat: no-repeat;\n            color: #ffffff;\n            width: calc(100% - 0.5rem);\n            z-index: 100; }\n            @media screen {\n              header div.row nav ul li #search:focus, header div.row nav ul li #search:focus:hover {\n                background-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li #search:focus, header div.row nav ul li #search:focus:hover {\n                background-size: 1.5625rem; } }\n        header div.row nav ul li a {\n          cursor: pointer; }\n        header div.row nav ul li a, header div.row nav ul li #search {\n          display: inline-block;\n          line-height: 1.625rem;\n          font-weight: 300; }\n          @media screen {\n            header div.row nav ul li a, header div.row nav ul li #search {\n              font-size: 1rem;\n              padding: 0.25rem; } }\n          @media screen and (min-width: 40.063em) {\n            header div.row nav ul li a, header div.row nav ul li #search {\n              font-size: 1.5rem;\n              padding: .5rem; } }\n          header div.row nav ul li a:link, header div.row nav ul li a:active, header div.row nav ul li a:visited, header div.row nav ul li #search:link, header div.row nav ul li #search:active, header div.row nav ul li #search:visited {\n            color: #808080;\n            border: none;\n            text-decoration: none; }\n          header div.row nav ul li a:hover, header div.row nav ul li #search:hover {\n            color: #4d4d4d; }\n        header div.row nav ul li.user {\n          position: relative; }\n          header div.row nav ul li.user > a {\n            font-family: 'font-awesome-light'; }\n            header div.row nav ul li.user > a.logged-in {\n              font-family: 'font-awesome-solid'; }\n            @media screen {\n              header div.row nav ul li.user > a {\n                font-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li.user > a {\n                font-size: 1.5625rem; } }\n          header div.row nav ul li.user ul.user-menu {\n            display: none;\n            position: absolute;\n            right: 0;\n            background-color: #fff;\n            background-image: url(\"/assets/img/Grey Stripe.png\");\n            background-size: cover;\n            background-position: 50% 50%;\n            z-index: 300; }\n            header div.row nav ul li.user ul.user-menu li {\n              margin: 0; }\n              header div.row nav ul li.user ul.user-menu li a {\n                width: 20rem;\n                color: #fff;\n                padding: 1rem;\n                font-size: 1.5rem;\n                cursor: pointer; }\n                header div.row nav ul li.user ul.user-menu li a:hover {\n                  background-color: rgba(0, 0, 0, 0.2); }\n          header div.row nav ul li.user:hover {\n            background-color: #fff;\n            background-image: url(\"/assets/img/Grey Stripe.png\");\n            background-size: cover;\n            background-position: 50% 50%; }\n            header div.row nav ul li.user:hover a {\n              color: #ffffff; }\n            header div.row nav ul li.user:hover ul.user-menu {\n              display: block; }\n  header .logo {\n    max-width: 320px; }\n  header div.orange-line {\n    background-image: url(\"/assets/img/Orange Line.png\");\n    background-position-x: 50%;\n    height: 17px;\n    position: absolute;\n    width: 100%;\n    bottom: -6px; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(19);
+
+var _axios = __webpack_require__(306);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+__webpack_require__(392);
+
+var _states = __webpack_require__(327);
+
+var _states2 = _interopRequireDefault(_states);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* eslint-env browser */
+
+
+var doPasswordsMatch = function doPasswordsMatch(pass, confPass) {
+  return pass === confPass;
+};
+var isNumber = function isNumber(num) {
+  var numbers = num.match('[0-9]+');
+  if (numbers) {
+    return numbers[0] === num;
+  }
+  return false;
+};
+var numLength = function numLength(num, length) {
+  return String(num).length === length;
+};
+
+var Register = function (_React$Component) {
+  _inherits(Register, _React$Component);
+
+  function Register(props) {
+    _classCallCheck(this, Register);
+
+    var _this = _possibleConstructorReturn(this, (Register.__proto__ || Object.getPrototypeOf(Register)).call(this, props));
+
+    _this.state = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      userType: 'donor',
+      position: '',
+      nonProfitName: '',
+      ein: '',
+      address: '',
+      city: '',
+      state: '',
+      zip: '',
+      agreed: false,
+      userPostResults: {}
+    };
+
+    _this.onChange = _this.onChange.bind(_this);
+    _this.onSubmit = _this.onSubmit.bind(_this);
+    return _this;
+  }
+
+  _createClass(Register, [{
+    key: 'onChange',
+    value: function onChange(e) {
+      var target = e.target;
+      var value = target.type === 'checkbox' ? target.checked : target.value;
+      var name = target.name;
+
+      this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: 'onSubmit',
+    value: function onSubmit(e) {
+      var _this2 = this;
+
+      e.preventDefault();
+      if (doPasswordsMatch(this.state.password, this.state.confirmPassword) && (isNumber(this.state.zip) && numLength(this.state.zip, 5) || this.state.userType === 'donor') && (isNumber(this.state.ein) && numLength(this.state.ein, 9) || this.state.userType === 'donor')) {
+        var User = function User(_ref) {
+          var email = _ref.email,
+              password = _ref.password,
+              firstName = _ref.firstName,
+              lastName = _ref.lastName,
+              userType = _ref.userType,
+              position = _ref.position,
+              nonProfitName = _ref.nonProfitName,
+              ein = _ref.ein,
+              address = _ref.address,
+              city = _ref.city,
+              state = _ref.state,
+              zip = _ref.zip;
+          return {
+            userInfo: {
+              email: email,
+              password: password,
+              user_metadata: {
+                firstName: firstName,
+                lastName: lastName,
+                passwordDate: new Date(),
+                position: position
+              },
+              app_metadata: {
+                userType: userType
+              }
+            },
+            nonProfitInfo: {
+              name: nonProfitName,
+              ein: ein,
+              address: address,
+              city: city,
+              state: state,
+              zip: zip
+            }
+          };
+        };
+
+        _axios2.default.post('https://' + window.location.hostname + ':3000/api/users/create', User(this.state)).then(function (results) {
+          var createUserResults = results.data;
+          console.log(createUserResults);
+          _this2.props.onNewMessage('Congratulations, your have created an account for ' + createUserResults.data.email);
+          return _this2.setState({ userPostResults: createUserResults });
+        }).catch(function (error) {
+          var createUserError = error.response.data;
+          createUserError.message = '' + createUserError.data.email.charAt(0).toUpperCase() + createUserError.data.email.slice(1) + ' is already in use.';
+
+          _this2.props.onNewError(createUserError.message);
+          _this2.setState({ userPostResults: createUserError });
+
+          window.scroll(0, 0);
+        });
+      } else {
+        console.log('You missed a field');
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'main',
+        { className: 'register' },
+        _react2.default.createElement(
+          'section',
+          { className: 'row align-center' },
+          _react2.default.createElement(
+            'form',
+            { className: 'small-12 columns', onSubmit: this.onSubmit },
+            _react2.default.createElement(
+              'div',
+              { className: 'row' },
+              _react2.default.createElement(
+                'h1',
+                { className: 'small-12 columns' },
+                _react2.default.createElement(
+                  'span',
+                  { className: 'underlined' },
+                  'Register'
+                )
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row align-center' },
+              _react2.default.createElement(
+                'div',
+                { className: 'small-12 large-4 columns' },
+                _react2.default.createElement(
+                  'fieldset',
+                  null,
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'first-name' },
+                    'First Name: ',
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'required' },
+                      '*'
+                    )
+                  ),
+                  _react2.default.createElement('input', {
+                    value: this.state.firstName,
+                    onChange: this.onChange,
+                    type: 'text',
+                    name: 'firstName',
+                    id: 'first-name',
+                    required: true }),
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'last-name' },
+                    'Last Name: ',
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'required' },
+                      '*'
+                    )
+                  ),
+                  _react2.default.createElement('input', {
+                    value: this.state.lastName,
+                    onChange: this.onChange,
+                    type: 'text',
+                    name: 'lastName',
+                    id: 'last-name',
+                    required: true }),
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'email', className: 'row' + (this.state.userPostResults.statusCode === 400 ? ' invalid' : '') },
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'small-12 columns' },
+                      'Email: ',
+                      _react2.default.createElement(
+                        'span',
+                        { className: 'required' },
+                        '*'
+                      )
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: ' small-12 columns' },
+                      _react2.default.createElement(
+                        'span',
+                        { className: 'error' },
+                        this.state.userPostResults.message
+                      )
+                    )
+                  ),
+                  _react2.default.createElement('input', {
+                    value: this.state.email,
+                    onChange: this.onChange,
+                    type: 'email',
+                    name: 'email',
+                    required: true,
+                    id: 'email' })
+                ),
+                _react2.default.createElement('hr', null),
+                _react2.default.createElement(
+                  'label',
+                  { htmlFor: 'password' },
+                  'Password: ',
+                  _react2.default.createElement(
+                    'span',
+                    { className: 'required' },
+                    '*'
+                  )
+                ),
+                _react2.default.createElement('input', {
+                  value: this.state.password,
+                  onChange: this.onChange,
+                  type: 'password',
+                  name: 'password',
+                  id: 'password',
+                  required: true }),
+                _react2.default.createElement(
+                  'label',
+                  { htmlFor: 'confirm-password', className: 'row' + (doPasswordsMatch(this.state.password, this.state.confirmPassword) ? '' : ' invalid') },
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'small-12 columns' },
+                    'Confirm Password: ',
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'required' },
+                      '*'
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'div',
+                    { className: ' small-12 columns' },
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'error' },
+                      'Your passwords don\'t match.'
+                    )
+                  )
+                ),
+                _react2.default.createElement('input', {
+                  value: this.state.confirmPassword,
+                  onChange: this.onChange,
+                  type: 'password',
+                  name: 'confirmPassword',
+                  id: 'confirm-password',
+                  required: true }),
+                _react2.default.createElement('hr', { className: 'hide-for-large' })
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'small-12 large-4 columns' },
+                _react2.default.createElement(
+                  'fieldset',
+                  { className: 'user-type' },
+                  _react2.default.createElement(
+                    'legend',
+                    null,
+                    'Are you a donor or non-profit? ',
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'required' },
+                      '*'
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'donor' },
+                    _react2.default.createElement('input', {
+                      onChange: this.onChange,
+                      onClick: this.onClick,
+                      type: 'radio',
+                      checked: this.state.userType === 'donor',
+                      name: 'userType',
+                      value: 'donor',
+                      id: 'donor' }),
+                    _react2.default.createElement('span', null),
+                    'Donor'
+                  ),
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'non-profit' },
+                    _react2.default.createElement('input', {
+                      onChange: this.onChange,
+                      onClick: this.onClick,
+                      checked: this.state.userType === 'non-profit',
+                      type: 'radio',
+                      name: 'userType',
+                      value: 'non-profit',
+                      id: 'non-profit' }),
+                    _react2.default.createElement('span', null),
+                    'Non-Profit'
+                  )
+                ),
+                _react2.default.createElement(
+                  'div',
+                  { className: this.state.userType === 'non-profit' ? '' : 'hide' },
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'position' },
+                    'Position at Non-Profit: ',
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'required' },
+                      '*'
+                    )
+                  ),
+                  _react2.default.createElement('input', {
+                    value: this.state.position,
+                    onChange: this.onChange,
+                    type: 'text',
+                    name: 'position',
+                    id: 'position',
+                    required: this.state.userType === 'non-profit' }),
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'non-profit-name' },
+                    'Non-Profit Name: ',
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'required' },
+                      '*'
+                    )
+                  ),
+                  _react2.default.createElement('input', {
+                    value: this.state.nonProfitName,
+                    onChange: this.onChange,
+                    type: 'text',
+                    name: 'nonProfitName',
+                    id: 'non-profit-name',
+                    required: this.state.userType === 'non-profit' }),
+                  _react2.default.createElement(
+                    'label',
+                    {
+                      htmlFor: 'ein',
+                      className: 'row align-bottom' + (isNumber(this.state.ein) && numLength(this.state.ein, 9) ? '' : ' invalid') + (numLength(this.state.ein, 0) ? ' empty' : '') },
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'small-12 columns' },
+                      'Employer Identification Number (EIN): ',
+                      _react2.default.createElement(
+                        'span',
+                        { className: 'required' },
+                        '*'
+                      )
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'small-12 columns' },
+                      _react2.default.createElement(
+                        'span',
+                        { className: 'error' },
+                        'You entered an invlaid EIN.'
+                      )
+                    )
+                  ),
+                  _react2.default.createElement('input', {
+                    value: this.state.ein,
+                    onChange: this.onChange,
+                    type: 'text',
+                    name: 'ein',
+                    id: 'ein',
+                    required: this.state.userType === 'non-profit' }),
+                  _react2.default.createElement('hr', { className: 'hide-for-large' })
+                )
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'small-12 large-4 columns' },
+                _react2.default.createElement(
+                  'div',
+                  { className: this.state.userType === 'non-profit' ? '' : 'hide' },
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'address' },
+                    'Address: ',
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'required' },
+                      '*'
+                    )
+                  ),
+                  _react2.default.createElement('input', {
+                    value: this.state.address,
+                    onChange: this.onChange,
+                    type: 'text',
+                    name: 'address',
+                    id: 'address',
+                    required: this.state.userType === 'non-profit' }),
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'city' },
+                    'City: ',
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'required' },
+                      '*'
+                    )
+                  ),
+                  _react2.default.createElement('input', {
+                    value: this.state.city,
+                    onChange: this.onChange,
+                    type: 'text',
+                    name: 'city',
+                    id: 'city',
+                    required: this.state.userType === 'non-profit' }),
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'state' },
+                    'State: ',
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'required' },
+                      '*'
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'select',
+                    {
+                      value: this.state.state,
+                      onChange: this.onChange,
+                      name: 'state',
+                      id: 'state',
+                      required: this.state.userType === 'non-profit' },
+                    _react2.default.createElement(
+                      'option',
+                      { value: '', disabled: true },
+                      'Choose Your State'
+                    ),
+                    _states2.default.map(function (state, i) {
+                      return _react2.default.createElement(
+                        'option',
+                        { value: state.abbreviation, key: i },
+                        state.name
+                      );
+                    })
+                  ),
+                  _react2.default.createElement(
+                    'label',
+                    { htmlFor: 'zip', className: 'row ' + (isNumber(this.state.zip) && numLength(this.state.zip, 5) ? '' : 'invalid') + (numLength(this.state.zip, 0) ? ' empty' : '') },
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'small-12 columns' },
+                      'Zip: ',
+                      _react2.default.createElement(
+                        'span',
+                        { className: 'required' },
+                        '*'
+                      )
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'small-12 columns' },
+                      _react2.default.createElement(
+                        'span',
+                        { className: 'error' },
+                        'You entered an invlaid Zip Code.'
+                      )
+                    )
+                  ),
+                  _react2.default.createElement('input', {
+                    value: this.state.zip,
+                    onChange: this.onChange,
+                    type: 'text',
+                    name: 'zip',
+                    id: 'zip',
+                    required: this.state.userType === 'non-profit' })
+                )
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'row align-center' },
+              _react2.default.createElement(
+                'label',
+                { htmlFor: 'terms', className: 'small-12 columns terms' },
+                _react2.default.createElement('input', {
+                  checked: this.state.agreed,
+                  onChange: this.onChange,
+                  type: 'checkbox',
+                  name: 'agreed',
+                  id: 'terms',
+                  required: true }),
+                _react2.default.createElement('span', null),
+                ' ',
+                this.state.userType === 'non-profit' ? 'I am authorized to represent the non-profit listed above and' : 'I ',
+                ' agree to the Design Bright ',
+                _react2.default.createElement(
+                  _reactRouterDom.Link,
+                  { to: '/help/terms' },
+                  'terms of service.'
+                ),
+                ' ',
+                _react2.default.createElement(
+                  'span',
+                  { className: 'required' },
+                  '*'
+                )
+              ),
+              _react2.default.createElement(
+                'button',
+                {
+                  className: 'primary small-11 medium-10 large-8',
+                  type: 'submit' },
+                'Submit Request'
+              )
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return Register;
+}(_react2.default.Component);
+
+exports.default = Register;
+
+/***/ }),
+/* 392 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(393);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(31)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/sass-loader/lib/loader.js!./style.scss", function() {
+			var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/sass-loader/lib/loader.js!./style.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 393 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(30)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "form label, form legend {\n  color: #999999;\n  font-size: 1.125rem;\n  font-family: 'Lato', sans-serif;\n  line-height: initial;\n  font-weight: 300;\n  margin-bottom: 0.375rem; }\n  @media screen and (min-width: 40.063em) {\n    form label, form legend {\n      font-size: 1.25rem; } }\n  form label span.required, form legend span.required {\n    color: #ffaa00;\n    font-weight: normal; }\n  form label input[type=\"radio\"], form label input[type=\"checkbox\"], form legend input[type=\"radio\"], form legend input[type=\"checkbox\"] {\n    margin-right: 0.75rem; }\n  form label span.error, form legend span.error {\n    display: none;\n    font-size: 0.75rem;\n    margin-top: 0.25rem; }\n  form label.invalid:not(.empty), form legend.invalid:not(.empty) {\n    color: #ff5800;\n    border-width: 0.2rem;\n    font-weight: normal; }\n    form label.invalid:not(.empty) > div:last-child, form legend.invalid:not(.empty) > div:last-child {\n      text-align: left; }\n    form label.invalid:not(.empty) span.error, form legend.invalid:not(.empty) span.error {\n      display: initial; }\n\nform label.terms {\n  text-align: center;\n  margin-top: 2rem;\n  font-size: 1.125rem; }\n  form label.terms input[type=\"radio\"] + span, form label.terms input[type=\"checkbox\"] + span {\n    top: 0.2rem; }\n\nform input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n  color: #808080;\n  font-family: 'Lato', sans-serif;\n  font-size: 1.125rem;\n  height: 2.5rem;\n  line-height: normal;\n  box-shadow: none;\n  border: 0.09rem solid #999999; }\n  @media screen and (min-width: 40.063em) {\n    form input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n      height: 2.75rem;\n      font-size: 1.375rem; } }\n\nform input[type=\"radio\"], form input[type=\"checkbox\"] {\n  display: none; }\n\nform input[type=\"radio\"] + span, form input[type=\"checkbox\"] + span {\n  display: inline-block;\n  width: 1.25rem;\n  height: 1.25rem;\n  background-image: url(\"/assets/img/square.svg\");\n  background-repeat: no-repeat;\n  position: relative;\n  top: 0.15rem;\n  margin-right: 0.375rem; }\n\nform input[type=\"radio\"]:checked + span, form input[type=\"checkbox\"]:checked + span {\n  background: url(\"/assets/img/check-square.svg\");\n  background-repeat: no-repeat; }\n\nform hr {\n  margin: 1.5rem 0.75rem; }\n\nform fieldset.user-type label {\n  display: inline-block;\n  margin-right: 2rem;\n  margin-bottom: 1rem; }\n\nform button.primary, form button[type='submit'].primary {\n  font-family: 'Lato', sans-serif;\n  font-size: 1.25rem;\n  color: #fff;\n  background-image: url(\"/assets/img/Blue Stripe.png\");\n  background-size: 100% 100%;\n  padding: 1.25rem;\n  width: 100%;\n  margin-top: 2rem;\n  cursor: pointer; }\n  @media screen and (min-width: 40.063em) {\n    form button.primary, form button[type='submit'].primary {\n      padding: 1.5rem;\n      font-size: 1.5rem; } }\n  form button.primary:hover, form button[type='submit'].primary:hover {\n    background-image: url(\"/assets/img/Blue Stripe-drk.png\");\n    background-size: 100% 100%; }\n\np.error {\n  font-size: 0.75rem;\n  margin-top: 0.25rem;\n  color: #ff5800;\n  border-width: 0.2rem;\n  font-weight: normal; }\n", ""]);
 
 // exports
 

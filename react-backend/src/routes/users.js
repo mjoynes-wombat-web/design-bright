@@ -56,7 +56,7 @@ router.post('/create', (req, res) => {
       (error) => {
         const { statusCode, message } = error.response.data;
 
-        return jsonResponse(statusCode, newUser.email, message, res);
+        return jsonResponse(statusCode, { email: newUser.email }, message, res);
       },
     );
   }

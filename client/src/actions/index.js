@@ -40,17 +40,28 @@ export const logout = () => (dispatch, getState) => {
 export const newError = errMsg => (dispatch, getState) => {
   dispatch({
     type: C.ERROR,
-    payload: [
-      ...getState().error,
-      errMsg,
-    ],
+    payload: errMsg,
   });
 };
 
-export const clearError = delError => (dispatch, getState) => {
+export const clearError = () => (dispatch, getState) => {
   dispatch({
     type: C.ERROR,
-    payload: getState.error.filter(errMsg => errMsg !== delError),
+    payload: '',
+  });
+};
+
+export const newMessage = msg => (dispatch, getState) => {
+  dispatch({
+    type: C.MESSAGE,
+    payload: msg,
+  });
+};
+
+export const clearMessage = () => (dispatch, getState) => {
+  dispatch({
+    type: C.MESSAGE,
+    payload: '',
   });
 };
 

@@ -339,7 +339,7 @@ router.post('/create', function (req, res) {
           message = _error$response$data2.message;
 
 
-      return (0, _response2.default)(statusCode, newUser.email, message, res);
+      return (0, _response2.default)(statusCode, { email: newUser.email }, message, res);
     });
   }
 });

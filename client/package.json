@@ -15,8 +15,13 @@
   "dependencies": {
     "auth0-js": "^8.9.1",
     "axios": "^0.16.2",
+    "babel-core": "^6.25.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "dotenv": "^4.0.0",
     "express": "^4.15.4",
+    "history": "^4.6.3",
     "http": "0.0.0",
     "isomorphic-fetch": "^2.2.1",
     "morgan": "^1.8.2",
@@ -32,11 +37,7 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "request": "^2.81.0",
-    "url-loader": "^0.5.9",
-    "babel-core": "^6.25.0",
-    "babel-preset-latest": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1"
+    "url-loader": "^0.5.9"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",

@@ -6,6 +6,7 @@ const constants = {
   SEARCH_CAMPAIGNS: 'SEARCH_CAMPAIGNS',
   FILTER_CAMPAIGNS: 'FILTER_CAMPAIGNS',
   ERROR: 'ERROR',
+  MESSAGE: 'MESSAGE',
 };
 
 export default constants;
