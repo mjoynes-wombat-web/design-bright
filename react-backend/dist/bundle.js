@@ -203,7 +203,6 @@ var whitelist = ['https://192.168.86.200:3002', 'https://192.168.1.9:3002', 'htt
 
 var corsOptions = {
   origin: function origin(_origin, callback) {
-    console.log(_origin);
     if (whitelist.indexOf(_origin) !== -1) {
       callback(null, true);
     } else {
@@ -314,8 +313,8 @@ router.post('/create', function (req, res) {
       var newUser = req.body.userInfo;
       newUser.app_metadata.nonProfitID = String(nonprofit.dataValues.nonprofitId);
       (0, _Auth.createNewUser)(newUser, function (createdUser) {
-        console.log(createdUser.data);
-        return (0, _response2.default)(201, createdUser.data, 'Your user was successfully created.');
+        var newUserData = createdUser.data;
+        return (0, _response2.default)(201, newUserData, 'Your user was successfully created.', res);
       }, function (error) {
         var _error$response$data = error.response.data,
             statusCode = _error$response$data.statusCode,
@@ -332,7 +331,8 @@ router.post('/create', function (req, res) {
     var newUser = req.body.userInfo;
     newUser.app_metadata.nonProfitID = '';
     (0, _Auth.createNewUser)(newUser, function (createdUser) {
-      return (0, _response2.default)(201, createdUser.data, 'Your user was successfully created.');
+      var newUserData = createdUser.data;
+      return (0, _response2.default)(201, newUserData, 'Your user was successfully created.', res);
     }, function (error) {
       var _error$response$data2 = error.response.data,
           statusCode = _error$response$data2.statusCode,
@@ -762,7 +762,6 @@ var router = (0, _express.Router)();
 
 router.post('/create', function (req, res) {
   (0, _nonprofits.addNonProfit)(req.body, function (results) {
-    console.log(results.status);
     res.status(results.status).json(results);
   }, function (error) {
     res.json(error);

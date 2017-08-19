@@ -31,8 +31,8 @@ router.post('/create', (req, res) => {
         createNewUser(
           newUser,
           (createdUser) => {
-            console.log(createdUser.data);
-            return jsonResponse(201, createdUser.data, 'Your user was successfully created.');
+            const newUserData = createdUser.data;
+            return jsonResponse(201, newUserData, 'Your user was successfully created.', res);
           },
           (error) => {
             const { statusCode, message } = error.response.data;
@@ -49,7 +49,10 @@ router.post('/create', (req, res) => {
     newUser.app_metadata.nonProfitID = '';
     createNewUser(
       newUser,
-      createdUser => jsonResponse(201, createdUser.data, 'Your user was successfully created.'),
+      (createdUser) => {
+        const newUserData = createdUser.data;
+        return jsonResponse(201, newUserData, 'Your user was successfully created.', res);
+      },
       (error) => {
         const { statusCode, message } = error.response.data;
 
