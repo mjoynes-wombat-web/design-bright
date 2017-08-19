@@ -11,7 +11,7 @@ const mapDispatchToProps = dispatch => ({
   onLogin(loginInfo, callback) {
     dispatch(
       login(loginInfo,
-        (err) => callback(err),
+        err => callback(err),
       ),
     );
   },

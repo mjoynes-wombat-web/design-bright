@@ -32079,221 +32079,35 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _reactRedux = __webpack_require__(72);
 
-var _react = __webpack_require__(4);
+var _actions = __webpack_require__(329);
 
-var _react2 = _interopRequireDefault(_react);
+var _components = __webpack_require__(379);
 
-var _reactRouterDom = __webpack_require__(19);
-
-__webpack_require__(298);
+var _components2 = _interopRequireDefault(_components);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    userAuth: state.userAuth
+  };
+};
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Header = function (_React$Component) {
-  _inherits(Header, _React$Component);
-
-  function Header(props) {
-    _classCallCheck(this, Header);
-
-    var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
-
-    _this.state = {
-      search: 'Search'
-    };
-
-    _this.onChange = _this.onChange.bind(_this);
-    _this.onSubmit = _this.onSubmit.bind(_this);
-    _this.onClick = _this.onClick.bind(_this);
-    _this.onBlur = _this.onBlur.bind(_this);
-    return _this;
-  }
-
-  _createClass(Header, [{
-    key: 'onChange',
-    value: function onChange(e) {
-      var target = e.target;
-      var value = target.value;
-      var name = target.name;
-
-      this.setState(_defineProperty({}, name, value));
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    onLogout: function onLogout() {
+      dispatch((0, _actions.logout)());
     }
-  }, {
-    key: 'onClick',
-    value: function onClick(e) {
-      var target = e.target;
-      var value = target.value;
-      var name = target.name;
+  };
+};
 
-      if (value === 'Search') {
-        this.setState(_defineProperty({}, name, ''));
-      }
-    }
-  }, {
-    key: 'onBlur',
-    value: function onBlur(e) {
-      var target = e.target;
-      var value = target.value;
-      var name = target.name;
-
-      if (value === '') {
-        this.setState(_defineProperty({}, name, 'Search'));
-      }
-    }
-  }, {
-    key: 'onSubmit',
-    value: function onSubmit(e) {
-      e.preventDefault();
-      this.props.search(this.state);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'header',
-        null,
-        _react2.default.createElement(
-          'div',
-          { className: 'row align-bottom' },
-          _react2.default.createElement(
-            'div',
-            { className: 'logo small-5 columns' },
-            _react2.default.createElement(
-              _reactRouterDom.Link,
-              { to: '/' },
-              _react2.default.createElement('img', { src: '/assets/img/logo.png', alt: 'Design Bright Logo' })
-            )
-          ),
-          _react2.default.createElement(
-            'nav',
-            { className: 'columns expand' },
-            _react2.default.createElement(
-              'ul',
-              { className: 'row align-right' },
-              _react2.default.createElement(
-                'li',
-                { className: 'shrink columns' },
-                _react2.default.createElement(
-                  _reactRouterDom.Link,
-                  { to: 'browser' },
-                  'Explore'
-                )
-              ),
-              _react2.default.createElement(
-                'li',
-                { className: 'small-6 medium-5 large-4 columns search' },
-                _react2.default.createElement(
-                  'form',
-                  { onSubmit: this.onSubmit },
-                  _react2.default.createElement('input', {
-                    type: 'search',
-                    name: 'search',
-                    id: 'search',
-                    value: this.state.search, onChange: this.onChange,
-                    onClick: this.onClick,
-                    onBlur: this.onBlur }),
-                  _react2.default.createElement('button', { type: 'submit' })
-                )
-              ),
-              _react2.default.createElement(
-                'li',
-                { className: 'user shrink' },
-                _react2.default.createElement(
-                  'a',
-                  null,
-                  '\uF007'
-                ),
-                _react2.default.createElement(
-                  'ul',
-                  { className: 'user-menu' },
-                  _react2.default.createElement(
-                    'li',
-                    null,
-                    _react2.default.createElement(
-                      _reactRouterDom.Link,
-                      { to: '/register' },
-                      'Register'
-                    )
-                  ),
-                  _react2.default.createElement(
-                    'li',
-                    null,
-                    _react2.default.createElement(
-                      _reactRouterDom.Link,
-                      { to: '/login' },
-                      'Login'
-                    )
-                  )
-                )
-              )
-            )
-          )
-        ),
-        _react2.default.createElement('div', { className: 'orange-line' })
-      );
-    }
-  }]);
-
-  return Header;
-}(_react2.default.Component);
-
-exports.default = Header;
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_components2.default);
 
 /***/ }),
-/* 298 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(299);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(31)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/lib/loader.js!./style.scss", function() {
-			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/lib/loader.js!./style.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 299 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(30)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "header {\n  background-image: url(\"/assets/img/paper.png\");\n  padding: 1.125rem 0;\n  position: relative; }\n  header div.row {\n    margin: auto; }\n    @media screen {\n      header div.row nav {\n        padding: 0 0 0.6% 0; } }\n    @media screen and (min-width: 40.063em) {\n      header div.row nav {\n        padding: 0 0 0.76% 0; } }\n    header div.row nav ul {\n      position: relative;\n      margin: 0;\n      padding: 0; }\n      header div.row nav ul.row.align-right {\n        max-width: 100%;\n        margin: 0; }\n      header div.row nav ul li {\n        display: inline-block;\n        padding: 0;\n        text-align: center; }\n        @media screen {\n          header div.row nav ul li {\n            margin-right: 0.5rem; } }\n        @media screen and (min-width: 40.063em) {\n          header div.row nav ul li {\n            margin-right: 0.6875rem; } }\n        header div.row nav ul li.search {\n          overflow: visible; }\n          header div.row nav ul li.search form {\n            height: auto;\n            margin: 0; }\n          header div.row nav ul li.search button {\n            display: none; }\n        header div.row nav ul li #search {\n          border: none;\n          box-shadow: none;\n          border-radius: 0.3rem;\n          background: url(\"/assets/img/search.svg\") rgba(255, 255, 255, 0.5);\n          background-position-x: calc(100% - 0.55rem);\n          background-position-y: calc(100% - 50%);\n          background-repeat: no-repeat;\n          color: #808080;\n          height: auto;\n          margin: 0;\n          line-height: 1.5rem; }\n          @media screen {\n            header div.row nav ul li #search {\n              background-size: 1.25rem; } }\n          @media screen and (min-width: 40.063em) {\n            header div.row nav ul li #search {\n              background-size: 1.5625rem; } }\n          header div.row nav ul li #search:hover {\n            background: url(\"/assets/img/search-drk.svg\") rgba(255, 255, 255, 0.7);\n            background-position-x: calc(100% - 0.55rem);\n            background-position-y: calc(100% - 50%);\n            background-repeat: no-repeat; }\n            @media screen {\n              header div.row nav ul li #search:hover {\n                background-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li #search:hover {\n                background-size: 1.5625rem; } }\n          header div.row nav ul li #search:focus, header div.row nav ul li #search:focus:hover {\n            position: absolute;\n            left: 0;\n            background: url(\"/assets/img/search-wht.svg\") #A6A6A6;\n            background-position-x: calc(100% - 0.55rem);\n            background-position-y: calc(100% - 50%);\n            background-size: 1.5625rem;\n            background-repeat: no-repeat;\n            color: #ffffff;\n            width: calc(100% - 0.5rem);\n            z-index: 100; }\n            @media screen {\n              header div.row nav ul li #search:focus, header div.row nav ul li #search:focus:hover {\n                background-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li #search:focus, header div.row nav ul li #search:focus:hover {\n                background-size: 1.5625rem; } }\n        header div.row nav ul li a {\n          cursor: pointer; }\n        header div.row nav ul li a, header div.row nav ul li #search {\n          display: inline-block;\n          line-height: 1.625rem;\n          font-weight: 300; }\n          @media screen {\n            header div.row nav ul li a, header div.row nav ul li #search {\n              font-size: 1rem;\n              padding: 0.25rem; } }\n          @media screen and (min-width: 40.063em) {\n            header div.row nav ul li a, header div.row nav ul li #search {\n              font-size: 1.5rem;\n              padding: .5rem; } }\n          header div.row nav ul li a:link, header div.row nav ul li a:active, header div.row nav ul li a:visited, header div.row nav ul li #search:link, header div.row nav ul li #search:active, header div.row nav ul li #search:visited {\n            color: #808080;\n            border: none;\n            text-decoration: none; }\n          header div.row nav ul li a:hover, header div.row nav ul li #search:hover {\n            color: #4d4d4d; }\n        header div.row nav ul li.user {\n          position: relative; }\n          header div.row nav ul li.user > a {\n            font-family: 'font-awesome-light'; }\n            @media screen {\n              header div.row nav ul li.user > a {\n                font-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li.user > a {\n                font-size: 1.5625rem; } }\n          header div.row nav ul li.user ul.user-menu {\n            display: none;\n            position: absolute;\n            right: 0;\n            background-color: #fff;\n            background-image: url(\"/assets/img/Grey Stripe.png\");\n            background-size: cover;\n            background-position: 50% 50%;\n            z-index: 300; }\n            header div.row nav ul li.user ul.user-menu li {\n              margin: 0; }\n              header div.row nav ul li.user ul.user-menu li a {\n                width: 20rem;\n                color: #fff;\n                padding: 1rem;\n                font-size: 1.5rem;\n                cursor: pointer; }\n                header div.row nav ul li.user ul.user-menu li a:hover {\n                  background-color: rgba(0, 0, 0, 0.2); }\n          header div.row nav ul li.user:hover {\n            background-color: #fff;\n            background-image: url(\"/assets/img/Grey Stripe.png\");\n            background-size: cover;\n            background-position: 50% 50%; }\n            header div.row nav ul li.user:hover a {\n              color: #ffffff; }\n            header div.row nav ul li.user:hover ul.user-menu {\n              display: block; }\n  header .logo {\n    max-width: 320px; }\n  header div.orange-line {\n    background-image: url(\"/assets/img/Orange Line.png\");\n    background-position-x: 50%;\n    height: 17px;\n    position: absolute;\n    width: 100%;\n    bottom: -6px; }\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 298 */,
+/* 299 */,
 /* 300 */
 /***/ (function(module, exports) {
 
@@ -32510,7 +32324,7 @@ var Home = function Home() {
           _react2.default.createElement(
             _reactRouterDom.Link,
             { to: '/browse' },
-            'Find a Cause to Support'
+            'Find a Cause'
           )
         ),
         _react2.default.createElement(
@@ -41309,6 +41123,253 @@ exports = module.exports = __webpack_require__(30)(undefined);
 
 // module
 exports.push([module.i, "@font-face {\n  font-family: 'font-awesome-light';\n  src: url(\"/assets/fonts/fontawesome-light-300.woff\"); }\n\n@font-face {\n  font-family: 'font-awesome-solid';\n  src: url(\"/assets/fonts/fontawesome-solid-900.woff\"); }\n\nbody {\n  font-family: 'Lato', sans-serif;\n  font-weight: 300;\n  color: #808080;\n  font-size: 0.875rem;\n  position: relative;\n  min-height: 100vh;\n  padding-bottom: 130px; }\n  @media screen and (min-width: 40.063em) {\n    body {\n      font-size: 1rem; } }\n\nmain:not(.index) {\n  margin-top: 1.875rem; }\n\nmain h1 {\n  font-size: 1.5rem;\n  font-family: 'Lato', sans-serif;\n  color: #4097ff;\n  margin: 1rem 0;\n  font-weight: normal; }\n  @media screen and (min-width: 40.063em) {\n    main h1 {\n      font-size: 1.75rem;\n      margin: 1.125rem 0; } }\n  main h1 span.underlined {\n    background-image: url(\"/assets/img/Blue Line.png\");\n    background-size: 100% 0.2rem;\n    background-repeat: no-repeat;\n    background-position: bottom;\n    padding: 0 0.125rem 0.375rem 0; }\n\nmain h2 {\n  font-size: 1.125rem;\n  margin: 0.75rem 0 0.25rem 0;\n  font-family: 'Lato', sans-serif;\n  color: #ffaa00;\n  font-weight: normal; }\n  @media screen and (min-width: 40.063em) {\n    main h2 {\n      margin: 1rem 0 0.375rem 0;\n      font-size: 1.375rem; } }\n  main h2 span.underlined {\n    background-image: url(\"/assets/img/Orange Line.png\");\n    background-size: 100% 0.125rem;\n    background-repeat: no-repeat;\n    background-position: bottom;\n    padding: 0 0.125rem 0.125rem 0; }\n\nmain p {\n  line-height: 1.2rem;\n  margin: 0.25rem 0 0 0; }\n  @media screen and (min-width: 40.063em) {\n    main p {\n      margin: 0.625rem 0 0 0; } }\n  main p:last-child {\n    margin-bottom: 0; }\n  main p span.details {\n    background-image: url(\"/assets/img/Yellow Stripe 2.png\");\n    background-size: 100% 100%;\n    padding: 0.375rem 0.5rem;\n    display: inline-block; }\n\nmain a:link, main a:visited, main a:link:hover, main a:visited:hover {\n  color: #8CC0FF;\n  border-bottom: 0.0625rem solid #8CC0FF;\n  cursor: pointer;\n  text-decoration: none; }\n  main a:link:hover, main a:visited:hover, main a:link:hover:hover, main a:visited:hover:hover {\n    color: #59a4ff;\n    border-color: #59a4ff; }\n\nmain .details {\n  font-weight: 900; }\n\nmain section:not(:last-child) {\n  margin-bottom: 2rem; }\n\na:link, a:visited, a:link:hover, a:visited:hover {\n  text-decoration: none; }\n\nhr {\n  margin: 0 auto;\n  height: 0.2rem;\n  border-bottom: none;\n  background: url(\"/assets/img/Grey Line.png\");\n  background-size: 100% 100%;\n  border: none; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 379 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(19);
+
+__webpack_require__(380);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Header = function (_React$Component) {
+  _inherits(Header, _React$Component);
+
+  function Header(props) {
+    _classCallCheck(this, Header);
+
+    var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
+
+    _this.state = {
+      search: 'Search'
+    };
+
+    _this.onChange = _this.onChange.bind(_this);
+    _this.onSubmit = _this.onSubmit.bind(_this);
+    _this.onClick = _this.onClick.bind(_this);
+    _this.onBlur = _this.onBlur.bind(_this);
+    return _this;
+  }
+
+  _createClass(Header, [{
+    key: 'onChange',
+    value: function onChange(e) {
+      var target = e.target;
+      var value = target.value;
+      var name = target.name;
+
+      this.setState(_defineProperty({}, name, value));
+    }
+  }, {
+    key: 'onClick',
+    value: function onClick(e) {
+      var target = e.target;
+      var value = target.value;
+      var name = target.name;
+
+      if (value === 'Search') {
+        this.setState(_defineProperty({}, name, ''));
+      }
+    }
+  }, {
+    key: 'onBlur',
+    value: function onBlur(e) {
+      var target = e.target;
+      var value = target.value;
+      var name = target.name;
+
+      if (value === '') {
+        this.setState(_defineProperty({}, name, 'Search'));
+      }
+    }
+  }, {
+    key: 'onSubmit',
+    value: function onSubmit(e) {
+      e.preventDefault();
+      this.props.search(this.state);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'header',
+        null,
+        _react2.default.createElement(
+          'div',
+          { className: 'row align-bottom' },
+          _react2.default.createElement(
+            'div',
+            { className: 'logo small-5 columns' },
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/' },
+              _react2.default.createElement('img', { src: '/assets/img/logo.png', alt: 'Design Bright Logo' })
+            )
+          ),
+          _react2.default.createElement(
+            'nav',
+            { className: 'columns expand' },
+            _react2.default.createElement(
+              'ul',
+              { className: 'row align-right' },
+              _react2.default.createElement(
+                'li',
+                { className: 'shrink columns' },
+                _react2.default.createElement(
+                  _reactRouterDom.Link,
+                  { to: 'browser' },
+                  'Explore'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                { className: 'small-6 medium-5 large-4 columns search' },
+                _react2.default.createElement(
+                  'form',
+                  { onSubmit: this.onSubmit },
+                  _react2.default.createElement('input', {
+                    type: 'search',
+                    name: 'search',
+                    id: 'search',
+                    value: this.state.search, onChange: this.onChange,
+                    onClick: this.onClick,
+                    onBlur: this.onBlur }),
+                  _react2.default.createElement('button', { type: 'submit' })
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                { className: 'user shrink' },
+                _react2.default.createElement(
+                  'a',
+                  {
+                    className: this.props.userAuth.accessToken ? 'logged-in' : '' },
+                  '\uF007'
+                ),
+                this.props.userAuth.accessToken ? _react2.default.createElement(
+                  'ul',
+                  { className: 'user-menu' },
+                  _react2.default.createElement(
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                      _reactRouterDom.Link,
+                      { to: '/profile' },
+                      'Profile'
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                      _reactRouterDom.Link,
+                      { to: '/', onClick: this.props.onLogout },
+                      'Logout'
+                    )
+                  )
+                ) : _react2.default.createElement(
+                  'ul',
+                  { className: 'user-menu' },
+                  _react2.default.createElement(
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                      _reactRouterDom.Link,
+                      { to: '/register' },
+                      'Register'
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'li',
+                    null,
+                    _react2.default.createElement(
+                      _reactRouterDom.Link,
+                      { to: '/login' },
+                      'Login'
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ),
+        _react2.default.createElement('div', { className: 'orange-line' })
+      );
+    }
+  }]);
+
+  return Header;
+}(_react2.default.Component);
+
+exports.default = Header;
+
+/***/ }),
+/* 380 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(381);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(31)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/sass-loader/lib/loader.js!./style.scss", function() {
+			var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/sass-loader/lib/loader.js!./style.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 381 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(30)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "header {\n  background-image: url(\"/assets/img/paper.png\");\n  padding: 1.125rem 0;\n  position: relative; }\n  header div.row {\n    margin: auto; }\n    @media screen {\n      header div.row nav {\n        padding: 0 0 0.6% 0; } }\n    @media screen and (min-width: 40.063em) {\n      header div.row nav {\n        padding: 0 0 0.76% 0; } }\n    header div.row nav ul {\n      position: relative;\n      margin: 0;\n      padding: 0; }\n      header div.row nav ul.row.align-right {\n        max-width: 100%;\n        margin: 0; }\n      header div.row nav ul li {\n        display: inline-block;\n        padding: 0;\n        text-align: center; }\n        @media screen {\n          header div.row nav ul li {\n            margin-right: 0.5rem; } }\n        @media screen and (min-width: 40.063em) {\n          header div.row nav ul li {\n            margin-right: 0.6875rem; } }\n        header div.row nav ul li.search {\n          overflow: visible; }\n          header div.row nav ul li.search form {\n            height: auto;\n            margin: 0; }\n          header div.row nav ul li.search button {\n            display: none; }\n        header div.row nav ul li #search {\n          border: none;\n          box-shadow: none;\n          border-radius: 0.3rem;\n          background: url(\"/assets/img/search.svg\") rgba(255, 255, 255, 0.5);\n          background-position-x: calc(100% - 0.55rem);\n          background-position-y: calc(100% - 50%);\n          background-repeat: no-repeat;\n          color: #808080;\n          height: auto;\n          margin: 0;\n          line-height: 1.5rem; }\n          @media screen {\n            header div.row nav ul li #search {\n              background-size: 1.25rem; } }\n          @media screen and (min-width: 40.063em) {\n            header div.row nav ul li #search {\n              background-size: 1.5625rem; } }\n          header div.row nav ul li #search:hover {\n            background: url(\"/assets/img/search-drk.svg\") rgba(255, 255, 255, 0.7);\n            background-position-x: calc(100% - 0.55rem);\n            background-position-y: calc(100% - 50%);\n            background-repeat: no-repeat; }\n            @media screen {\n              header div.row nav ul li #search:hover {\n                background-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li #search:hover {\n                background-size: 1.5625rem; } }\n          header div.row nav ul li #search:focus, header div.row nav ul li #search:focus:hover {\n            position: absolute;\n            left: 0;\n            background: url(\"/assets/img/search-wht.svg\") #A6A6A6;\n            background-position-x: calc(100% - 0.55rem);\n            background-position-y: calc(100% - 50%);\n            background-size: 1.5625rem;\n            background-repeat: no-repeat;\n            color: #ffffff;\n            width: calc(100% - 0.5rem);\n            z-index: 100; }\n            @media screen {\n              header div.row nav ul li #search:focus, header div.row nav ul li #search:focus:hover {\n                background-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li #search:focus, header div.row nav ul li #search:focus:hover {\n                background-size: 1.5625rem; } }\n        header div.row nav ul li a {\n          cursor: pointer; }\n        header div.row nav ul li a, header div.row nav ul li #search {\n          display: inline-block;\n          line-height: 1.625rem;\n          font-weight: 300; }\n          @media screen {\n            header div.row nav ul li a, header div.row nav ul li #search {\n              font-size: 1rem;\n              padding: 0.25rem; } }\n          @media screen and (min-width: 40.063em) {\n            header div.row nav ul li a, header div.row nav ul li #search {\n              font-size: 1.5rem;\n              padding: .5rem; } }\n          header div.row nav ul li a:link, header div.row nav ul li a:active, header div.row nav ul li a:visited, header div.row nav ul li #search:link, header div.row nav ul li #search:active, header div.row nav ul li #search:visited {\n            color: #808080;\n            border: none;\n            text-decoration: none; }\n          header div.row nav ul li a:hover, header div.row nav ul li #search:hover {\n            color: #4d4d4d; }\n        header div.row nav ul li.user {\n          position: relative; }\n          header div.row nav ul li.user > a {\n            font-family: 'font-awesome-light'; }\n            header div.row nav ul li.user > a.logged-in {\n              font-family: 'font-awesome-solid'; }\n            @media screen {\n              header div.row nav ul li.user > a {\n                font-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li.user > a {\n                font-size: 1.5625rem; } }\n          header div.row nav ul li.user ul.user-menu {\n            display: none;\n            position: absolute;\n            right: 0;\n            background-color: #fff;\n            background-image: url(\"/assets/img/Grey Stripe.png\");\n            background-size: cover;\n            background-position: 50% 50%;\n            z-index: 300; }\n            header div.row nav ul li.user ul.user-menu li {\n              margin: 0; }\n              header div.row nav ul li.user ul.user-menu li a {\n                width: 20rem;\n                color: #fff;\n                padding: 1rem;\n                font-size: 1.5rem;\n                cursor: pointer; }\n                header div.row nav ul li.user ul.user-menu li a:hover {\n                  background-color: rgba(0, 0, 0, 0.2); }\n          header div.row nav ul li.user:hover {\n            background-color: #fff;\n            background-image: url(\"/assets/img/Grey Stripe.png\");\n            background-size: cover;\n            background-position: 50% 50%; }\n            header div.row nav ul li.user:hover a {\n              color: #ffffff; }\n            header div.row nav ul li.user:hover ul.user-menu {\n              display: block; }\n  header .logo {\n    max-width: 320px; }\n  header div.orange-line {\n    background-image: url(\"/assets/img/Orange Line.png\");\n    background-position-x: 50%;\n    height: 17px;\n    position: absolute;\n    width: 100%;\n    bottom: -6px; }\n", ""]);
 
 // exports
 

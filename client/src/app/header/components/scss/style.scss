@@ -151,6 +151,10 @@ header {
             > a {
               font-family: 'font-awesome-light';
 
+              &.logged-in {
+                font-family: 'font-awesome-solid';
+              }
+
               @media screen {
                 font-size:1.25rem;
               }

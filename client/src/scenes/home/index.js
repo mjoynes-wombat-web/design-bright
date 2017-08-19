@@ -19,7 +19,7 @@ const Home = () => (
     </section>
     <section className="row">
       <div className="column small-12 medium-4">
-        <h2><Link to="/browse">Find a Cause to Support</Link></h2>
+        <h2><Link to="/browse">Find a Cause</Link></h2>
         <p>Pyotr Alexandrovitch could say no more, and was about to leave the room, overwhelmed with confusion.</p>
       </div>
       <div className="column small-12 medium-4">
