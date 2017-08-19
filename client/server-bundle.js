@@ -107,7 +107,9 @@ var _dotenv$config$parsed = _dotenv2.default.config().parsed,
     HTTPS_PORT = _dotenv$config$parsed3 === undefined ? 437 : _dotenv$config$parsed3,
     STATUS = _dotenv$config$parsed.STATUS,
     _dotenv$config$parsed4 = _dotenv$config$parsed.HOST,
-    HOST = _dotenv$config$parsed4 === undefined ? '0.0.0.0' : _dotenv$config$parsed4;
+    HOST = _dotenv$config$parsed4 === undefined ? '0.0.0.0' : _dotenv$config$parsed4,
+    PRIVATE_KEY_FILE = _dotenv$config$parsed.PRIVATE_KEY_FILE,
+    CERTIFICATE_FILE = _dotenv$config$parsed.CERTIFICATE_FILE;
 
 var app = (0, _express2.default)();
 
@@ -136,8 +138,8 @@ _http2.default.createServer(function (req, res) {
 }).listen(HTTP_PORT, HOST);
 
 _https2.default.createServer({
-  key: _fs2.default.readFileSync('./private.key'),
-  cert: _fs2.default.readFileSync('./certificate.pem')
+  key: _fs2.default.readFileSync(PRIVATE_KEY_FILE),
+  cert: _fs2.default.readFileSync(CERTIFICATE_FILE)
 }, app).listen(HTTPS_PORT, HOST, function () {
   console.log('Design Bright site running on ' + HOST + ':' + HTTPS_PORT + '.');
 });

@@ -6,7 +6,7 @@ import fs from 'fs';
 import http from 'http';
 import https from 'https';
 
-const { HTTP_PORT = 80, HTTPS_PORT = 437, STATUS, HOST = '0.0.0.0' } = dotenv.config().parsed;
+const { HTTP_PORT = 80, HTTPS_PORT = 437, STATUS, HOST = '0.0.0.0', PRIVATE_KEY_FILE, CERTIFICATE_FILE } = dotenv.config().parsed;
 
 const app = express();
 
@@ -35,8 +35,8 @@ http.createServer((req, res) => {
 }).listen(HTTP_PORT, HOST);
 
 https.createServer({
-  key: fs.readFileSync('./private.key'),
-  cert: fs.readFileSync('./certificate.pem'),
+  key: fs.readFileSync(PRIVATE_KEY_FILE),
+  cert: fs.readFileSync(CERTIFICATE_FILE),
 }, app).listen(HTTPS_PORT, HOST, () => {
   console.log(`Design Bright site running on ${HOST}:${HTTPS_PORT}.`);
 },

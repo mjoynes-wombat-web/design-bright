@@ -157,19 +157,19 @@ var _users = __webpack_require__(9);
 
 var _users2 = _interopRequireDefault(_users);
 
-var _nonprofits = __webpack_require__(15);
+var _nonprofits = __webpack_require__(16);
 
 var _nonprofits2 = _interopRequireDefault(_nonprofits);
 
-var _campaigns = __webpack_require__(16);
+var _campaigns = __webpack_require__(17);
 
 var _campaigns2 = _interopRequireDefault(_campaigns);
 
-var _advisor = __webpack_require__(17);
+var _advisor = __webpack_require__(18);
 
 var _advisor2 = _interopRequireDefault(_advisor);
 
-var _help = __webpack_require__(18);
+var _help = __webpack_require__(19);
 
 var _help2 = _interopRequireDefault(_help);
 
@@ -182,7 +182,9 @@ var _dotenv$config$parsed = _dotenv2.default.config().parsed,
     API_PORT = _dotenv$config$parsed2 === undefined ? 3000 : _dotenv$config$parsed2,
     STATUS = _dotenv$config$parsed.STATUS,
     _dotenv$config$parsed3 = _dotenv$config$parsed.HOST,
-    HOST = _dotenv$config$parsed3 === undefined ? '0.0.0.0' : _dotenv$config$parsed3;
+    HOST = _dotenv$config$parsed3 === undefined ? '0.0.0.0' : _dotenv$config$parsed3,
+    PRIVATE_KEY_FILE = _dotenv$config$parsed.PRIVATE_KEY_FILE,
+    CERTIFICATE_FILE = _dotenv$config$parsed.CERTIFICATE_FILE;
 
 // Setting up the express application.
 
@@ -222,8 +224,8 @@ app.use('/api/advisor', _advisor2.default);
 app.use('/api/help', _help2.default);
 
 _https2.default.createServer({
-  key: _fs2.default.readFileSync('./private.key'),
-  cert: _fs2.default.readFileSync('./certificate.pem')
+  key: _fs2.default.readFileSync(PRIVATE_KEY_FILE),
+  cert: _fs2.default.readFileSync(CERTIFICATE_FILE)
 }, app).listen(API_PORT, HOST, function () {
   console.log('Design Bright API running on ' + HOST + ':' + API_PORT + '.');
 });
@@ -275,7 +277,7 @@ var _nonprofits = __webpack_require__(2);
 
 var _Auth = __webpack_require__(12);
 
-var _response = __webpack_require__(19);
+var _response = __webpack_require__(15);
 
 var _response2 = _interopRequireDefault(_response);
 
@@ -728,6 +730,28 @@ module.exports = require("auth0-js");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var jsonResponse = function jsonResponse(statusCode, data, message, res) {
+  var response = {
+    statusCode: statusCode,
+    data: data,
+    message: message
+  };
+
+  return res.status(response.statusCode).json(response);
+};
+
+exports.default = jsonResponse;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _express = __webpack_require__(0);
 
@@ -747,7 +771,7 @@ router.post('/create', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -813,7 +837,7 @@ router.post('/create', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -844,7 +868,7 @@ router.post('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -870,28 +894,6 @@ router.post('/', function (req, res) {
 
 // Exporting router as default.
 exports.default = router;
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var jsonResponse = function jsonResponse(statusCode, data, message, res) {
-  var response = {
-    statusCode: statusCode,
-    data: data,
-    message: message
-  };
-
-  return res.status(response.statusCode).json(response);
-};
-
-exports.default = jsonResponse;
 
 /***/ })
 /******/ ]);
