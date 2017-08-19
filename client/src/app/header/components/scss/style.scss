@@ -167,12 +167,18 @@ header {
             ul.user-menu {
               display: none;
               position: absolute;
-              right: 0;
               background-color: #fff;
               background-image: url("/assets/img/Grey Stripe.png");
               background-size: cover;
               background-position: 50% 50%;
               z-index: 300;
+              width: 100vw;
+              right: -0.5rem;
+
+              @media screen and (min-width: $medium-break) {
+                right: 0;
+                width: auto;
+              }
 
               li {
                 margin: 0;
