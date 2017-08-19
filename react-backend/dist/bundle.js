@@ -314,6 +314,7 @@ router.post('/create', function (req, res) {
       var newUser = req.body.userInfo;
       newUser.app_metadata.nonProfitID = String(nonprofit.dataValues.nonprofitId);
       (0, _Auth.createNewUser)(newUser, function (createdUser) {
+        console.log(createdUser);
         return (0, _response2.default)(201, createdUser.data, 'Your user was successfully created.');
       }, function (error) {
         var _error$response$data = error.response.data,
