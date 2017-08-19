@@ -31,7 +31,7 @@ router.post('/create', (req, res) => {
         createNewUser(
           newUser,
           (createdUser) => {
-            console.log(createdUser);
+            console.log(createdUser.data);
             return jsonResponse(201, createdUser.data, 'Your user was successfully created.');
           },
           (error) => {
