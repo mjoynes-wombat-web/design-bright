@@ -1,4 +1,7 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
+
+import requireAuth from '../../../../../helpers/requireAuth';
 
 class Login extends React.Component {
   constructor(props) {
@@ -39,17 +42,12 @@ class Login extends React.Component {
   }
 
   render() {
-    if (this.props.userAuth.accessToken) {
+    if (requireAuth()) {
       return (
-        <form className="small-12 large-6 columns" onSubmit={this.onLogout}>
-          <div className="row align-center">
-            <button
-              className="primary small-11 medium-10 large-10"
-              type="submit">
-              Logout
-            </button>
-          </div>
-        </form>
+        <Redirect to={{
+          pathname: '/profile',
+          search: '?origin=login',
+        }} />
       );
     }
     return (
@@ -66,7 +64,7 @@ class Login extends React.Component {
                     Email: <span className="required">*</span>
                   </div>
                   <div className="small-12 columns">
-                  {this.props.userAuth.error ? <span className="error">{this.props.userAuth.error}</span> : ''}
+                    {this.props.userAuth.error ? <span className="error">{this.props.userAuth.error}</span> : ''}
                   </div>
                 </label>
                 <input

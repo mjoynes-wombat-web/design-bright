@@ -32251,7 +32251,7 @@ var Routes = function Routes() {
       null,
       _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _home2.default }),
       _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/register', component: _register2.default }),
-      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/login', component: _login2.default }),
+      _react2.default.createElement(_reactRouterDom.Route, { path: '/login', component: _login2.default }),
       _react2.default.createElement(_reactRouterDom.Route, { path: '/profile', component: _userProfile2.default })
     )
   );
@@ -40509,6 +40509,12 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(19);
+
+var _requireAuth = __webpack_require__(371);
+
+var _requireAuth2 = _interopRequireDefault(_requireAuth);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -40571,22 +40577,11 @@ var Login = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      if (this.props.userAuth.accessToken) {
-        return _react2.default.createElement(
-          'form',
-          { className: 'small-12 large-6 columns', onSubmit: this.onLogout },
-          _react2.default.createElement(
-            'div',
-            { className: 'row align-center' },
-            _react2.default.createElement(
-              'button',
-              {
-                className: 'primary small-11 medium-10 large-10',
-                type: 'submit' },
-              'Logout'
-            )
-          )
-        );
+      if ((0, _requireAuth2.default)()) {
+        return _react2.default.createElement(_reactRouterDom.Redirect, { to: {
+            pathname: '/profile',
+            search: '?origin=login'
+          } });
       }
       return _react2.default.createElement(
         'main',
@@ -40891,7 +40886,8 @@ var Profile = function (_React$Component) {
       }
 
       return _react2.default.createElement(_reactRouterDom.Redirect, { to: {
-          pathname: '/login'
+          pathname: '/login',
+          search: '?origin=profile'
         } });
     }
   }]);
@@ -41148,6 +41144,10 @@ var _reactRouterDom = __webpack_require__(19);
 
 __webpack_require__(380);
 
+var _requireAuth = __webpack_require__(371);
+
+var _requireAuth2 = _interopRequireDefault(_requireAuth);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -41269,7 +41269,7 @@ var Header = function (_React$Component) {
                 _react2.default.createElement(
                   'a',
                   {
-                    className: this.props.userAuth.accessToken ? 'logged-in' : '' },
+                    className: (0, _requireAuth2.default)() ? 'logged-in' : '' },
                   '\uF007'
                 ),
                 this.props.userAuth.accessToken ? _react2.default.createElement(

@@ -26,7 +26,7 @@ class Profile extends React.Component {
             <div className="profile-wrapper small-3 columns">
               <img src={this.state.profileImg} className="profile-img" />
               <Link to='/profile/upload-photo'>
-                  <span></span> Upload Profile Photo
+                <span></span> Upload Profile Photo
               </Link>
             </div>
             <div className="small-12 medium-9 columns">
@@ -49,6 +49,7 @@ class Profile extends React.Component {
     return (
       <Redirect to={{
         pathname: '/login',
+        search: '?origin=profile',
       }} />
     );
   }

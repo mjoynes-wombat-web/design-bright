@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import './scss/style.scss';
+import requireAuth from '../../../helpers/requireAuth';
 
 class Header extends React.Component {
   constructor(props) {
@@ -74,7 +76,7 @@ class Header extends React.Component {
               </li>
               <li className="user shrink">
                 <a
-                  className={this.props.userAuth.accessToken ? 'logged-in' : ''}>
+                  className={requireAuth() ? 'logged-in' : ''}>
                   
                 </a>
                 {
