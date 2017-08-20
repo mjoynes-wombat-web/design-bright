@@ -9,7 +9,7 @@ $large-break: 64.063em;
 $xlarge-break: 90.063em;
 $xxlarge-break: 120.063em;
 
-main.profile {
+main#profile {
   .profile-wrapper {
     margin: 1rem 0;
     text-align:center;
@@ -36,7 +36,7 @@ main.profile {
     a {
       display: block;
       border-bottom: none;
-      background-image: url('/assets/img/Yellow Stripe 5.png');
+      background-image: url('/assets/img/yellow-brush5.png');
       background-size:100% 100%;
       padding: 0.375rem 0.375rem;
       font-size:0.75rem;
@@ -64,7 +64,7 @@ main.profile {
       &:link:hover{
         border: none;
         color: $blue-hydrangea;
-        background-image: url('/assets/img/Yellow Stripe 2.png');
+        background-image: url('/assets/img/yellow-brush2.png');
         background-size:100% 100%;
       }
 

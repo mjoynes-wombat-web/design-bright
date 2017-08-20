@@ -9,6 +9,7 @@ header {
   background-image: url("/assets/img/paper.png");
   padding: 1.125rem 0;
   position: relative;
+  z-index: 100;
 
   &.no-touch div.row nav li #search {
     &:hover {
@@ -29,7 +30,7 @@ header {
     &:focus, &focus:hover {
       position: absolute;
       left:0;
-      background-image: url('/assets/img/search-wht.svg'), url('/assets/img/Grey Stripe.png');
+      background-image: url('/assets/img/search-wht.svg'), url('/assets/img/grey-brush.png');
       background-color: #ffffff;
       background-position-x: calc(100% - 0.55rem), 50%;
       background-position-y: calc(100% - 50%), 50%;
@@ -117,7 +118,7 @@ header {
             &:focus, &focus:hover {
               position: absolute;
               left:0;
-              background-image: url('/assets/img/search-wht.svg'), url('/assets/img/Grey Stripe.png');
+              background-image: url('/assets/img/search-wht.svg'), url('/assets/img/grey-brush.png');
               background-color: #ffffff;
               background-position-x: calc(100% - 0.55rem), 50%;
               background-position-y: calc(100% - 50%), 50%;
@@ -185,8 +186,8 @@ header {
               display: none;
               position: absolute;
               background-color: #fff;
-              background-image: url("/assets/img/Grey Stripe.png");
-              background-size: cover;
+              background-image: url("/assets/img/grey-brush.png");
+              background-size: auto 125%;
               background-position: 50% 50%;
               z-index: 300;
               width: 100vw;
@@ -224,8 +225,8 @@ header {
             
             &:hover {
               background-color: #fff;
-              background-image: url("/assets/img/Grey Stripe.png");
-              background-size: cover;
+              background-image: url("/assets/img/grey-brush.png");
+              background-size: auto 130%;
               background-position: 50% 50%;
               a{
                 color: #ffffff;
@@ -246,11 +247,13 @@ header {
   }
 
   div.orange-line {
-    background-image: url("/assets/img/Orange Line.png");
+    background-image: url("/assets/img/orange-line.svg");
     background-position-x: 50%;
-    height: 17px;
+    height: 1.125rem;
     position: absolute;
     width: 100%;
-    bottom: -6px;
+    bottom: -0.5625rem;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 }

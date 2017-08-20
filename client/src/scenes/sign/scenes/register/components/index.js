@@ -1,10 +1,11 @@
 /* eslint-env browser */
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import './scss/style.scss';
 import states from '../../../../../helpers/states';
+import validEmail from '../../../../../helpers/validEmail';
 
 const doPasswordsMatch = (pass, confPass) => pass === confPass;
 const isNumber = (num) => {
@@ -34,6 +35,7 @@ class Register extends React.Component {
       state: '',
       zip: '',
       agreed: false,
+      valid: false,
       userPostResults: {},
     };
 
@@ -46,18 +48,49 @@ class Register extends React.Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    this.setState({ [name]: value });
+    this.setState(
+      { [name]: value },
+      () => {
+        if (this.validate()) {
+          this.setState({ valid: true });
+        } else {
+          this.setState({ valid: false });
+        }
+      },
+    );
+  }
+
+  validate() {
+    if (
+      this.state.firstName.length > 0
+      && this.state.lastName.length > 0
+      && (this.state.email.length > 0
+        && validEmail(this.state.email))
+      && doPasswordsMatch(this.state.password, this.state.confirmPassword)
+      && this.state.password.length > 0
+      && (
+        this.state.userType === 'donor'
+        || (
+          this.state.position.length > 0
+          && this.state.nonProfitName.length > 0
+          && (isNumber(this.state.ein)
+            && numLength(this.state.ein, 9))
+          && this.state.address.length > 0
+          && this.state.city.length > 0
+          && this.state.state.length === 2
+          && (isNumber(this.state.zip)
+            && numLength(this.state.zip, 5))
+        )
+      )
+      && this.state.agreed) {
+      return true;
+    }
+    return false;
   }
 
   onSubmit(e) {
     e.preventDefault();
-    if (
-      doPasswordsMatch(this.state.password, this.state.confirmPassword)
-      && ((isNumber(this.state.zip) && numLength(this.state.zip, 5))
-        || this.state.userType === 'donor')
-      && ((isNumber(this.state.ein) && numLength(this.state.ein, 9))
-        || this.state.userType === 'donor')
-    ) {
+    if (this.state.valid) {
       const User = ({ email, password, firstName, lastName, userType, position, nonProfitName, ein, address, city, state, zip }) => ({
         userInfo: {
           email,
@@ -87,9 +120,11 @@ class Register extends React.Component {
         User(this.state))
         .then((results) => {
           const createUserResults = results.data;
-          console.log(createUserResults);
+
           this.props.onNewMessage(`Congratulations, your have created an account for ${createUserResults.data.email}`);
-          return this.setState({ userPostResults: createUserResults });
+          this.setState({ userPostResults: createUserResults });
+
+          window.scroll(0, 0);
         })
         .catch((error) => {
           const createUserError = error.response.data;
@@ -101,13 +136,15 @@ class Register extends React.Component {
           window.scroll(0, 0);
         });
     } else {
-      console.log('You missed a field');
+      this.props.onNewError('You have an invalid or empty field. Please make sure everything is filled out.');
+
+      window.scroll(0, 0);
     }
   }
 
   render() {
     return (
-      <main className="register">
+      <main id="register">
         <section className="row align-center">
           <form className="small-12 columns" onSubmit={this.onSubmit}>
             <div className="row">
@@ -136,12 +173,12 @@ class Register extends React.Component {
                     name="lastName"
                     id="last-name"
                     required />
-                  <label htmlFor="email" className={`row${this.state.userPostResults.statusCode === 400 ? ' invalid' : ''}`}>
+                  <label htmlFor="email" className={`row${this.props.error.type === 'register' ? ' invalid' : ''}${(validEmail(this.state.email) || this.state.email.length === 0) ? '' : ' invalid'}`}>
                     <div className="small-12 columns">
                       Email: <span className="required">*</span>
                     </div>
                     <div className=" small-12 columns">
-                      <span className='error'>{this.state.userPostResults.message}</span>
+                      <span className='error'>{this.props.error.type === 'register' ? this.props.error.message : 'Please enter a valid email address.'}</span>
                     </div>
                   </label>
                   <input
@@ -320,10 +357,12 @@ class Register extends React.Component {
             service.</Link> <span className='required'>*</span>
               </label>
               <button
-                className="primary small-11 medium-10 large-8"
+                className={`primary small-11 medium-10 large-8${this.state.valid ? '' : ' disabled'}`}
+                disabled={!this.state.valid}
                 type="submit">
                 Submit Request
               </button>
+              <span className='error small-12'>Please make sure you've entered all your information.</span>
             </div>
           </form>
         </section>

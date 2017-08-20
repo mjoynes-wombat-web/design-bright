@@ -1,7 +1,9 @@
+/* eslint-env browser */
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
 import requireAuth from '../../../../../helpers/requireAuth';
+import validEmail from '../../../../../helpers/validEmail';
 
 class Login extends React.Component {
   constructor(props) {
@@ -9,6 +11,7 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      loginError: '',
     };
 
     this.onChange = this.onChange.bind(this);
@@ -30,9 +33,11 @@ class Login extends React.Component {
     this.props.onLogin({
       email: this.state.email,
       password: this.state.password,
-    }, (err) => console.log(err));
+    });
 
     this.state.password = '';
+    
+    window.scroll(0, 0);
   }
 
   onLogout(e) {
@@ -51,7 +56,7 @@ class Login extends React.Component {
       );
     }
     return (
-      <main className="login">
+      <main id="login">
         <section className="row align-center">
           <form className="small-12 large-6 columns" onSubmit={this.onLogin}>
             <div className="row">
@@ -59,12 +64,13 @@ class Login extends React.Component {
             </div>
             <div className="row align-center">
               <div className="small-12 columns">
-                <label htmlFor="email" className={`row${this.props.userAuth.error ? ' invalid' : ''}`}>
+                <label htmlFor="email"
+                  className={`row${this.props.error.type === 'login' ? ' invalid' : ''}${(validEmail(this.state.email) || this.state.email.length === 0) ? '' : ' invalid'}`}>
                   <div className="small-12 columns">
                     Email: <span className="required">*</span>
                   </div>
                   <div className="small-12 columns">
-                    {this.props.userAuth.error ? <span className="error">{this.props.userAuth.error}</span> : ''}
+                    <span className="error">{this.props.error.type === 'login' ? this.props.error.message : 'Please enter a valid email address.'}</span>
                   </div>
                 </label>
                 <input

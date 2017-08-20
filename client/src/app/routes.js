@@ -6,6 +6,7 @@ import Register from '../scenes/sign/scenes/register';
 import Login from '../scenes/sign/scenes/login';
 import Profile from '../scenes/userProfile';
 import routeRefresh from '../helpers/routeRefresh';
+import Message from '../partials/messages';
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -15,7 +16,8 @@ import routeRefresh from '../helpers/routeRefresh';
 
 const Routes = () => (
   <div className={('ontouchstart' in document.documentElement) ? '' : 'no-touch'}>
-    <Switch onEnter={routeRefresh()}>
+    <Message />
+    <Switch onComponentWillMount={routeRefresh()}>
       <Route
         exact path='/'
         component={Home}/>

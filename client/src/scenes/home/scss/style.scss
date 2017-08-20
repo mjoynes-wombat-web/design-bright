@@ -1,4 +1,4 @@
-main.index {
+main#index {
   position: relative;
   section.main-image {
       overflow: hidden;
@@ -15,14 +15,27 @@ main.index {
       img {
         min-width: 100%;
       }
-    }
 
-  div.orange-line {
-    background-image: url("/assets/img/Orange Line-wht-btm.png");
-    background-position-x: 50%;
-    height: 17px;
-    position: absolute;
-    width: 100%;
-    bottom: -1px;
-  }
+      div.orange-line {
+        background-image: url("/assets/img/orange-line.svg");
+        background-position-x: 50%;
+        position: absolute;
+        width: 100%;
+        bottom: -0.25rem;
+        height: 1.125rem;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index:200;
+        transform: rotate(180deg);
+      }
+
+      div.white-block {
+        background-color: white;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 0.29rem;
+        z-index: 100;
+      }
+    }
 }

@@ -21,7 +21,7 @@ class Profile extends React.Component {
   render() {
     if (requireAuth()) {
       return (
-        <main className="profile">
+        <main id="profile" className="small-12 columns">
           <section className="row align-center">
             <div className="profile-wrapper small-3 columns">
               <img src={this.state.profileImg} className="profile-img" />

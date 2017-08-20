@@ -32249,6 +32249,10 @@ var _routeRefresh = __webpack_require__(394);
 
 var _routeRefresh2 = _interopRequireDefault(_routeRefresh);
 
+var _messages = __webpack_require__(396);
+
+var _messages2 = _interopRequireDefault(_messages);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // The Main component renders one of the three provided
@@ -32257,13 +32261,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // with /roster or /schedule. The / route will only match
 // when the pathname is exactly the string "/"
 
+/* eslint-env browser */
 var Routes = function Routes() {
   return _react2.default.createElement(
     'div',
     { className: 'ontouchstart' in document.documentElement ? '' : 'no-touch' },
+    _react2.default.createElement(_messages2.default, null),
     _react2.default.createElement(
       _reactRouterDom.Switch,
-      { onEnter: (0, _routeRefresh2.default)() },
+      { onComponentWillMount: (0, _routeRefresh2.default)() },
       _react2.default.createElement(_reactRouterDom.Route, {
         exact: true, path: '/',
         component: _home2.default }),
@@ -32280,7 +32286,8 @@ var Routes = function Routes() {
         component: _userProfile2.default })
     )
   );
-}; /* eslint-env browser */
+};
+
 exports.default = Routes;
 
 /***/ }),
@@ -32307,12 +32314,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Home = function Home() {
   return _react2.default.createElement(
     'main',
-    { className: 'index' },
+    { id: 'index' },
     _react2.default.createElement(
       'section',
       { className: 'main-image' },
       _react2.default.createElement('img', { src: 'assets/img/sunset marsh.jpg', alt: 'Sunset over the marsh.' }),
-      _react2.default.createElement('div', { className: 'orange-line' })
+      _react2.default.createElement('div', { className: 'orange-line' }),
+      _react2.default.createElement('div', { className: 'white-block' })
     ),
     _react2.default.createElement(
       'section',
@@ -32439,7 +32447,7 @@ exports = module.exports = __webpack_require__(30)(undefined);
 
 
 // module
-exports.push([module.i, "main.index {\n  position: relative; }\n  main.index section.main-image {\n    overflow: hidden;\n    position: relative;\n    z-index: -10;\n    max-height: 300px;\n    display: flex;\n    align-items: center;\n    padding: 0;\n    margin: 0;\n    margin-bottom: 2rem;\n    width: 100%;\n    height: 40vw; }\n    main.index section.main-image img {\n      min-width: 100%; }\n  main.index div.orange-line {\n    background-image: url(\"/assets/img/Orange Line-wht-btm.png\");\n    background-position-x: 50%;\n    height: 17px;\n    position: absolute;\n    width: 100%;\n    bottom: -1px; }\n", ""]);
+exports.push([module.i, "main#index {\n  position: relative; }\n  main#index section.main-image {\n    overflow: hidden;\n    position: relative;\n    z-index: -10;\n    max-height: 300px;\n    display: flex;\n    align-items: center;\n    padding: 0;\n    margin: 0;\n    margin-bottom: 2rem;\n    width: 100%;\n    height: 40vw; }\n    main#index section.main-image img {\n      min-width: 100%; }\n    main#index section.main-image div.orange-line {\n      background-image: url(\"/assets/img/orange-line.svg\");\n      background-position-x: 50%;\n      position: absolute;\n      width: 100%;\n      bottom: -0.25rem;\n      height: 1.125rem;\n      background-repeat: no-repeat;\n      background-size: cover;\n      z-index: 200;\n      transform: rotate(180deg); }\n    main#index section.main-image div.white-block {\n      background-color: white;\n      position: absolute;\n      bottom: 0;\n      width: 100%;\n      height: 0.29rem;\n      z-index: 100; }\n", ""]);
 
 // exports
 
@@ -32467,20 +32475,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    userAuth: state.userAuth
+    userAuth: state.userAuth,
+    error: state.error
   };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     onNewError: function onNewError(errorMsg) {
-      dispatch((0, _actions.newError)(errorMsg));
+      dispatch((0, _actions.newError)('register', errorMsg));
     },
     onClearError: function onClearError() {
       dispatch((0, _actions.clearError)());
     },
     onNewMessage: function onNewMessage(msg) {
-      dispatch((0, _actions.newMessage)(msg));
+      dispatch((0, _actions.newMessage)('register', msg));
     },
     onClearMessage: function onClearMessage() {
       dispatch((0, _actions.clearMessage)());
@@ -33401,16 +33410,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    userAuth: state.userAuth
+    userAuth: state.userAuth,
+    error: state.error
   };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
-    onLogin: function onLogin(loginInfo, callback) {
-      dispatch((0, _actions.login)(loginInfo, function (err) {
-        return callback(err);
-      }));
+    onLogin: function onLogin(loginInfo) {
+      dispatch((0, _actions.login)(loginInfo));
     }
   };
 };
@@ -33427,7 +33435,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getCampaigns = exports.clearMessage = exports.newMessage = exports.clearError = exports.newError = exports.logout = exports.login = undefined;
+exports.getCampaigns = exports.logout = exports.login = exports.clearMessage = exports.newMessage = exports.clearError = exports.newError = undefined;
 
 var _auth0Js = __webpack_require__(330);
 
@@ -33438,6 +33446,54 @@ var _constants = __webpack_require__(124);
 var _constants2 = _interopRequireDefault(_constants);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var newError = exports.newError = function newError(errType, errMsg) {
+  return function (dispatch, getState) {
+    dispatch({
+      type: _constants2.default.ERROR,
+      payload: {
+        type: errType,
+        message: errMsg
+      }
+    });
+  };
+};
+
+var clearError = exports.clearError = function clearError() {
+  return function (dispatch, getState) {
+    dispatch({
+      type: _constants2.default.ERROR,
+      payload: {
+        type: '',
+        message: ''
+      }
+    });
+  };
+};
+
+var newMessage = exports.newMessage = function newMessage(msgType, msg) {
+  return function (dispatch, getState) {
+    dispatch({
+      type: _constants2.default.MESSAGE,
+      payload: {
+        type: msgType,
+        message: msg
+      }
+    });
+  };
+};
+
+var clearMessage = exports.clearMessage = function clearMessage() {
+  return function (dispatch, getState) {
+    dispatch({
+      type: _constants2.default.MESSAGE,
+      payload: {
+        type: '',
+        message: ''
+      }
+    });
+  };
+};
 
 var login = exports.login = function login(loginInfo) {
   return function (dispatch, getState) {
@@ -33453,12 +33509,7 @@ var login = exports.login = function login(loginInfo) {
       scope: 'user_metadata'
     }, function (errMsg, authResults) {
       if (errMsg) {
-        return dispatch({
-          type: _constants2.default.ERROR,
-          payload: {
-            error: errMsg.description
-          }
-        });
+        return dispatch(newError('login', errMsg.description));
       }
 
       return dispatch({
@@ -33474,42 +33525,6 @@ var logout = exports.logout = function logout() {
     dispatch({
       type: _constants2.default.USER_AUTH,
       payload: {}
-    });
-  };
-};
-
-var newError = exports.newError = function newError(errMsg) {
-  return function (dispatch, getState) {
-    dispatch({
-      type: _constants2.default.ERROR,
-      payload: errMsg
-    });
-  };
-};
-
-var clearError = exports.clearError = function clearError() {
-  return function (dispatch, getState) {
-    dispatch({
-      type: _constants2.default.ERROR,
-      payload: ''
-    });
-  };
-};
-
-var newMessage = exports.newMessage = function newMessage(msg) {
-  return function (dispatch, getState) {
-    dispatch({
-      type: _constants2.default.MESSAGE,
-      payload: msg
-    });
-  };
-};
-
-var clearMessage = exports.clearMessage = function clearMessage() {
-  return function (dispatch, getState) {
-    dispatch({
-      type: _constants2.default.MESSAGE,
-      payload: ''
     });
   };
 };
@@ -40000,6 +40015,10 @@ var _requireAuth = __webpack_require__(371);
 
 var _requireAuth2 = _interopRequireDefault(_requireAuth);
 
+var _validEmail = __webpack_require__(395);
+
+var _validEmail2 = _interopRequireDefault(_validEmail);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -40008,7 +40027,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* eslint-env browser */
+
 
 var Login = function (_React$Component) {
   _inherits(Login, _React$Component);
@@ -40020,7 +40040,8 @@ var Login = function (_React$Component) {
 
     _this.state = {
       email: '',
-      password: ''
+      password: '',
+      loginError: ''
     };
 
     _this.onChange = _this.onChange.bind(_this);
@@ -40046,11 +40067,11 @@ var Login = function (_React$Component) {
       this.props.onLogin({
         email: this.state.email,
         password: this.state.password
-      }, function (err) {
-        return console.log(err);
       });
 
       this.state.password = '';
+
+      window.scroll(0, 0);
     }
   }, {
     key: 'onLogout',
@@ -40070,7 +40091,7 @@ var Login = function (_React$Component) {
       }
       return _react2.default.createElement(
         'main',
-        { className: 'login' },
+        { id: 'login' },
         _react2.default.createElement(
           'section',
           { className: 'row align-center' },
@@ -40098,7 +40119,8 @@ var Login = function (_React$Component) {
                 { className: 'small-12 columns' },
                 _react2.default.createElement(
                   'label',
-                  { htmlFor: 'email', className: 'row' + (this.props.userAuth.error ? ' invalid' : '') },
+                  { htmlFor: 'email',
+                    className: 'row' + (this.props.error.type === 'login' ? ' invalid' : '') + ((0, _validEmail2.default)(this.state.email) || this.state.email.length === 0 ? '' : ' invalid') },
                   _react2.default.createElement(
                     'div',
                     { className: 'small-12 columns' },
@@ -40112,11 +40134,11 @@ var Login = function (_React$Component) {
                   _react2.default.createElement(
                     'div',
                     { className: 'small-12 columns' },
-                    this.props.userAuth.error ? _react2.default.createElement(
+                    _react2.default.createElement(
                       'span',
                       { className: 'error' },
-                      this.props.userAuth.error
-                    ) : ''
+                      this.props.error.type === 'login' ? this.props.error.message : 'Please enter a valid email address.'
+                    )
                   )
                 ),
                 _react2.default.createElement('input', {
@@ -40299,7 +40321,7 @@ var Profile = function (_React$Component) {
       if ((0, _requireAuth2.default)()) {
         return _react2.default.createElement(
           'main',
-          { className: 'profile' },
+          { id: 'profile', className: 'small-12 columns' },
           _react2.default.createElement(
             'section',
             { className: 'row align-center' },
@@ -40452,7 +40474,7 @@ exports = module.exports = __webpack_require__(30)(undefined);
 
 
 // module
-exports.push([module.i, "form label, form legend {\n  color: #999999;\n  font-size: 1.125rem;\n  font-family: 'Lato', sans-serif;\n  line-height: initial;\n  font-weight: 300;\n  margin-bottom: 0.375rem; }\n  @media screen and (min-width: 40.063em) {\n    form label, form legend {\n      font-size: 1.25rem; } }\n  form label span.required, form legend span.required {\n    color: #ffaa00;\n    font-weight: normal; }\n  form label input[type=\"radio\"], form label input[type=\"checkbox\"], form legend input[type=\"radio\"], form legend input[type=\"checkbox\"] {\n    margin-right: 0.75rem; }\n  form label span.error, form legend span.error {\n    display: none;\n    font-size: 0.75rem;\n    margin-top: 0.25rem; }\n  form label.invalid:not(.empty), form legend.invalid:not(.empty) {\n    color: #ff5800;\n    border-width: 0.2rem;\n    font-weight: normal; }\n    form label.invalid:not(.empty) > div:last-child, form legend.invalid:not(.empty) > div:last-child {\n      text-align: left; }\n    form label.invalid:not(.empty) span.error, form legend.invalid:not(.empty) span.error {\n      display: initial; }\n\nform label.terms {\n  text-align: center;\n  margin-top: 2rem;\n  font-size: 1.125rem; }\n  form label.terms input[type=\"radio\"] + span, form label.terms input[type=\"checkbox\"] + span {\n    top: 0.2rem; }\n\nform input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n  color: #808080;\n  font-family: 'Lato', sans-serif;\n  font-size: 1.125rem;\n  height: 2.5rem;\n  line-height: normal;\n  box-shadow: none;\n  border: 0.09rem solid #999999; }\n  @media screen and (min-width: 40.063em) {\n    form input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n      height: 2.75rem;\n      font-size: 1.375rem; } }\n\nform input[type=\"radio\"], form input[type=\"checkbox\"] {\n  display: none; }\n\nform input[type=\"radio\"] + span, form input[type=\"checkbox\"] + span {\n  display: inline-block;\n  width: 1.25rem;\n  height: 1.25rem;\n  background-image: url(\"/assets/img/square.svg\");\n  background-repeat: no-repeat;\n  position: relative;\n  top: 0.15rem;\n  margin-right: 0.375rem; }\n\nform input[type=\"radio\"]:checked + span, form input[type=\"checkbox\"]:checked + span {\n  background: url(\"/assets/img/check-square.svg\");\n  background-repeat: no-repeat; }\n\nform hr {\n  margin: 1.5rem 0.75rem; }\n\nform fieldset.user-type label {\n  display: inline-block;\n  margin-right: 2rem;\n  margin-bottom: 1rem; }\n\nform button.primary, form button[type='submit'].primary {\n  font-family: 'Lato', sans-serif;\n  font-size: 1.25rem;\n  color: #fff;\n  background-image: url(\"/assets/img/Blue Stripe.png\");\n  background-size: 100% 100%;\n  padding: 1.25rem;\n  width: 100%;\n  margin-top: 2rem;\n  cursor: pointer; }\n  @media screen and (min-width: 40.063em) {\n    form button.primary, form button[type='submit'].primary {\n      padding: 1.5rem;\n      font-size: 1.5rem; } }\n  form button.primary:hover, form button[type='submit'].primary:hover {\n    background-image: url(\"/assets/img/Blue Stripe-drk.png\");\n    background-size: 100% 100%; }\n\np.error {\n  font-size: 0.75rem;\n  margin-top: 0.25rem;\n  color: #ff5800;\n  border-width: 0.2rem;\n  font-weight: normal; }\n\nmain.profile .profile-wrapper {\n  margin: 1rem 0;\n  text-align: center;\n  position: relative;\n  min-width: calc(144px + 0.75rem);\n  padding: 0;\n  margin-bottom: 0; }\n  @media screen and (min-width: 40.063em) {\n    main.profile .profile-wrapper {\n      font-size: 1.75rem;\n      margin: 1.125rem 0;\n      padding: 0 0.9375rem; } }\n  main.profile .profile-wrapper img.profile-img {\n    max-width: 210px;\n    min-width: 144px;\n    width: 90%;\n    margin: 0 0.375rem;\n    height: auto;\n    border-radius: 0.25rem; }\n  main.profile .profile-wrapper a {\n    display: block;\n    border-bottom: none;\n    background-image: url(\"/assets/img/Yellow Stripe 5.png\");\n    background-size: 100% 100%;\n    padding: 0.375rem 0.375rem;\n    font-size: 0.75rem;\n    font-weight: normal;\n    color: #0d7bff;\n    text-shadow: 0 0 0.25rem #fff;\n    min-width: calc(144px + 0.75rem);\n    position: absolute;\n    bottom: -0.375rem;\n    left: 0;\n    right: 0;\n    margin: 0 auto; }\n    @media screen and (min-width: 40.063em) {\n      main.profile .profile-wrapper a {\n        position: relative;\n        bottom: 1.5rem; } }\n    @media screen and (min-width: 64.063em) {\n      main.profile .profile-wrapper a {\n        font-size: 1.125rem; } }\n    main.profile .profile-wrapper a:link:hover {\n      border: none;\n      color: #4097ff;\n      background-image: url(\"/assets/img/Yellow Stripe 2.png\");\n      background-size: 100% 100%; }\n    main.profile .profile-wrapper a span {\n      font-family: 'font-awesome-light';\n      font-size: 0.875rem;\n      position: relative;\n      vertical-align: middle;\n      top: -0.125rem; }\n      @media screen and (min-width: 64.063em) {\n        main.profile .profile-wrapper a span {\n          font-size: 1.125rem; } }\n\nmain.profile p {\n  font-size: 1.25rem;\n  color: #808080;\n  margin: 0.125rem 0 1rem 0;\n  line-height: initial; }\n  @media screen and (min-width: 40.063em) {\n    main.profile p {\n      font-size: 1.375rem; } }\n  main.profile p.title {\n    color: #999999;\n    font-size: 1.125rem;\n    font-family: 'Lato', sans-serif;\n    line-height: initial;\n    font-weight: 300;\n    margin-bottom: 0.125rem; }\n    @media screen and (min-width: 40.063em) {\n      main.profile p.title {\n        font-size: 1.25rem; } }\n", ""]);
+exports.push([module.i, "form label, form legend {\n  color: #999999;\n  font-size: 1.125rem;\n  font-family: 'Lato', sans-serif;\n  line-height: initial;\n  font-weight: 300;\n  margin-bottom: 0.375rem; }\n  @media screen and (min-width: 40.063em) {\n    form label, form legend {\n      font-size: 1.25rem; } }\n  form label span.required, form legend span.required {\n    color: #ffaa00;\n    font-weight: normal; }\n  form label input[type=\"radio\"], form label input[type=\"checkbox\"], form legend input[type=\"radio\"], form legend input[type=\"checkbox\"] {\n    margin-right: 0.75rem; }\n  form label span.error, form legend span.error {\n    display: none;\n    font-size: 0.75rem;\n    margin-top: 0.25rem; }\n  form label.invalid:not(.empty), form legend.invalid:not(.empty) {\n    color: #ff5800;\n    border-width: 0.2rem;\n    font-weight: normal; }\n    form label.invalid:not(.empty) > div:last-child, form legend.invalid:not(.empty) > div:last-child {\n      text-align: left; }\n    form label.invalid:not(.empty) span.error, form legend.invalid:not(.empty) span.error {\n      display: initial; }\n\nform label.terms {\n  text-align: center;\n  margin-top: 2rem;\n  font-size: 1.125rem; }\n  form label.terms input[type=\"radio\"] + span, form label.terms input[type=\"checkbox\"] + span {\n    top: 0.2rem; }\n\nform input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n  color: #808080;\n  font-family: 'Lato', sans-serif;\n  font-size: 1.125rem;\n  height: 2.5rem;\n  line-height: normal;\n  box-shadow: none;\n  border: 0.09rem solid #999999; }\n  @media screen and (min-width: 40.063em) {\n    form input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n      height: 2.75rem;\n      font-size: 1.375rem; } }\n\nform input[type=\"radio\"], form input[type=\"checkbox\"] {\n  display: none; }\n\nform input[type=\"radio\"] + span, form input[type=\"checkbox\"] + span {\n  display: inline-block;\n  width: 1.25rem;\n  height: 1.25rem;\n  background-image: url(\"/assets/img/square.svg\");\n  background-repeat: no-repeat;\n  position: relative;\n  top: 0.15rem;\n  margin-right: 0.375rem; }\n\nform input[type=\"radio\"]:checked + span, form input[type=\"checkbox\"]:checked + span {\n  background: url(\"/assets/img/check-square.svg\");\n  background-repeat: no-repeat; }\n\nform hr {\n  margin: 1.5rem 0.75rem; }\n\nform fieldset.user-type label {\n  display: inline-block;\n  margin-right: 2rem;\n  margin-bottom: 1rem; }\n\nform button.primary, form button[type='submit'].primary {\n  font-family: 'Lato', sans-serif;\n  font-size: 1.25rem;\n  color: #fff;\n  background-image: url(\"/assets/img/blue-brush.png\");\n  background-size: 100% 100%;\n  padding: 1rem 1.25rem 1.25rem 1.25rem;\n  width: 100%;\n  margin-top: 2rem;\n  cursor: pointer; }\n  @media screen and (min-width: 40.063em) {\n    form button.primary, form button[type='submit'].primary {\n      padding: 1.25rem 1.5rem 1.5rem 1.5rem;\n      font-size: 1.5rem; } }\n  form button.primary:hover, form button[type='submit'].primary:hover {\n    background-image: url(\"/assets/img/blue-brush-drk.png\");\n    background-size: 100% 100%; }\n\nform button + span.error, form button[type='submit'] + span.error {\n  display: none; }\n\nform button.disabled, form button.disabled:hover, form button[type='submit'].disabled, form button[type='submit'].disabled:hover {\n  background-image: url(\"/assets/img/grey-brush.png\");\n  background-size: 100% 100%;\n  cursor: not-allowed;\n  opacity: 0.5; }\n  form button.disabled + span.error, form button.disabled:hover + span.error, form button[type='submit'].disabled + span.error, form button[type='submit'].disabled:hover + span.error {\n    display: block;\n    font-size: 0.75rem;\n    margin-top: 0.25rem;\n    color: #ff5800;\n    font-weight: normal;\n    text-align: center; }\n\np.error {\n  font-size: 0.75rem;\n  margin-top: 0.25rem;\n  color: #ff5800;\n  font-weight: normal; }\n\nmain#profile .profile-wrapper {\n  margin: 1rem 0;\n  text-align: center;\n  position: relative;\n  min-width: calc(144px + 0.75rem);\n  padding: 0;\n  margin-bottom: 0; }\n  @media screen and (min-width: 40.063em) {\n    main#profile .profile-wrapper {\n      font-size: 1.75rem;\n      margin: 1.125rem 0;\n      padding: 0 0.9375rem; } }\n  main#profile .profile-wrapper img.profile-img {\n    max-width: 210px;\n    min-width: 144px;\n    width: 90%;\n    margin: 0 0.375rem;\n    height: auto;\n    border-radius: 0.25rem; }\n  main#profile .profile-wrapper a {\n    display: block;\n    border-bottom: none;\n    background-image: url(\"/assets/img/yellow-brush5.png\");\n    background-size: 100% 100%;\n    padding: 0.375rem 0.375rem;\n    font-size: 0.75rem;\n    font-weight: normal;\n    color: #0d7bff;\n    text-shadow: 0 0 0.25rem #fff;\n    min-width: calc(144px + 0.75rem);\n    position: absolute;\n    bottom: -0.375rem;\n    left: 0;\n    right: 0;\n    margin: 0 auto; }\n    @media screen and (min-width: 40.063em) {\n      main#profile .profile-wrapper a {\n        position: relative;\n        bottom: 1.5rem; } }\n    @media screen and (min-width: 64.063em) {\n      main#profile .profile-wrapper a {\n        font-size: 1.125rem; } }\n    main#profile .profile-wrapper a:link:hover {\n      border: none;\n      color: #4097ff;\n      background-image: url(\"/assets/img/yellow-brush2.png\");\n      background-size: 100% 100%; }\n    main#profile .profile-wrapper a span {\n      font-family: 'font-awesome-light';\n      font-size: 0.875rem;\n      position: relative;\n      vertical-align: middle;\n      top: -0.125rem; }\n      @media screen and (min-width: 64.063em) {\n        main#profile .profile-wrapper a span {\n          font-size: 1.125rem; } }\n\nmain#profile p {\n  font-size: 1.25rem;\n  color: #808080;\n  margin: 0.125rem 0 1rem 0;\n  line-height: initial; }\n  @media screen and (min-width: 40.063em) {\n    main#profile p {\n      font-size: 1.375rem; } }\n  main#profile p.title {\n    color: #999999;\n    font-size: 1.125rem;\n    font-family: 'Lato', sans-serif;\n    line-height: initial;\n    font-weight: 300;\n    margin-bottom: 0.125rem; }\n    @media screen and (min-width: 40.063em) {\n      main#profile p.title {\n        font-size: 1.25rem; } }\n", ""]);
 
 // exports
 
@@ -40557,7 +40579,7 @@ exports = module.exports = __webpack_require__(30)(undefined);
 
 
 // module
-exports.push([module.i, "footer {\n  background-image: url(\"/assets/img/Grey Stripe.png\");\n  background-position: calc(100% - 50%);\n  background-size: cover;\n  color: #fff;\n  margin-top: 3rem;\n  padding-top: 1.5rem;\n  height: auto;\n  background-repeat: none;\n  position: absolute;\n  bottom: 0;\n  width: 100%; }\n  footer.no-touch a:link:hover, footer.no-touch avisited:hover {\n    border-bottom: 0.06rem solid #ffffff; }\n  footer a:link, footer a:visited, footer a:link:hover, footer a:visited:hover {\n    color: #ffffff;\n    border-bottom: none;\n    font-weight: normal; }\n    @media screen {\n      footer a:link, footer a:visited, footer a:link:hover, footer a:visited:hover {\n        font-size: 0.875rem; } }\n    @media screen and (min-width: 40.063em) {\n      footer a:link, footer a:visited, footer a:link:hover, footer a:visited:hover {\n        font-size: 1.125rem; } }\n  footer div, footer p {\n    text-align: center; }\n  footer p {\n    margin: 0.5rem 0; }\n    @media screen {\n      footer p {\n        font-size: 0.875rem; } }\n    @media screen and (min-width: 40.063em) {\n      footer p {\n        font-size: 1rem; } }\n", ""]);
+exports.push([module.i, "footer {\n  background-image: url(\"/assets/img/grey-brush.png\");\n  background-position-x: calc(100% - 50%);\n  background-size: auto 120%;\n  color: #fff;\n  margin-top: 3rem;\n  padding-top: 1.5rem;\n  height: auto;\n  background-repeat: none;\n  position: absolute;\n  bottom: 0;\n  width: 100%; }\n  footer.no-touch a:link:hover, footer.no-touch avisited:hover {\n    border-bottom: 0.06rem solid #ffffff; }\n  footer a:link, footer a:visited, footer a:link:hover, footer a:visited:hover {\n    color: #ffffff;\n    border-bottom: none;\n    font-weight: normal; }\n    @media screen {\n      footer a:link, footer a:visited, footer a:link:hover, footer a:visited:hover {\n        font-size: 0.875rem; } }\n    @media screen and (min-width: 40.063em) {\n      footer a:link, footer a:visited, footer a:link:hover, footer a:visited:hover {\n        font-size: 1.125rem; } }\n  footer div, footer p {\n    text-align: center; }\n  footer p {\n    margin: 0.5rem 0; }\n    @media screen {\n      footer p {\n        font-size: 0.875rem; } }\n    @media screen and (min-width: 40.063em) {\n      footer p {\n        font-size: 1rem; } }\n", ""]);
 
 // exports
 
@@ -40602,7 +40624,7 @@ exports = module.exports = __webpack_require__(30)(undefined);
 
 
 // module
-exports.push([module.i, "@font-face {\n  font-family: 'font-awesome-light';\n  src: url(\"/assets/fonts/fontawesome-light-300.woff\"); }\n\n@font-face {\n  font-family: 'font-awesome-solid';\n  src: url(\"/assets/fonts/fontawesome-solid-900.woff\"); }\n\nbody {\n  font-family: 'Lato', sans-serif;\n  font-weight: 300;\n  color: #808080;\n  font-size: 0.875rem;\n  position: relative;\n  min-height: 100vh;\n  padding-bottom: 130px; }\n  @media screen and (min-width: 40.063em) {\n    body {\n      font-size: 1rem; } }\n\nmain:not(.index) {\n  margin-top: 1.875rem; }\n\nmain h1 {\n  font-size: 1.5rem;\n  font-family: 'Lato', sans-serif;\n  color: #4097ff;\n  margin: 1rem 0;\n  font-weight: normal; }\n  @media screen and (min-width: 40.063em) {\n    main h1 {\n      font-size: 1.75rem;\n      margin: 1.125rem 0; } }\n  main h1 span.underlined {\n    background-image: url(\"/assets/img/Blue Line.png\");\n    background-size: 100% 0.2rem;\n    background-repeat: no-repeat;\n    background-position: bottom;\n    padding: 0 0.125rem 0.375rem 0; }\n\nmain h2 {\n  font-size: 1.125rem;\n  margin: 0.75rem 0 0.25rem 0;\n  font-family: 'Lato', sans-serif;\n  color: #ffaa00;\n  font-weight: normal; }\n  @media screen and (min-width: 40.063em) {\n    main h2 {\n      margin: 1rem 0 0.375rem 0;\n      font-size: 1.375rem; } }\n  main h2 span.underlined {\n    background-image: url(\"/assets/img/Orange Line.png\");\n    background-size: 100% 0.125rem;\n    background-repeat: no-repeat;\n    background-position: bottom;\n    padding: 0 0.125rem 0.125rem 0; }\n\nmain p {\n  line-height: 1.2rem;\n  margin: 0.25rem 0 0 0; }\n  @media screen and (min-width: 40.063em) {\n    main p {\n      margin: 0.625rem 0 0 0; } }\n  main p:last-child {\n    margin-bottom: 0; }\n  main p span.details {\n    background-image: url(\"/assets/img/Yellow Stripe 2.png\");\n    background-size: 100% 100%;\n    padding: 0.375rem 0.5rem;\n    display: inline-block; }\n\nmain a:link, main a:visited, main a:link:hover, main a:visited:hover {\n  color: #8CC0FF;\n  border-bottom: 0.0625rem solid #8CC0FF;\n  cursor: pointer;\n  text-decoration: none; }\n  main a:link:hover, main a:visited:hover, main a:link:hover:hover, main a:visited:hover:hover {\n    color: #59a4ff;\n    border-color: #59a4ff; }\n\nmain .details {\n  font-weight: 900; }\n\nmain section:not(:last-child) {\n  margin-bottom: 2rem; }\n\na:link, a:visited, a:link:hover, a:visited:hover {\n  text-decoration: none; }\n\nhr {\n  margin: 0 auto;\n  height: 0.2rem;\n  border-bottom: none;\n  background: url(\"/assets/img/Grey Line.png\");\n  background-size: 100% 100%;\n  border: none; }\n", ""]);
+exports.push([module.i, "@font-face {\n  font-family: 'font-awesome-light';\n  src: url(\"/assets/fonts/fontawesome-light-300.woff\"); }\n\n@font-face {\n  font-family: 'font-awesome-solid';\n  src: url(\"/assets/fonts/fontawesome-solid-900.woff\"); }\n\nbody {\n  font-family: 'Lato', sans-serif;\n  font-weight: 300;\n  color: #808080;\n  font-size: 0.875rem;\n  position: relative;\n  min-height: 100vh;\n  padding-bottom: 130px; }\n  @media screen and (min-width: 40.063em) {\n    body {\n      font-size: 1rem; } }\n\nmain:not(#index) {\n  margin-top: 1.875rem; }\n\nmain h1 {\n  font-size: 1.5rem;\n  font-family: 'Lato', sans-serif;\n  color: #4097ff;\n  margin: 1rem 0;\n  font-weight: normal; }\n  @media screen and (min-width: 40.063em) {\n    main h1 {\n      font-size: 1.75rem;\n      margin: 1.125rem 0; } }\n  main h1 span.underlined {\n    background-image: url(\"/assets/img/blue-line.svg\");\n    background-size: 100% 0.3rem;\n    background-repeat: no-repeat;\n    background-position: bottom;\n    padding: 0 0.125rem 0.375rem 0; }\n\nmain h2 {\n  font-size: 1.125rem;\n  margin: 0.75rem 0 0.25rem 0;\n  font-family: 'Lato', sans-serif;\n  color: #ffaa00;\n  font-weight: normal; }\n  @media screen and (min-width: 40.063em) {\n    main h2 {\n      margin: 1rem 0 0.375rem 0;\n      font-size: 1.375rem; } }\n  main h2 span.underlined {\n    background-image: url(\"/assets/img/orange-line.svg\");\n    background-size: 100% 0.125rem;\n    background-repeat: no-repeat;\n    background-position: bottom;\n    padding: 0 0.125rem 0.125rem 0; }\n\nmain p {\n  line-height: 1.2rem;\n  margin: 0.25rem 0 0 0; }\n  @media screen and (min-width: 40.063em) {\n    main p {\n      margin: 0.625rem 0 0 0; } }\n  main p:last-child {\n    margin-bottom: 0; }\n  main p span.details {\n    background-image: url(\"/assets/img/yellow-brush2.png\");\n    background-size: 100% 100%;\n    padding: 0.375rem 0.5rem;\n    display: inline-block; }\n\nmain a:link, main a:visited, main a:link:hover, main a:visited:hover {\n  color: #8CC0FF;\n  border-bottom: 0.0625rem solid #8CC0FF;\n  cursor: pointer;\n  text-decoration: none; }\n  main a:link:hover, main a:visited:hover, main a:link:hover:hover, main a:visited:hover:hover {\n    color: #59a4ff;\n    border-color: #59a4ff; }\n\nmain .details {\n  font-weight: 900; }\n\nmain section:not(:last-child) {\n  margin-bottom: 2rem; }\n\na:link, a:visited, a:link:hover, a:visited:hover {\n  text-decoration: none; }\n\nhr {\n  margin: 0 auto;\n  height: 0.2rem;\n  border-bottom: none;\n  background: url(\"/assets/img/grey-line.svg\");\n  background-size: 100% 100%;\n  border: none; }\n\n:focus {\n  outline: none; }\n", ""]);
 
 // exports
 
@@ -40854,7 +40876,7 @@ exports = module.exports = __webpack_require__(30)(undefined);
 
 
 // module
-exports.push([module.i, "header {\n  background-image: url(\"/assets/img/paper.png\");\n  padding: 1.125rem 0;\n  position: relative; }\n  header.no-touch div.row nav li #search:hover {\n    background: url(\"/assets/img/search-drk.svg\") rgba(255, 255, 255, 0.7);\n    background-position-x: calc(100% - 0.55rem);\n    background-position-y: calc(100% - 50%);\n    background-repeat: no-repeat; }\n    @media screen {\n      header.no-touch div.row nav li #search:hover {\n        background-size: 1.25rem; } }\n    @media screen and (min-width: 40.063em) {\n      header.no-touch div.row nav li #search:hover {\n        background-size: 1.5625rem; } }\n  header.no-touch div.row nav li #search:focus, header.no-touch div.row nav li #searchfocus:hover {\n    position: absolute;\n    left: 0;\n    background-image: url(\"/assets/img/search-wht.svg\"), url(\"/assets/img/Grey Stripe.png\");\n    background-color: #ffffff;\n    background-position-x: calc(100% - 0.55rem), 50%;\n    background-position-y: calc(100% - 50%), 50%;\n    background-size: 1.25rem, 200% 120%;\n    background-repeat: no-repeat;\n    width: calc(100% - 0.5rem);\n    z-index: 100; }\n    @media screen and (min-width: 40.063em) {\n      header.no-touch div.row nav li #search:focus, header.no-touch div.row nav li #searchfocus:hover {\n        background-size: 1.5625rem, 200% 120%; } }\n  header div.row {\n    margin: auto; }\n    @media screen {\n      header div.row nav {\n        padding: 0 0 0.6% 0; } }\n    @media screen and (min-width: 40.063em) {\n      header div.row nav {\n        padding: 0 0 0.76% 0; } }\n    header div.row nav ul {\n      position: relative;\n      margin: 0;\n      padding: 0; }\n      header div.row nav ul.row.align-right {\n        max-width: 100%;\n        margin: 0; }\n      header div.row nav ul li {\n        display: inline-block;\n        padding: 0;\n        text-align: center; }\n        @media screen {\n          header div.row nav ul li {\n            margin-right: 0.5rem; } }\n        @media screen and (min-width: 40.063em) {\n          header div.row nav ul li {\n            margin-right: 0.6875rem; } }\n        header div.row nav ul li.search {\n          overflow: visible; }\n          header div.row nav ul li.search form {\n            height: auto;\n            margin: 0; }\n          header div.row nav ul li.search button {\n            display: none; }\n        header div.row nav ul li #search {\n          border: none;\n          box-shadow: none;\n          border-radius: 0.3rem;\n          background: url(\"/assets/img/search.svg\") rgba(255, 255, 255, 0.5);\n          background-position-x: calc(100% - 0.55rem);\n          background-position-y: calc(100% - 50%);\n          background-repeat: no-repeat;\n          color: #808080;\n          height: auto;\n          margin: 0;\n          line-height: 1.5rem; }\n          @media screen {\n            header div.row nav ul li #search {\n              background-size: 1.25rem; } }\n          @media screen and (min-width: 40.063em) {\n            header div.row nav ul li #search {\n              background-size: 1.5625rem; } }\n          header div.row nav ul li #search:focus, header div.row nav ul li #searchfocus:hover {\n            position: absolute;\n            left: 0;\n            background-image: url(\"/assets/img/search-wht.svg\"), url(\"/assets/img/Grey Stripe.png\");\n            background-color: #ffffff;\n            background-position-x: calc(100% - 0.55rem), 50%;\n            background-position-y: calc(100% - 50%), 50%;\n            background-size: 1.25rem, 200% 120%;\n            background-repeat: no-repeat;\n            color: #fff;\n            width: calc(100% - 0.5rem);\n            z-index: 100; }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li #search:focus, header div.row nav ul li #searchfocus:hover {\n                background-size: 1.5625rem, 200% 120%; } }\n        header div.row nav ul li a {\n          cursor: pointer; }\n        header div.row nav ul li a, header div.row nav ul li #search {\n          display: inline-block;\n          line-height: 1.625rem;\n          font-weight: 300; }\n          @media screen {\n            header div.row nav ul li a, header div.row nav ul li #search {\n              font-size: 1rem;\n              padding: 0.25rem; } }\n          @media screen and (min-width: 40.063em) {\n            header div.row nav ul li a, header div.row nav ul li #search {\n              font-size: 1.5rem;\n              padding: .5rem; } }\n          header div.row nav ul li a:link, header div.row nav ul li a:active, header div.row nav ul li a:visited, header div.row nav ul li #search:link, header div.row nav ul li #search:active, header div.row nav ul li #search:visited {\n            color: #808080;\n            border: none;\n            text-decoration: none; }\n        header div.row nav ul li a:hover {\n          color: #4d4d4d; }\n        header div.row nav ul li.user {\n          position: relative; }\n          header div.row nav ul li.user > a {\n            font-family: 'font-awesome-light'; }\n            header div.row nav ul li.user > a.logged-in {\n              font-family: 'font-awesome-solid'; }\n            @media screen {\n              header div.row nav ul li.user > a {\n                font-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li.user > a {\n                font-size: 1.5625rem; } }\n          header div.row nav ul li.user ul.user-menu {\n            display: none;\n            position: absolute;\n            background-color: #fff;\n            background-image: url(\"/assets/img/Grey Stripe.png\");\n            background-size: cover;\n            background-position: 50% 50%;\n            z-index: 300;\n            width: 100vw;\n            right: -0.5rem; }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li.user ul.user-menu {\n                right: 0;\n                width: auto; } }\n            header div.row nav ul li.user ul.user-menu li {\n              margin: 0;\n              width: 100%; }\n              header div.row nav ul li.user ul.user-menu li a {\n                min-width: 15rem;\n                width: 100%;\n                color: #fff;\n                padding: 0.75rem 0.75rem 0.875rem 0.75rem;\n                font-size: 1rem;\n                font-weight: normal;\n                cursor: pointer;\n                border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.3); }\n                @media screen and (min-width: 40.063em) {\n                  header div.row nav ul li.user ul.user-menu li a {\n                    font-size: 1.25rem; } }\n                header div.row nav ul li.user ul.user-menu li a:hover {\n                  background-color: rgba(0, 0, 0, 0.2); }\n          header div.row nav ul li.user:hover {\n            background-color: #fff;\n            background-image: url(\"/assets/img/Grey Stripe.png\");\n            background-size: cover;\n            background-position: 50% 50%; }\n            header div.row nav ul li.user:hover a {\n              color: #ffffff; }\n            header div.row nav ul li.user:hover ul.user-menu {\n              display: block; }\n  header .logo {\n    max-width: 320px; }\n  header div.orange-line {\n    background-image: url(\"/assets/img/Orange Line.png\");\n    background-position-x: 50%;\n    height: 17px;\n    position: absolute;\n    width: 100%;\n    bottom: -6px; }\n", ""]);
+exports.push([module.i, "header {\n  background-image: url(\"/assets/img/paper.png\");\n  padding: 1.125rem 0;\n  position: relative;\n  z-index: 100; }\n  header.no-touch div.row nav li #search:hover {\n    background: url(\"/assets/img/search-drk.svg\") rgba(255, 255, 255, 0.7);\n    background-position-x: calc(100% - 0.55rem);\n    background-position-y: calc(100% - 50%);\n    background-repeat: no-repeat; }\n    @media screen {\n      header.no-touch div.row nav li #search:hover {\n        background-size: 1.25rem; } }\n    @media screen and (min-width: 40.063em) {\n      header.no-touch div.row nav li #search:hover {\n        background-size: 1.5625rem; } }\n  header.no-touch div.row nav li #search:focus, header.no-touch div.row nav li #searchfocus:hover {\n    position: absolute;\n    left: 0;\n    background-image: url(\"/assets/img/search-wht.svg\"), url(\"/assets/img/grey-brush.png\");\n    background-color: #ffffff;\n    background-position-x: calc(100% - 0.55rem), 50%;\n    background-position-y: calc(100% - 50%), 50%;\n    background-size: 1.25rem, 200% 120%;\n    background-repeat: no-repeat;\n    width: calc(100% - 0.5rem);\n    z-index: 100; }\n    @media screen and (min-width: 40.063em) {\n      header.no-touch div.row nav li #search:focus, header.no-touch div.row nav li #searchfocus:hover {\n        background-size: 1.5625rem, 200% 120%; } }\n  header div.row {\n    margin: auto; }\n    @media screen {\n      header div.row nav {\n        padding: 0 0 0.6% 0; } }\n    @media screen and (min-width: 40.063em) {\n      header div.row nav {\n        padding: 0 0 0.76% 0; } }\n    header div.row nav ul {\n      position: relative;\n      margin: 0;\n      padding: 0; }\n      header div.row nav ul.row.align-right {\n        max-width: 100%;\n        margin: 0; }\n      header div.row nav ul li {\n        display: inline-block;\n        padding: 0;\n        text-align: center; }\n        @media screen {\n          header div.row nav ul li {\n            margin-right: 0.5rem; } }\n        @media screen and (min-width: 40.063em) {\n          header div.row nav ul li {\n            margin-right: 0.6875rem; } }\n        header div.row nav ul li.search {\n          overflow: visible; }\n          header div.row nav ul li.search form {\n            height: auto;\n            margin: 0; }\n          header div.row nav ul li.search button {\n            display: none; }\n        header div.row nav ul li #search {\n          border: none;\n          box-shadow: none;\n          border-radius: 0.3rem;\n          background: url(\"/assets/img/search.svg\") rgba(255, 255, 255, 0.5);\n          background-position-x: calc(100% - 0.55rem);\n          background-position-y: calc(100% - 50%);\n          background-repeat: no-repeat;\n          color: #808080;\n          height: auto;\n          margin: 0;\n          line-height: 1.5rem; }\n          @media screen {\n            header div.row nav ul li #search {\n              background-size: 1.25rem; } }\n          @media screen and (min-width: 40.063em) {\n            header div.row nav ul li #search {\n              background-size: 1.5625rem; } }\n          header div.row nav ul li #search:focus, header div.row nav ul li #searchfocus:hover {\n            position: absolute;\n            left: 0;\n            background-image: url(\"/assets/img/search-wht.svg\"), url(\"/assets/img/grey-brush.png\");\n            background-color: #ffffff;\n            background-position-x: calc(100% - 0.55rem), 50%;\n            background-position-y: calc(100% - 50%), 50%;\n            background-size: 1.25rem, 200% 120%;\n            background-repeat: no-repeat;\n            color: #fff;\n            width: calc(100% - 0.5rem);\n            z-index: 100; }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li #search:focus, header div.row nav ul li #searchfocus:hover {\n                background-size: 1.5625rem, 200% 120%; } }\n        header div.row nav ul li a {\n          cursor: pointer; }\n        header div.row nav ul li a, header div.row nav ul li #search {\n          display: inline-block;\n          line-height: 1.625rem;\n          font-weight: 300; }\n          @media screen {\n            header div.row nav ul li a, header div.row nav ul li #search {\n              font-size: 1rem;\n              padding: 0.25rem; } }\n          @media screen and (min-width: 40.063em) {\n            header div.row nav ul li a, header div.row nav ul li #search {\n              font-size: 1.5rem;\n              padding: .5rem; } }\n          header div.row nav ul li a:link, header div.row nav ul li a:active, header div.row nav ul li a:visited, header div.row nav ul li #search:link, header div.row nav ul li #search:active, header div.row nav ul li #search:visited {\n            color: #808080;\n            border: none;\n            text-decoration: none; }\n        header div.row nav ul li a:hover {\n          color: #4d4d4d; }\n        header div.row nav ul li.user {\n          position: relative; }\n          header div.row nav ul li.user > a {\n            font-family: 'font-awesome-light'; }\n            header div.row nav ul li.user > a.logged-in {\n              font-family: 'font-awesome-solid'; }\n            @media screen {\n              header div.row nav ul li.user > a {\n                font-size: 1.25rem; } }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li.user > a {\n                font-size: 1.5625rem; } }\n          header div.row nav ul li.user ul.user-menu {\n            display: none;\n            position: absolute;\n            background-color: #fff;\n            background-image: url(\"/assets/img/grey-brush.png\");\n            background-size: auto 125%;\n            background-position: 50% 50%;\n            z-index: 300;\n            width: 100vw;\n            right: -0.5rem; }\n            @media screen and (min-width: 40.063em) {\n              header div.row nav ul li.user ul.user-menu {\n                right: 0;\n                width: auto; } }\n            header div.row nav ul li.user ul.user-menu li {\n              margin: 0;\n              width: 100%; }\n              header div.row nav ul li.user ul.user-menu li a {\n                min-width: 15rem;\n                width: 100%;\n                color: #fff;\n                padding: 0.75rem 0.75rem 0.875rem 0.75rem;\n                font-size: 1rem;\n                font-weight: normal;\n                cursor: pointer;\n                border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.3); }\n                @media screen and (min-width: 40.063em) {\n                  header div.row nav ul li.user ul.user-menu li a {\n                    font-size: 1.25rem; } }\n                header div.row nav ul li.user ul.user-menu li a:hover {\n                  background-color: rgba(0, 0, 0, 0.2); }\n          header div.row nav ul li.user:hover {\n            background-color: #fff;\n            background-image: url(\"/assets/img/grey-brush.png\");\n            background-size: auto 130%;\n            background-position: 50% 50%; }\n            header div.row nav ul li.user:hover a {\n              color: #ffffff; }\n            header div.row nav ul li.user:hover ul.user-menu {\n              display: block; }\n  header .logo {\n    max-width: 320px; }\n  header div.orange-line {\n    background-image: url(\"/assets/img/orange-line.svg\");\n    background-position-x: 50%;\n    height: 1.125rem;\n    position: absolute;\n    width: 100%;\n    bottom: -0.5625rem;\n    background-repeat: no-repeat;\n    background-size: cover; }\n", ""]);
 
 // exports
 
@@ -40896,6 +40918,10 @@ __webpack_require__(392);
 var _states = __webpack_require__(327);
 
 var _states2 = _interopRequireDefault(_states);
+
+var _validEmail = __webpack_require__(395);
+
+var _validEmail2 = _interopRequireDefault(_validEmail);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40945,6 +40971,7 @@ var Register = function (_React$Component) {
       state: '',
       zip: '',
       agreed: false,
+      valid: false,
       userPostResults: {}
     };
 
@@ -40956,19 +40983,35 @@ var Register = function (_React$Component) {
   _createClass(Register, [{
     key: 'onChange',
     value: function onChange(e) {
+      var _this2 = this;
+
       var target = e.target;
       var value = target.type === 'checkbox' ? target.checked : target.value;
       var name = target.name;
 
-      this.setState(_defineProperty({}, name, value));
+      this.setState(_defineProperty({}, name, value), function () {
+        if (_this2.validate()) {
+          _this2.setState({ valid: true });
+        } else {
+          _this2.setState({ valid: false });
+        }
+      });
+    }
+  }, {
+    key: 'validate',
+    value: function validate() {
+      if (this.state.firstName.length > 0 && this.state.lastName.length > 0 && this.state.email.length > 0 && (0, _validEmail2.default)(this.state.email) && doPasswordsMatch(this.state.password, this.state.confirmPassword) && this.state.password.length > 0 && (this.state.userType === 'donor' || this.state.position.length > 0 && this.state.nonProfitName.length > 0 && isNumber(this.state.ein) && numLength(this.state.ein, 9) && this.state.address.length > 0 && this.state.city.length > 0 && this.state.state.length === 2 && isNumber(this.state.zip) && numLength(this.state.zip, 5)) && this.state.agreed) {
+        return true;
+      }
+      return false;
     }
   }, {
     key: 'onSubmit',
     value: function onSubmit(e) {
-      var _this2 = this;
+      var _this3 = this;
 
       e.preventDefault();
-      if (doPasswordsMatch(this.state.password, this.state.confirmPassword) && (isNumber(this.state.zip) && numLength(this.state.zip, 5) || this.state.userType === 'donor') && (isNumber(this.state.ein) && numLength(this.state.ein, 9) || this.state.userType === 'donor')) {
+      if (this.state.valid) {
         var User = function User(_ref) {
           var email = _ref.email,
               password = _ref.password,
@@ -41009,20 +41052,24 @@ var Register = function (_React$Component) {
 
         _axios2.default.post('https://' + window.location.hostname + ':3000/api/users/create', User(this.state)).then(function (results) {
           var createUserResults = results.data;
-          console.log(createUserResults);
-          _this2.props.onNewMessage('Congratulations, your have created an account for ' + createUserResults.data.email);
-          return _this2.setState({ userPostResults: createUserResults });
+
+          _this3.props.onNewMessage('Congratulations, your have created an account for ' + createUserResults.data.email);
+          _this3.setState({ userPostResults: createUserResults });
+
+          window.scroll(0, 0);
         }).catch(function (error) {
           var createUserError = error.response.data;
           createUserError.message = '' + createUserError.data.email.charAt(0).toUpperCase() + createUserError.data.email.slice(1) + ' is already in use.';
 
-          _this2.props.onNewError(createUserError.message);
-          _this2.setState({ userPostResults: createUserError });
+          _this3.props.onNewError(createUserError.message);
+          _this3.setState({ userPostResults: createUserError });
 
           window.scroll(0, 0);
         });
       } else {
-        console.log('You missed a field');
+        this.props.onNewError('You have an invalid or empty field. Please make sure everything is filled out.');
+
+        window.scroll(0, 0);
       }
     }
   }, {
@@ -41030,7 +41077,7 @@ var Register = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'main',
-        { className: 'register' },
+        { id: 'register' },
         _react2.default.createElement(
           'section',
           { className: 'row align-center' },
@@ -41095,7 +41142,7 @@ var Register = function (_React$Component) {
                     required: true }),
                   _react2.default.createElement(
                     'label',
-                    { htmlFor: 'email', className: 'row' + (this.state.userPostResults.statusCode === 400 ? ' invalid' : '') },
+                    { htmlFor: 'email', className: 'row' + (this.props.error.type === 'register' ? ' invalid' : '') + ((0, _validEmail2.default)(this.state.email) || this.state.email.length === 0 ? '' : ' invalid') },
                     _react2.default.createElement(
                       'div',
                       { className: 'small-12 columns' },
@@ -41112,7 +41159,7 @@ var Register = function (_React$Component) {
                       _react2.default.createElement(
                         'span',
                         { className: 'error' },
-                        this.state.userPostResults.message
+                        this.props.error.type === 'register' ? this.props.error.message : 'Please enter a valid email address.'
                       )
                     )
                   ),
@@ -41427,9 +41474,15 @@ var Register = function (_React$Component) {
               _react2.default.createElement(
                 'button',
                 {
-                  className: 'primary small-11 medium-10 large-8',
+                  className: 'primary small-11 medium-10 large-8' + (this.state.valid ? '' : ' disabled'),
+                  disabled: !this.state.valid,
                   type: 'submit' },
                 'Submit Request'
+              ),
+              _react2.default.createElement(
+                'span',
+                { className: 'error small-12' },
+                'Please make sure you\'ve entered all your information.'
               )
             )
           )
@@ -41483,7 +41536,7 @@ exports = module.exports = __webpack_require__(30)(undefined);
 
 
 // module
-exports.push([module.i, "form label, form legend {\n  color: #999999;\n  font-size: 1.125rem;\n  font-family: 'Lato', sans-serif;\n  line-height: initial;\n  font-weight: 300;\n  margin-bottom: 0.375rem; }\n  @media screen and (min-width: 40.063em) {\n    form label, form legend {\n      font-size: 1.25rem; } }\n  form label span.required, form legend span.required {\n    color: #ffaa00;\n    font-weight: normal; }\n  form label input[type=\"radio\"], form label input[type=\"checkbox\"], form legend input[type=\"radio\"], form legend input[type=\"checkbox\"] {\n    margin-right: 0.75rem; }\n  form label span.error, form legend span.error {\n    display: none;\n    font-size: 0.75rem;\n    margin-top: 0.25rem; }\n  form label.invalid:not(.empty), form legend.invalid:not(.empty) {\n    color: #ff5800;\n    border-width: 0.2rem;\n    font-weight: normal; }\n    form label.invalid:not(.empty) > div:last-child, form legend.invalid:not(.empty) > div:last-child {\n      text-align: left; }\n    form label.invalid:not(.empty) span.error, form legend.invalid:not(.empty) span.error {\n      display: initial; }\n\nform label.terms {\n  text-align: center;\n  margin-top: 2rem;\n  font-size: 1.125rem; }\n  form label.terms input[type=\"radio\"] + span, form label.terms input[type=\"checkbox\"] + span {\n    top: 0.2rem; }\n\nform input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n  color: #808080;\n  font-family: 'Lato', sans-serif;\n  font-size: 1.125rem;\n  height: 2.5rem;\n  line-height: normal;\n  box-shadow: none;\n  border: 0.09rem solid #999999; }\n  @media screen and (min-width: 40.063em) {\n    form input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n      height: 2.75rem;\n      font-size: 1.375rem; } }\n\nform input[type=\"radio\"], form input[type=\"checkbox\"] {\n  display: none; }\n\nform input[type=\"radio\"] + span, form input[type=\"checkbox\"] + span {\n  display: inline-block;\n  width: 1.25rem;\n  height: 1.25rem;\n  background-image: url(\"/assets/img/square.svg\");\n  background-repeat: no-repeat;\n  position: relative;\n  top: 0.15rem;\n  margin-right: 0.375rem; }\n\nform input[type=\"radio\"]:checked + span, form input[type=\"checkbox\"]:checked + span {\n  background: url(\"/assets/img/check-square.svg\");\n  background-repeat: no-repeat; }\n\nform hr {\n  margin: 1.5rem 0.75rem; }\n\nform fieldset.user-type label {\n  display: inline-block;\n  margin-right: 2rem;\n  margin-bottom: 1rem; }\n\nform button.primary, form button[type='submit'].primary {\n  font-family: 'Lato', sans-serif;\n  font-size: 1.25rem;\n  color: #fff;\n  background-image: url(\"/assets/img/Blue Stripe.png\");\n  background-size: 100% 100%;\n  padding: 1.25rem;\n  width: 100%;\n  margin-top: 2rem;\n  cursor: pointer; }\n  @media screen and (min-width: 40.063em) {\n    form button.primary, form button[type='submit'].primary {\n      padding: 1.5rem;\n      font-size: 1.5rem; } }\n  form button.primary:hover, form button[type='submit'].primary:hover {\n    background-image: url(\"/assets/img/Blue Stripe-drk.png\");\n    background-size: 100% 100%; }\n\np.error {\n  font-size: 0.75rem;\n  margin-top: 0.25rem;\n  color: #ff5800;\n  border-width: 0.2rem;\n  font-weight: normal; }\n", ""]);
+exports.push([module.i, "form label, form legend {\n  color: #999999;\n  font-size: 1.125rem;\n  font-family: 'Lato', sans-serif;\n  line-height: initial;\n  font-weight: 300;\n  margin-bottom: 0.375rem; }\n  @media screen and (min-width: 40.063em) {\n    form label, form legend {\n      font-size: 1.25rem; } }\n  form label span.required, form legend span.required {\n    color: #ffaa00;\n    font-weight: normal; }\n  form label input[type=\"radio\"], form label input[type=\"checkbox\"], form legend input[type=\"radio\"], form legend input[type=\"checkbox\"] {\n    margin-right: 0.75rem; }\n  form label span.error, form legend span.error {\n    display: none;\n    font-size: 0.75rem;\n    margin-top: 0.25rem; }\n  form label.invalid:not(.empty), form legend.invalid:not(.empty) {\n    color: #ff5800;\n    border-width: 0.2rem;\n    font-weight: normal; }\n    form label.invalid:not(.empty) > div:last-child, form legend.invalid:not(.empty) > div:last-child {\n      text-align: left; }\n    form label.invalid:not(.empty) span.error, form legend.invalid:not(.empty) span.error {\n      display: initial; }\n\nform label.terms {\n  text-align: center;\n  margin-top: 2rem;\n  font-size: 1.125rem; }\n  form label.terms input[type=\"radio\"] + span, form label.terms input[type=\"checkbox\"] + span {\n    top: 0.2rem; }\n\nform input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n  color: #808080;\n  font-family: 'Lato', sans-serif;\n  font-size: 1.125rem;\n  height: 2.5rem;\n  line-height: normal;\n  box-shadow: none;\n  border: 0.09rem solid #999999; }\n  @media screen and (min-width: 40.063em) {\n    form input[type=text], form input[type=number], form input[type=password], form input[type=email], form select {\n      height: 2.75rem;\n      font-size: 1.375rem; } }\n\nform input[type=\"radio\"], form input[type=\"checkbox\"] {\n  display: none; }\n\nform input[type=\"radio\"] + span, form input[type=\"checkbox\"] + span {\n  display: inline-block;\n  width: 1.25rem;\n  height: 1.25rem;\n  background-image: url(\"/assets/img/square.svg\");\n  background-repeat: no-repeat;\n  position: relative;\n  top: 0.15rem;\n  margin-right: 0.375rem; }\n\nform input[type=\"radio\"]:checked + span, form input[type=\"checkbox\"]:checked + span {\n  background: url(\"/assets/img/check-square.svg\");\n  background-repeat: no-repeat; }\n\nform hr {\n  margin: 1.5rem 0.75rem; }\n\nform fieldset.user-type label {\n  display: inline-block;\n  margin-right: 2rem;\n  margin-bottom: 1rem; }\n\nform button.primary, form button[type='submit'].primary {\n  font-family: 'Lato', sans-serif;\n  font-size: 1.25rem;\n  color: #fff;\n  background-image: url(\"/assets/img/blue-brush.png\");\n  background-size: 100% 100%;\n  padding: 1rem 1.25rem 1.25rem 1.25rem;\n  width: 100%;\n  margin-top: 2rem;\n  cursor: pointer; }\n  @media screen and (min-width: 40.063em) {\n    form button.primary, form button[type='submit'].primary {\n      padding: 1.25rem 1.5rem 1.5rem 1.5rem;\n      font-size: 1.5rem; } }\n  form button.primary:hover, form button[type='submit'].primary:hover {\n    background-image: url(\"/assets/img/blue-brush-drk.png\");\n    background-size: 100% 100%; }\n\nform button + span.error, form button[type='submit'] + span.error {\n  display: none; }\n\nform button.disabled, form button.disabled:hover, form button[type='submit'].disabled, form button[type='submit'].disabled:hover {\n  background-image: url(\"/assets/img/grey-brush.png\");\n  background-size: 100% 100%;\n  cursor: not-allowed;\n  opacity: 0.5; }\n  form button.disabled + span.error, form button.disabled:hover + span.error, form button[type='submit'].disabled + span.error, form button[type='submit'].disabled:hover + span.error {\n    display: block;\n    font-size: 0.75rem;\n    margin-top: 0.25rem;\n    color: #ff5800;\n    font-weight: normal;\n    text-align: center; }\n\np.error {\n  font-size: 0.75rem;\n  margin-top: 0.25rem;\n  color: #ff5800;\n  font-weight: normal; }\n", ""]);
 
 // exports
 
@@ -41498,13 +41551,191 @@ exports.push([module.i, "form label, form legend {\n  color: #999999;\n  font-si
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _store = __webpack_require__(123);
+
+var _store2 = _interopRequireDefault(_store);
+
+var _actions = __webpack_require__(329);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /* eslint-env browser */
 var routeRefresh = function routeRefresh() {
   window.scrollTo(0, 0);
   document.activeElement.blur();
+  _store2.default.dispatch((0, _actions.clearError)());
+  _store2.default.dispatch((0, _actions.clearMessage)());
 };
 
 exports.default = routeRefresh;
+
+/***/ }),
+/* 395 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var validEmail = function validEmail(email) {
+  return (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)
+  );
+};
+
+exports.default = validEmail;
+
+/***/ }),
+/* 396 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _reactRedux = __webpack_require__(72);
+
+var _actions = __webpack_require__(329);
+
+var _components = __webpack_require__(397);
+
+var _components2 = _interopRequireDefault(_components);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    error: state.error,
+    message: state.message
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    onClearMessage: function onClearMessage() {
+      dispatch((0, _actions.clearMessage)());
+    },
+    onClearError: function onClearError() {
+      dispatch((0, _actions.clearError)());
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_components2.default);
+
+/***/ }),
+/* 397 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+__webpack_require__(398);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Message = function (_React$Component) {
+  _inherits(Message, _React$Component);
+
+  function Message() {
+    _classCallCheck(this, Message);
+
+    return _possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).apply(this, arguments));
+  }
+
+  _createClass(Message, [{
+    key: 'render',
+    value: function render() {
+      if (this.props.error.message !== '' || this.props.message.message !== '') {
+        return _react2.default.createElement(
+          'section',
+          { id: 'message', className: 'small-12 columns' + (this.props.error.message !== '' ? ' error' : '') },
+          _react2.default.createElement(
+            'p',
+            null,
+            _react2.default.createElement(
+              'a',
+              { onClick: this.props.error.message !== '' ? this.props.onClearError : this.props.onClearMessage },
+              '\uF057'
+            ),
+            this.props.error.message !== '' ? this.props.error.message : this.props.message.message
+          )
+        );
+      }
+      return null;
+    }
+  }]);
+
+  return Message;
+}(_react2.default.Component);
+
+exports.default = Message;
+
+/***/ }),
+/* 398 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(399);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(31)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/sass-loader/lib/loader.js!./style.scss", function() {
+			var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/sass-loader/lib/loader.js!./style.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 399 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(30)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "div#root > div > div {\n  position: relative;\n  overflow: auto; }\n  div#root > div > div section#message {\n    position: absolute;\n    background-image: url(\"/assets/img/blue-brush.png\");\n    background-position-x: 50%;\n    background-position-y: 60%;\n    background-size: 110% 110%;\n    width: 100%;\n    text-align: center; }\n    div#root > div > div section#message.error {\n      background-image: url(\"/assets/img/red-brush.png\");\n      background-position-x: 50%;\n      background-position-y: 60%;\n      background-size: 110% 110%; }\n    div#root > div > div section#message p {\n      margin: 0.75rem 0 0.875rem 0;\n      color: white;\n      font-weight: normal;\n      font-size: 1.25rem;\n      font-family: 'Lato', sans-serif; }\n      @media screen and (min-width: 40.063em) {\n        div#root > div > div section#message p {\n          font-size: 1.5rem; } }\n      div#root > div > div section#message p a {\n        font-family: 'font-awesome-light';\n        font-size: 1.375rem;\n        line-height: 1.25rem;\n        position: relative;\n        top: 0.25rem;\n        padding-right: 1rem;\n        top: 0.125rem;\n        cursor: pointer; }\n        @media screen and (min-width: 40.063em) {\n          div#root > div > div section#message p a {\n            font-size: 1.625rem;\n            line-height: 1.5rem;\n            top: 0.25rem; } }\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

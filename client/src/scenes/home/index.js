@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import './scss/style.scss';
 
 const Home = () => (
-  <main className="index">
+  <main id="index">
     <section className="main-image">
       <img src="assets/img/sunset marsh.jpg" alt="Sunset over the marsh."/>
       <div className="orange-line"></div>
+      <div className="white-block"></div>
     </section>
     <section className="row">
       <div className="columns small-12">

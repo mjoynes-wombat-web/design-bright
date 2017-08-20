@@ -5,12 +5,13 @@ import Register from './components';
 
 const mapStateToProps = state => ({
   userAuth: state.userAuth,
+  error: state.error,
 });
 
 const mapDispatchToProps = dispatch => ({
   onNewError(errorMsg) {
     dispatch(
-      newError(errorMsg),
+      newError('register', errorMsg),
     );
   },
   onClearError() {
@@ -20,7 +21,7 @@ const mapDispatchToProps = dispatch => ({
   },
   onNewMessage(msg) {
     dispatch(
-      newMessage(msg),
+      newMessage('register', msg),
     );
   },
   onClearMessage() {
