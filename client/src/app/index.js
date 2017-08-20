@@ -9,7 +9,7 @@ import './scss/style.scss';
 const App = () => (
   <div>
     <Header />
-    <Routes onChange={window.scrollTo(0, 0)}/>
+    <Routes />
     <Footer />
   </div>
 );

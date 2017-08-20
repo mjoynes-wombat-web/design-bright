@@ -10,6 +10,41 @@ header {
   padding: 1.125rem 0;
   position: relative;
 
+  &.no-touch div.row nav li #search {
+    &:hover {
+      background: url('/assets/img/search-drk.svg') rgba(255, 255, 255, 0.7);
+      background-position-x: calc(100% - 0.55rem);
+      background-position-y: calc(100% - 50%);
+      background-repeat: no-repeat;
+  
+      @media screen {
+        background-size:1.25rem;
+      }
+  
+      @media screen and (min-width: $medium-break) {
+        background-size:1.5625rem;
+      }
+    }
+
+    &:focus, &focus:hover {
+      position: absolute;
+      left:0;
+      background-image: url('/assets/img/search-wht.svg'), url('/assets/img/Grey Stripe.png');
+      background-color: #ffffff;
+      background-position-x: calc(100% - 0.55rem), 50%;
+      background-position-y: calc(100% - 50%), 50%;
+      background-size:1.25rem, 200% 120%;
+      background-repeat: no-repeat;
+      
+      width: calc(100% - 0.5rem);
+      z-index: 100;
+
+      @media screen and (min-width: $medium-break) {
+        background-size:1.5625rem, 200% 120%;
+      }
+    }
+  }
+
   div.row {
     margin: auto;
 
@@ -79,39 +114,21 @@ header {
               background-size:1.5625rem;
             }
 
-            &:hover {
-              background: url('/assets/img/search-drk.svg') rgba(255, 255, 255, 0.7);
-              background-position-x: calc(100% - 0.55rem);
-              background-position-y: calc(100% - 50%);
-              background-repeat: no-repeat;
-
-              @media screen {
-                background-size:1.25rem;
-              }
-
-              @media screen and (min-width: $medium-break) {
-                background-size:1.5625rem;
-              }
-            }
-
-            &:focus, &:focus:hover {
+            &:focus, &focus:hover {
               position: absolute;
               left:0;
-              background: url('/assets/img/search-wht.svg') #A6A6A6;
-              background-position-x: calc(100% - 0.55rem);
-              background-position-y: calc(100% - 50%);
-              background-size:1.5625rem;
+              background-image: url('/assets/img/search-wht.svg'), url('/assets/img/Grey Stripe.png');
+              background-color: #ffffff;
+              background-position-x: calc(100% - 0.55rem), 50%;
+              background-position-y: calc(100% - 50%), 50%;
+              background-size:1.25rem, 200% 120%;
               background-repeat: no-repeat;
-              color: #ffffff;
+              color: #fff;
               width: calc(100% - 0.5rem);
               z-index: 100;
 
-              @media screen {
-                background-size:1.25rem;
-              }
-
               @media screen and (min-width: $medium-break) {
-                background-size:1.5625rem;
+                background-size:1.5625rem, 200% 120%;
               }
             }
           }
@@ -140,10 +157,10 @@ header {
               border: none;
               text-decoration: none;
             }
+          }
 
-            &:hover{
-              color: darken($graphite, 20);
-            }
+          a:hover {
+            color: darken($graphite, 20);
           }
 
           &.user {
@@ -182,13 +199,21 @@ header {
 
               li {
                 margin: 0;
+                width: 100%;
 
                 a {
-                  width: 20rem;
+                  min-width: 15rem;
+                  width: 100%;
                   color: #fff;
-                  padding: 1rem;
-                  font-size: 1.5rem;
+                  padding: 0.75rem 0.75rem 0.875rem 0.75rem;
+                  font-size: 1rem;
+                  font-weight: normal;
                   cursor: pointer;
+                  border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.3);
+
+                  @media screen and (min-width: $medium-break) {
+                    font-size: 1.25rem;
+                  }
 
                   &:hover {
                     background-color: rgba(0, 0, 0, 0.2);

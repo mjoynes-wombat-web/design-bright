@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -47,12 +48,12 @@ class Header extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    this.props.search(this.state);
+    this.props.onSearch(this.state.search);
   }
 
   render() {
     return (
-      <header>
+      <header className={('ontouchstart' in document.documentElement) ? '' : 'no-touch'}>
         <div className="row align-bottom">
           <div className="logo small-5 columns">
             <Link to="/">

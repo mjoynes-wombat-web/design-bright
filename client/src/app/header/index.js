@@ -13,6 +13,9 @@ const mapDispatchToProps = dispatch => ({
       logout(),
     );
   },
+  onSearch(search) {
+    console.log(`A search attempt was made for ${search}`);
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

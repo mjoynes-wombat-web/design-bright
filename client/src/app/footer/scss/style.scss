@@ -16,6 +16,14 @@ footer {
   bottom:0;
   width: 100%;
 
+  &.no-touch {
+    a {
+      &:link:hover, &visited:hover {
+        border-bottom: 0.06rem solid #ffffff;
+      }
+    }
+  }
+
   a {
     &:link, &:visited, &:link:hover, &:visited:hover {
       color: #ffffff;
@@ -29,10 +37,6 @@ footer {
       @media screen and (min-width: $medium-break) {
         font-size: 1.125rem;
       }
-    }
-
-    &:link:hover, &visited:hover {
-      border-bottom: 0.06rem solid #ffffff;
     }
   }
   div, p {
