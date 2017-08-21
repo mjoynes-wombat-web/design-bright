@@ -1,11 +1,12 @@
 /* eslint-env browser */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
 import './scss/style.scss';
 import states from '../../../../../helpers/states';
 import validEmail from '../../../../../helpers/validEmail';
+import requireAuth from '../../../../../helpers/requireAuth';
 
 const doPasswordsMatch = (pass, confPass) => pass === confPass;
 const isNumber = (num) => {
@@ -144,6 +145,14 @@ class Register extends React.Component {
   }
 
   render() {
+    if (requireAuth()) {
+      return (
+        <Redirect to={{
+          pathname: '/profile',
+          search: '?origin=register',
+        }} />
+      );
+    }
     return (
       <main id="register">
         <section className="row align-center">

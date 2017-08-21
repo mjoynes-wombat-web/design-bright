@@ -33512,9 +33512,12 @@ var login = exports.login = function login(loginInfo) {
         return dispatch(newError('login', errMsg.description));
       }
 
+      var authorization = authResults;
+      authorization.date = new Date();
+
       return dispatch({
         type: _constants2.default.USER_AUTH,
-        payload: authResults
+        payload: authorization
       });
     });
   };
@@ -40281,6 +40284,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(19);
 
+var _auth0Js = __webpack_require__(330);
+
+var _auth0Js2 = _interopRequireDefault(_auth0Js);
+
 var _requireAuth = __webpack_require__(371);
 
 var _requireAuth2 = _interopRequireDefault(_requireAuth);
@@ -40304,18 +40311,59 @@ var Profile = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).call(this, props));
 
     _this.state = {
-      firstName: 'James',
-      lastName: 'Roberts',
-      email: 'jimmyr@gmail.com',
-      passwordDate: new Date(Date.parse('2017-08-16T16:54:54.323Z')),
+      firstName: '',
+      lastName: '',
+      email: '',
+      passwordDate: new Date(),
       position: '',
-      userType: 'donor',
-      profileImg: '/assets/img/james-roberts.jpg'
+      userType: '',
+      picture: '/assets/img/user.svg'
     };
+
+    _this.componentWillMount = _this.componentWillMount.bind(_this);
     return _this;
   }
 
   _createClass(Profile, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var _this2 = this;
+
+      if ((0, _requireAuth2.default)()) {
+        var webAuth = new _auth0Js2.default.WebAuth({
+          domain: 'designbright.auth0.com',
+          clientID: 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh'
+        });
+
+        webAuth.client.userInfo(this.props.userAuth.accessToken, function (err, userInfo) {
+          var email = userInfo.email,
+              picture = userInfo.picture;
+          var _userInfo$user_metada = userInfo.user_metadata,
+              firstName = _userInfo$user_metada.firstName,
+              lastName = _userInfo$user_metada.lastName,
+              passwordDate = _userInfo$user_metada.passwordDate,
+              position = _userInfo$user_metada.position;
+          var userType = userInfo.app_metadata.userType;
+
+
+          _this2.setState({
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            passwordDate: new Date(Date.parse(passwordDate)),
+            position: position,
+            userType: userType
+          });
+
+          if (picture.indexOf('gravatar')) {
+            return;
+          }
+
+          _this2.setState({ picture: picture });
+        });
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       if ((0, _requireAuth2.default)()) {
@@ -40328,7 +40376,7 @@ var Profile = function (_React$Component) {
             _react2.default.createElement(
               'div',
               { className: 'profile-wrapper small-3 columns' },
-              _react2.default.createElement('img', { src: this.state.profileImg, className: 'profile-img' }),
+              _react2.default.createElement('img', { src: this.state.picture, className: 'profile-img' }),
               _react2.default.createElement(
                 _reactRouterDom.Link,
                 { to: '/profile/upload-photo' },
@@ -40381,7 +40429,7 @@ var Profile = function (_React$Component) {
                 'p',
                 null,
                 'Password Changed on ',
-                this.state.passwordDate.getMonth(),
+                this.state.passwordDate.getMonth() + 1,
                 '/',
                 this.state.passwordDate.getDate(),
                 '/',
@@ -40425,9 +40473,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var requireAuth = function requireAuth() {
   var currentState = _store2.default.getState();
+  var auth = currentState.userAuth;
+  var authDate = new Date(Date.parse(auth.date));
+  var expireDate = new Date(authDate.setSeconds(authDate.getSeconds() + auth.expiresIn));
+  var currentDate = new Date();
 
-  if (currentState.userAuth.accessToken && currentState.userAuth.accessToken.length === 16) {
-    return true;
+  if (auth.accessToken && auth.accessToken.length === 16) {
+    if (expireDate > currentDate) {
+      return true;
+    }
   }
   return false;
 };
@@ -40923,6 +40977,10 @@ var _validEmail = __webpack_require__(395);
 
 var _validEmail2 = _interopRequireDefault(_validEmail);
 
+var _requireAuth = __webpack_require__(371);
+
+var _requireAuth2 = _interopRequireDefault(_requireAuth);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -41076,6 +41134,12 @@ var Register = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      if ((0, _requireAuth2.default)()) {
+        return _react2.default.createElement(_reactRouterDom.Redirect, { to: {
+            pathname: '/profile',
+            search: '?origin=register'
+          } });
+      }
       return _react2.default.createElement(
         'main',
         { id: 'register' },

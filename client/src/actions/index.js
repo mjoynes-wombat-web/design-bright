@@ -58,9 +58,12 @@ export const login = loginInfo => (dispatch, getState) => {
       return dispatch(newError('login', errMsg.description));
     }
 
+    const authorization = authResults;
+    authorization.date = new Date();
+
     return dispatch({
       type: C.USER_AUTH,
-      payload: authResults,
+      payload: authorization,
     });
   });
 };
