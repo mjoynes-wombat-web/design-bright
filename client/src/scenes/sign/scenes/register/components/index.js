@@ -128,6 +128,7 @@ class Register extends React.Component {
         })
         .catch((error) => {
           const createUserError = error.response.data;
+          console.log(createUserError);
           createUserError.message = `${createUserError.data.email.charAt(0).toUpperCase()}${createUserError.data.email.slice(1)} is already in use.`;
 
           this.props.onNewError(createUserError.message);
