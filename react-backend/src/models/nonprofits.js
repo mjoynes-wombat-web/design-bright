@@ -1,13 +1,19 @@
 import * as db from './db';
 
-export const findNonProfit = (ein, success, error) => {
+export const findNonProfitByEIN = (ein, success, error) => {
   db.nonProfits.find({ where: { ein } })
     .then(results => success(results))
-    .catch(e => error(e));
+    .catch(err => error(err));
+};
+
+export const findNonProfitByID = (nonprofitId, success, error) => {
+  db.nonProfits.find({ where: { nonprofitId } })
+    .then(results => success(results))
+    .catch(err => error(err));
 };
 
 export const addNonProfit = (nonProfitData, success, error) => {
-  findNonProfit(nonProfitData.ein,
+  findNonProfitByEIN(nonProfitData.ein,
     (findResults) => {
       if (findResults !== null) {
         const nonProfit = findResults;

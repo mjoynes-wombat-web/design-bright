@@ -17,7 +17,6 @@ if (STATUS !== undefined) {
 app.use(express.static('./dist'));
 
 app.get('/', (req, res) => {
-  console.log('test');
   res.sendFile('./dist', 'index.html');
 });
 
@@ -26,10 +25,8 @@ app.get('/*', (req, res) => {
 });
 
 http.createServer((req, res) => {
-  console.log('HTTP redirects to HTTPS');
   const hostname = (req.headers.host.match(/:/g)) ? req.headers.host.slice(0, req.headers.host.indexOf(':')) : req.headers.host;
   const redirect = `https://${hostname}:${HTTPS_PORT}${req.url}`;
-  console.log(redirect);
   res.writeHead(301, { Location: redirect });
   res.end();
 }).listen(HTTP_PORT, HOST);

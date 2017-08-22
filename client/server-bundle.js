@@ -120,7 +120,6 @@ if (STATUS !== undefined) {
 app.use(_express2.default.static('./dist'));
 
 app.get('/', function (req, res) {
-  console.log('test');
   res.sendFile('./dist', 'index.html');
 });
 
@@ -129,10 +128,8 @@ app.get('/*', function (req, res) {
 });
 
 _http2.default.createServer(function (req, res) {
-  console.log('HTTP redirects to HTTPS');
   var hostname = req.headers.host.match(/:/g) ? req.headers.host.slice(0, req.headers.host.indexOf(':')) : req.headers.host;
   var redirect = 'https://' + hostname + ':' + HTTPS_PORT + req.url;
-  console.log(redirect);
   res.writeHead(301, { Location: redirect });
   res.end();
 }).listen(HTTP_PORT, HOST);

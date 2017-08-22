@@ -4,7 +4,6 @@ const jsonResponse = (statusCode, data, message, res) => {
     data,
     message,
   };
-  
   return res.status(response.statusCode).json(response);
 };
 

@@ -50,11 +50,11 @@ export const createNewUser = (
     .catch(authErr => error(authErr));
 };
 
-export const getUserInfo = (accessToken) => {
+export const getUserInfo = (accessToken, callback, error) => {
   clientWebAuth.client.userInfo(accessToken, (userErr, user) => {
     if (userErr) {
-      throw new Error(userErr);
+      return error(userErr);
     }
-    console.log(user);
+    return callback(user);
   });
 };

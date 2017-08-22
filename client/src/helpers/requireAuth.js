@@ -1,6 +1,7 @@
 import { Redirect } from 'react-router-dom';
 
 import store from '../store';
+import { logout } from '../actions';
 
 const requireAuth = () => {
   const currentState = store.getState();
@@ -13,6 +14,8 @@ const requireAuth = () => {
     if (expireDate > currentDate) {
       return true;
     }
+    store.dispatch(logout());
+    return false;
   }
   return false;
 };

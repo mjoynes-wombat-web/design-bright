@@ -15,6 +15,7 @@ div#root > div > div {
     background-size: 140% 110%;
     width: 100%;
     text-align: center;
+    z-index: 100;
 
     &.error {
       background-image: url('/assets/img/red-brush.png');
@@ -29,6 +30,7 @@ div#root > div > div {
       font-weight: normal;
       font-size: 1.25rem;
       font-family: 'Lato', sans-serif;
+      text-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
 
       @media screen and (min-width: $medium-break) {
         font-size: 1.5rem;

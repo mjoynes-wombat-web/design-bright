@@ -85,7 +85,7 @@ module.exports = require("dotenv");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addNonProfit = exports.findNonProfit = undefined;
+exports.addNonProfit = exports.findNonProfitByID = exports.findNonProfitByEIN = undefined;
 
 var _db = __webpack_require__(10);
 
@@ -93,16 +93,24 @@ var db = _interopRequireWildcard(_db);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var findNonProfit = exports.findNonProfit = function findNonProfit(ein, success, error) {
+var findNonProfitByEIN = exports.findNonProfitByEIN = function findNonProfitByEIN(ein, success, error) {
   db.nonProfits.find({ where: { ein: ein } }).then(function (results) {
     return success(results);
-  }).catch(function (e) {
-    return error(e);
+  }).catch(function (err) {
+    return error(err);
+  });
+};
+
+var findNonProfitByID = exports.findNonProfitByID = function findNonProfitByID(nonprofitId, success, error) {
+  db.nonProfits.find({ where: { nonprofitId: nonprofitId } }).then(function (results) {
+    return success(results);
+  }).catch(function (err) {
+    return error(err);
   });
 };
 
 var addNonProfit = exports.addNonProfit = function addNonProfit(nonProfitData, success, error) {
-  findNonProfit(nonProfitData.ein, function (findResults) {
+  findNonProfitByEIN(nonProfitData.ein, function (findResults) {
     if (findResults !== null) {
       var nonProfit = findResults;
       nonProfit.status = 200;
@@ -342,12 +350,6 @@ router.post('/create', function (req, res) {
       return (0, _response2.default)(statusCode, { email: newUser.email }, message, res);
     });
   }
-});
-
-// Returns the user info with the userId param. Requires authorization.
-router.get('/:authToken', function (req, res) {
-  console.log(req.params.authToken);
-  res.send('\n  Returns the user information from the user with the id of ' + req.params.userId + '. \n  Requires authorization.\n  ');
 });
 
 // Accepts new information for the user with the userId param.
@@ -700,12 +702,12 @@ var createNewUser = exports.createNewUser = function createNewUser(_ref, success
   });
 };
 
-var getUserInfo = exports.getUserInfo = function getUserInfo(accessToken) {
+var getUserInfo = exports.getUserInfo = function getUserInfo(accessToken, callback, error) {
   clientWebAuth.client.userInfo(accessToken, function (userErr, user) {
     if (userErr) {
-      throw new Error(userErr);
+      return error(userErr);
     }
-    console.log(user);
+    return callback(user);
   });
 };
 
@@ -737,7 +739,6 @@ var jsonResponse = function jsonResponse(statusCode, data, message, res) {
     data: data,
     message: message
   };
-
   return res.status(response.statusCode).json(response);
 };
 
@@ -758,6 +759,18 @@ var _express = __webpack_require__(0);
 
 var _nonprofits = __webpack_require__(2);
 
+var _requireAuth = __webpack_require__(20);
+
+var _requireAuth2 = _interopRequireDefault(_requireAuth);
+
+var _Auth = __webpack_require__(12);
+
+var _response = __webpack_require__(15);
+
+var _response2 = _interopRequireDefault(_response);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var router = (0, _express.Router)();
 
 router.post('/create', function (req, res) {
@@ -766,6 +779,22 @@ router.post('/create', function (req, res) {
   }, function (error) {
     res.json(error);
   });
+});
+
+router.get('/:accessToken', function (req, res) {
+  var accessToken = req.params.accessToken;
+  if ((0, _requireAuth2.default)(accessToken)) {
+    (0, _Auth.getUserInfo)(accessToken, function (user) {
+      var nonprofitId = user.app_metadata.nonProfitID;
+      (0, _nonprofits.findNonProfitByID)(nonprofitId, function (results) {
+        return results === null ? (0, _response2.default)(404, { nonprofitId: nonprofitId }, 'The account belongs to a non-profit that doesn\'t exist. Please contact support.', res) : (0, _response2.default)(200, results.dataValues, 'You have successfully retrieved the nonprofit\'s info that has the id of ' + user.app_metadata.nonProfitID + '.', res);
+      }, function (error) {
+        return (0, _response2.default)(500, error, 'There was an issue retrieving the non-profit information from the database. Please contact support.', res);
+      });
+    }, function (error) {
+      return (0, _response2.default)(error.statusCode, error.original, 'This access token is not authorized.', res);
+    });
+  }
 });
 
 exports.default = router;
@@ -894,6 +923,25 @@ router.post('/', function (req, res) {
 
 // Exporting router as default.
 exports.default = router;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var requireAuth = function requireAuth(accessToken) {
+  if (accessToken && accessToken.length === 16) {
+    return true;
+  }
+  return false;
+};
+
+exports.default = requireAuth;
 
 /***/ })
 /******/ ]);

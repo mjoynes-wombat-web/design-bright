@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { login } from '../../../../actions';
+import { login, newMessage } from '../../../../actions';
 import Login from './components';
 
 const mapStateToProps = state => ({
@@ -12,6 +12,11 @@ const mapDispatchToProps = dispatch => ({
   onLogin(loginInfo) {
     dispatch(
       login(loginInfo),
+    );
+  },
+  onNewMessage(msg) {
+    dispatch(
+      newMessage('login', msg),
     );
   },
 });

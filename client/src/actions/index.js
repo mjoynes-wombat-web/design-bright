@@ -76,5 +76,5 @@ export const logout = () => (dispatch, getState) => {
 };
 
 export const getCampaigns = () => {
-  console.log('Gets campaigns.');
+  return null;
 };

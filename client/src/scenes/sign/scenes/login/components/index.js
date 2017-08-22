@@ -1,6 +1,7 @@
 /* eslint-env browser */
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import queryString from 'query-string';
 
 import requireAuth from '../../../../../helpers/requireAuth';
 import validEmail from '../../../../../helpers/validEmail';
@@ -44,6 +45,20 @@ class Login extends React.Component {
     e.preventDefault();
 
     this.props.onLogout();
+  }
+
+  componentWillMount() {
+    const search = queryString.parse(this.props.location.search);
+
+    if ('origin' in search) {
+      switch (search.origin) {
+        case 'profile':
+          return this.props.onNewMessage('You have been logged out.');
+        default:
+          return null;
+      }
+    }
+    return null;
   }
 
   render() {

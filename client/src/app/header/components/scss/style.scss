@@ -9,7 +9,7 @@ header {
   background-image: url("/assets/img/paper.png");
   padding: 1.125rem 0;
   position: relative;
-  z-index: 100;
+  z-index: 200;
 
   &.no-touch div.row nav li #search {
     &:hover {

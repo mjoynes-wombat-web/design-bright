@@ -92,7 +92,19 @@ class Register extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     if (this.state.valid) {
-      const User = ({ email, password, firstName, lastName, userType, position, nonProfitName, ein, address, city, state, zip }) => ({
+      const User = (
+        { email,
+          password,
+          firstName,
+          lastName,
+          userType,
+          position,
+          nonProfitName,
+          ein,
+          address,
+          city,
+          state,
+          zip }) => ({
         userInfo: {
           email,
           password,
@@ -129,7 +141,6 @@ class Register extends React.Component {
         })
         .catch((error) => {
           const createUserError = error.response.data;
-          console.log(createUserError);
           createUserError.message = `${createUserError.data.email.charAt(0).toUpperCase()}${createUserError.data.email.slice(1)} is already in use.`;
 
           this.props.onNewError(createUserError.message);

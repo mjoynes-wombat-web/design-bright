@@ -62,15 +62,6 @@ router.post('/create', (req, res) => {
   }
 });
 
-// Returns the user info with the userId param. Requires authorization.
-router.get('/:authToken', (req, res) => {
-  console.log(req.params.authToken);
-  res.send(`
-  Returns the user information from the user with the id of ${req.params.userId}. 
-  Requires authorization.
-  `);
-});
-
 // Accepts new information for the user with the userId param.
 // Returns the updated user information. Requires authorization.
 router.patch('/:userId/edit', (req, res) => {
