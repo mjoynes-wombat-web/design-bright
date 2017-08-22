@@ -41730,6 +41730,9 @@ var Profile = function (_React$Component) {
           }
 
           if (picture.indexOf('s.gravatar.com/avatar/')) {
+            _this2.setState({
+              fetched: true
+            });
             return;
           }
 
@@ -41739,6 +41742,7 @@ var Profile = function (_React$Component) {
           });
         });
       }
+      return null;
     }
   }, {
     key: 'componentDidMount',
@@ -42039,7 +42043,7 @@ var Message = function (_React$Component) {
             null,
             _react2.default.createElement(
               'a',
-              { onClick: this.props.error.message !== '' ? this.props.onClearError() : this.props.onClearMessage() },
+              { onClick: this.props.error.message !== '' ? this.props.onClearError : this.props.onClearMessage },
               '\uF057'
             ),
             this.props.error.message !== '' ? this.props.error.message : this.props.message.message

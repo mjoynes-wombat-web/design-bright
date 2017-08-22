@@ -78,6 +78,9 @@ class Profile extends React.Component {
           }
 
           if (picture.indexOf('s.gravatar.com/avatar/')) {
+            this.setState({
+              fetched: true,
+            });
             return;
           }
 
@@ -88,6 +91,7 @@ class Profile extends React.Component {
         },
       );
     }
+    return null;
   }
 
   componentDidMount() {
@@ -116,7 +120,7 @@ class Profile extends React.Component {
                 <img src={this.state.picture} className="profile-img" />
                 <Link to='/profile/upload-photo'>
                   <span></span> Upload Profile Photo
-              </Link>
+                </Link>
               </div>
               <div className="small-12 medium-9 columns">
                 <h1>
@@ -125,7 +129,7 @@ class Profile extends React.Component {
                       ? this.state.nonProfitName
                       : `${this.state.firstName} ${this.state.lastName}`
                     }'s Profile
-                </span>
+                  </span>
                 </h1>
                 <p className="title">Name:</p>
                 <p>{this.state.firstName} {this.state.lastName}</p>
