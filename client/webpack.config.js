@@ -3,20 +3,15 @@ const cssNano = require('cssnano');
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/client/index.js',
   target: 'web',
   node: {
     fs: 'empty',
   },
   output: {
-    path: path.resolve('dist/assets'),
+    path: path.resolve('build/dist/assets/js'),
     filename: 'bundle.js',
     publicPath: '/assets',
-  },
-  devServer: {
-    inline: true,
-    contentBase: './dist',
-    port: 3002,
   },
   module: {
     loaders: [
@@ -25,7 +20,7 @@ module.exports = {
         exclude: /(node_modules)/,
         loader: 'babel-loader',
         query: {
-          presets: ['latest', 'stage-0', 'react'],
+          presets: ['env', 'stage-0', 'react'],
         },
       },
       {
