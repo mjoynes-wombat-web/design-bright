@@ -31,7 +31,7 @@ router.get('/:accessToken', (req, res) => {
             jsonResponse(
               404,
               { nonprofitId },
-              'The account belongs to a non-profit that doesn\'t exist. Please contact support.',
+              'This account belongs to a non-profit that doesn\'t exist. Please contact support.',
               res)
             : jsonResponse(
               200,

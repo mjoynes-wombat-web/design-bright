@@ -1,2 +1,6 @@
 Register:
   ☐ Create a delete non-profit fallback. Check creation date. @high 
+  ☐ Move form to single column. @high
+  ☐ Add additional content to entice user to register. @high
+  ☐ Limit width of inputs. Possibly based on length of expected input. @high
+  ☐ Change user type to radio instead of checkbox to follow convention. @high

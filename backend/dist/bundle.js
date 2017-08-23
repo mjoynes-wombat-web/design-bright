@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -87,7 +87,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.addNonProfit = exports.findNonProfitByID = exports.findNonProfitByEIN = undefined;
 
-var _db = __webpack_require__(10);
+var _db = __webpack_require__(12);
 
 var db = _interopRequireWildcard(_db);
 
@@ -133,11 +133,115 @@ var addNonProfit = exports.addNonProfit = function addNonProfit(nonProfitData, s
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getUserInfo = exports.createNewUser = undefined;
+
+var _axios = __webpack_require__(14);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _dotenv = __webpack_require__(1);
+
+var _dotenv2 = _interopRequireDefault(_dotenv);
+
+var _auth0Js = __webpack_require__(15);
+
+var _auth0Js2 = _interopRequireDefault(_auth0Js);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _dotenv$config$parsed = _dotenv2.default.config().parsed,
+    AUTH0_API_ID = _dotenv$config$parsed.AUTH0_API_ID,
+    AUTH0_API_SECRET = _dotenv$config$parsed.AUTH0_API_SECRET,
+    AUTH0_DOMAIN = _dotenv$config$parsed.AUTH0_DOMAIN,
+    AUTH0_CLIENT_ID = _dotenv$config$parsed.AUTH0_CLIENT_ID;
+
+var clientWebAuth = new _auth0Js2.default.WebAuth({
+  domain: AUTH0_DOMAIN,
+  clientID: AUTH0_CLIENT_ID
+});
+
+var createNewUser = exports.createNewUser = function createNewUser(_ref, success, error) {
+  var email = _ref.email,
+      password = _ref.password,
+      user_metadata = _ref.user_metadata,
+      app_metadata = _ref.app_metadata;
+
+  _axios2.default.post('https://designbright.auth0.com/oauth/token', {
+    client_id: AUTH0_API_ID,
+    client_secret: AUTH0_API_SECRET,
+    audience: 'https://designbright.auth0.com/api/v2/',
+    grant_type: 'client_credentials'
+  }, { 'content-type': 'application/json' }).then(function (results) {
+    _axios2.default.post('https://designbright.auth0.com/api/v2/users', {
+      connection: 'Username-Password-Authentication',
+      email: email,
+      name: email,
+      password: password,
+      user_metadata: user_metadata,
+      app_metadata: {
+        userType: app_metadata.userType,
+        nonProfitID: app_metadata.nonProfitID
+      }
+    }, {
+      headers: {
+        Authorization: 'Bearer ' + results.data.access_token,
+        'content-type': 'application/json'
+      }
+    }).then(function (newUser) {
+      return success(newUser);
+    }).catch(function (userErr) {
+      return error(userErr);
+    });
+  }).catch(function (authErr) {
+    return error(authErr);
+  });
+};
+
+var getUserInfo = exports.getUserInfo = function getUserInfo(accessToken, callback, error) {
+  clientWebAuth.client.userInfo(accessToken, function (userErr, user) {
+    if (userErr) {
+      return error(userErr);
+    }
+    return callback(user);
+  });
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var jsonResponse = function jsonResponse(statusCode, data, message, res) {
+  var response = {
+    statusCode: statusCode,
+    data: data,
+    message: message
+  };
+  return res.status(response.statusCode).json(response);
+};
+
+exports.default = jsonResponse;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _express = __webpack_require__(0);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _morgan = __webpack_require__(4);
+var _morgan = __webpack_require__(6);
 
 var _morgan2 = _interopRequireDefault(_morgan);
 
@@ -145,23 +249,23 @@ var _dotenv = __webpack_require__(1);
 
 var _dotenv2 = _interopRequireDefault(_dotenv);
 
-var _cors = __webpack_require__(5);
+var _cors = __webpack_require__(7);
 
 var _cors2 = _interopRequireDefault(_cors);
 
-var _bodyParser = __webpack_require__(6);
+var _bodyParser = __webpack_require__(8);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _fs = __webpack_require__(7);
+var _fs = __webpack_require__(9);
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _https = __webpack_require__(8);
+var _https = __webpack_require__(10);
 
 var _https2 = _interopRequireDefault(_https);
 
-var _users = __webpack_require__(9);
+var _users = __webpack_require__(11);
 
 var _users2 = _interopRequireDefault(_users);
 
@@ -169,15 +273,15 @@ var _nonprofits = __webpack_require__(16);
 
 var _nonprofits2 = _interopRequireDefault(_nonprofits);
 
-var _campaigns = __webpack_require__(17);
+var _campaigns = __webpack_require__(18);
 
 var _campaigns2 = _interopRequireDefault(_campaigns);
 
-var _advisor = __webpack_require__(18);
+var _advisor = __webpack_require__(19);
 
 var _advisor2 = _interopRequireDefault(_advisor);
 
-var _help = __webpack_require__(19);
+var _help = __webpack_require__(20);
 
 var _help2 = _interopRequireDefault(_help);
 
@@ -238,37 +342,37 @@ _https2.default.createServer({
 });
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = require("morgan");
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = require("cors");
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = require("https");
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -282,9 +386,9 @@ var _express = __webpack_require__(0);
 
 var _nonprofits = __webpack_require__(2);
 
-var _Auth = __webpack_require__(12);
+var _Auth = __webpack_require__(3);
 
-var _response = __webpack_require__(15);
+var _response = __webpack_require__(4);
 
 var _response2 = _interopRequireDefault(_response);
 
@@ -362,7 +466,7 @@ router.patch('/:userId/edit', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -373,7 +477,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.advisors = exports.campaignContent = exports.campaignImages = exports.campaigns = exports.nonProfits = exports.sequelize = undefined;
 
-var _sequelize = __webpack_require__(11);
+var _sequelize = __webpack_require__(13);
 
 var _sequelize2 = _interopRequireDefault(_sequelize);
 
@@ -623,126 +727,22 @@ var advisors = exports.advisors = sequelize.define('advisors', {
 sequelize.sync();
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("sequelize");
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getUserInfo = exports.createNewUser = undefined;
-
-var _axios = __webpack_require__(13);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-var _dotenv = __webpack_require__(1);
-
-var _dotenv2 = _interopRequireDefault(_dotenv);
-
-var _auth0Js = __webpack_require__(14);
-
-var _auth0Js2 = _interopRequireDefault(_auth0Js);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _dotenv$config$parsed = _dotenv2.default.config().parsed,
-    AUTH0_API_ID = _dotenv$config$parsed.AUTH0_API_ID,
-    AUTH0_API_SECRET = _dotenv$config$parsed.AUTH0_API_SECRET,
-    AUTH0_DOMAIN = _dotenv$config$parsed.AUTH0_DOMAIN,
-    AUTH0_CLIENT_ID = _dotenv$config$parsed.AUTH0_CLIENT_ID;
-
-var clientWebAuth = new _auth0Js2.default.WebAuth({
-  domain: AUTH0_DOMAIN,
-  clientID: AUTH0_CLIENT_ID
-});
-
-var createNewUser = exports.createNewUser = function createNewUser(_ref, success, error) {
-  var email = _ref.email,
-      password = _ref.password,
-      user_metadata = _ref.user_metadata,
-      app_metadata = _ref.app_metadata;
-
-  _axios2.default.post('https://designbright.auth0.com/oauth/token', {
-    client_id: AUTH0_API_ID,
-    client_secret: AUTH0_API_SECRET,
-    audience: 'https://designbright.auth0.com/api/v2/',
-    grant_type: 'client_credentials'
-  }, { 'content-type': 'application/json' }).then(function (results) {
-    _axios2.default.post('https://designbright.auth0.com/api/v2/users', {
-      connection: 'Username-Password-Authentication',
-      email: email,
-      name: email,
-      password: password,
-      user_metadata: user_metadata,
-      app_metadata: {
-        userType: app_metadata.userType,
-        nonProfitID: app_metadata.nonProfitID
-      }
-    }, {
-      headers: {
-        Authorization: 'Bearer ' + results.data.access_token,
-        'content-type': 'application/json'
-      }
-    }).then(function (newUser) {
-      return success(newUser);
-    }).catch(function (userErr) {
-      return error(userErr);
-    });
-  }).catch(function (authErr) {
-    return error(authErr);
-  });
-};
-
-var getUserInfo = exports.getUserInfo = function getUserInfo(accessToken, callback, error) {
-  clientWebAuth.client.userInfo(accessToken, function (userErr, user) {
-    if (userErr) {
-      return error(userErr);
-    }
-    return callback(user);
-  });
-};
-
-/***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("axios");
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("auth0-js");
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var jsonResponse = function jsonResponse(statusCode, data, message, res) {
-  var response = {
-    statusCode: statusCode,
-    data: data,
-    message: message
-  };
-  return res.status(response.statusCode).json(response);
-};
-
-exports.default = jsonResponse;
 
 /***/ }),
 /* 16 */
@@ -759,13 +759,13 @@ var _express = __webpack_require__(0);
 
 var _nonprofits = __webpack_require__(2);
 
-var _requireAuth = __webpack_require__(20);
+var _requireAuth = __webpack_require__(17);
 
 var _requireAuth2 = _interopRequireDefault(_requireAuth);
 
-var _Auth = __webpack_require__(12);
+var _Auth = __webpack_require__(3);
 
-var _response = __webpack_require__(15);
+var _response = __webpack_require__(4);
 
 var _response2 = _interopRequireDefault(_response);
 
@@ -787,7 +787,7 @@ router.get('/:accessToken', function (req, res) {
     (0, _Auth.getUserInfo)(accessToken, function (user) {
       var nonprofitId = user.app_metadata.nonProfitID;
       (0, _nonprofits.findNonProfitByID)(nonprofitId, function (results) {
-        return results === null ? (0, _response2.default)(404, { nonprofitId: nonprofitId }, 'The account belongs to a non-profit that doesn\'t exist. Please contact support.', res) : (0, _response2.default)(200, results.dataValues, 'You have successfully retrieved the nonprofit\'s info that has the id of ' + user.app_metadata.nonProfitID + '.', res);
+        return results === null ? (0, _response2.default)(404, { nonprofitId: nonprofitId }, 'This account belongs to a non-profit that doesn\'t exist. Please contact support.', res) : (0, _response2.default)(200, results.dataValues, 'You have successfully retrieved the nonprofit\'s info that has the id of ' + user.app_metadata.nonProfitID + '.', res);
       }, function (error) {
         return (0, _response2.default)(500, error, 'There was an issue retrieving the non-profit information from the database. Please contact support.', res);
       });
@@ -801,6 +801,25 @@ exports.default = router;
 
 /***/ }),
 /* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var requireAuth = function requireAuth(accessToken) {
+  if (accessToken && accessToken.length === 16) {
+    return true;
+  }
+  return false;
+};
+
+exports.default = requireAuth;
+
+/***/ }),
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -866,7 +885,7 @@ router.post('/create', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -897,7 +916,7 @@ router.post('/', function (req, res) {
 exports.default = router;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -923,25 +942,6 @@ router.post('/', function (req, res) {
 
 // Exporting router as default.
 exports.default = router;
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var requireAuth = function requireAuth(accessToken) {
-  if (accessToken && accessToken.length === 16) {
-    return true;
-  }
-  return false;
-};
-
-exports.default = requireAuth;
 
 /***/ })
 /******/ ]);
