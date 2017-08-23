@@ -8,6 +8,4 @@ npm-debug.log
 *.csr
 *;
 cert/
-dist/
-build/
 
