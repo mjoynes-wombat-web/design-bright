@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./src/app.js --exec babel-node",
-    "build": "webpack",
-    "build-run": "webpack -w & nodemon ./dist/bundle.js",
-    "start": "nodemon ./dist/bundle.js",
-    "start-prod": "node ./dist/bundle.js"
+    "clean": "rm -rf build && mkdir build",
+    "build-server": "babel -d ./build ./src -s",
+    "build": "npm run clean && npm run build-server",
+    "start": "node ./build/app.js",
+    "build-start": "npm run build && npm run start",
+    "dev": "nodemon --exec babel-node ./src/app.js"
   },
   "dependencies": {
     "auth0-js": "^8.9.1",
