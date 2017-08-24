@@ -38,14 +38,15 @@ if (STATUS !== undefined) {
   app.use((0, _morgan2.default)(STATUS));
 }
 
-app.use(_express2.default.static('build/dist'));
+app.use(_express2.default.static(_path2.default.join(__dirname, '../build/dist')));
 
 app.get('/', (req, res) => {
-  res.sendFile(_path2.default.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(_path2.default.join(__dirname, '../build/dist', 'index.html'));
 });
 
 app.get('/*', (req, res) => {
-  res.sendFile(_path2.default.join(__dirname, 'dist', 'index.html'));
+  console.log('Get attempt');
+  res.sendFile(_path2.default.join(__dirname, '../build/dist', 'index.html'));
 });
 
 _http2.default.createServer((req, res) => {

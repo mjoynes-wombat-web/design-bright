@@ -5,6 +5,7 @@ import Home from '../scenes/home';
 import Register from '../scenes/sign/scenes/register';
 import Login from '../scenes/sign/scenes/login';
 import Profile from '../scenes/userProfile';
+import editProfile from '../scenes/userProfile/scenes/edit';
 import routeRefresh from '../helpers/routeRefresh';
 import Message from '../partials/messages';
 
@@ -27,11 +28,17 @@ const Routes = () => (
         component={Register}
       />
       <Route
+        exact
         path='/login'
         component={Login}/>
       <Route
+        exact
         path='/profile'
         component={Profile}/>
+      <Route
+        exact
+        path='/profile/edit'
+        component={editProfile}/>
     </Switch>
   </div>
 );

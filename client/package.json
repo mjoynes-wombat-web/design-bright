@@ -7,10 +7,10 @@
     "build-add": "npm run build && git add -A",
     "clean": "rm -f build/server.js build/sever.js.map build/dist/assets/js/bundle.js",
     "build-server": "babel -o ./build/server.js ./src/server.js -s",
-    "build-client": "webpack",
+    "build-client": "webpack -p",
     "build": "npm run clean && npm run build-server && npm run build-client",
     "start": "node ./build/server.js",
-    "dev-build": "webpack && babel-node ./src/server.js",
+    "dev-build": "webpack -p && babel-node ./src/server.js",
     "dev": "nodemon --ignore build/dist --exec npm run dev-build"
   },
   "author": "Simeon Smith",

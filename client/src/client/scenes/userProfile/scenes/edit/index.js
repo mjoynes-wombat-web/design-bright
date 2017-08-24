@@ -4,9 +4,9 @@ import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
 import './scss/style.scss';
-import states from '../../../../../helpers/states';
-import validEmail from '../../../../../helpers/validEmail';
-import requireAuth from '../../../../../helpers/requireAuth';
+import states from '../../../../helpers/states';
+import validEmail from '../../../../helpers/validEmail';
+import requireAuth from '../../../../helpers/requireAuth';
 
 const doPasswordsMatch = (pass, confPass) => pass === confPass;
 const isNumber = (num) => {
@@ -18,7 +18,7 @@ const isNumber = (num) => {
 };
 const numLength = (num, length) => String(num).length === length;
 
-class Register extends React.Component {
+class editProfile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,13 +27,10 @@ class Register extends React.Component {
       email: '',
       password: '',
       confirmPassword: '',
-      userType: 'donor',
-      position: '',
-      nonProfitName: '',
-      ein: '',
       address: '',
       city: '',
       state: '',
+      userType: 'non-profit',
       zip: '',
       agreed: false,
       valid: false,
@@ -97,36 +94,28 @@ class Register extends React.Component {
           password,
           firstName,
           lastName,
-          userType,
-          position,
-          nonProfitName,
-          ein,
           address,
           city,
           state,
-          zip }) => ({
-        userInfo: {
-          email,
-          password,
-          user_metadata: {
-            firstName,
-            lastName,
-            passwordDate: new Date(),
-            position,
+          zip }) =>
+        ({
+          userInfo: {
+            email,
+            password,
+            user_metadata: {
+              firstName,
+              lastName,
+              passwordDate: new Date(),
+            },
           },
-          app_metadata: {
-            userType,
+          nonProfitInfo: {
+            address,
+            city,
+            state,
+            zip,
           },
-        },
-        nonProfitInfo: {
-          name: nonProfitName,
-          ein,
-          address,
-          city,
-          state,
-          zip,
-        },
-      });
+        }
+        );
 
       axios.post(
         `https://${window.location.hostname}:3000/api/users/create`,
@@ -156,14 +145,14 @@ class Register extends React.Component {
   }
 
   render() {
-    if (requireAuth()) {
-      return (
-        <Redirect to={{
-          pathname: '/profile',
-          search: '?origin=register',
-        }} />
-      );
-    }
+    // if (requireAuth()) {
+    //   return (
+    //     <Redirect to={{
+    //       pathname: '/profile',
+    //       search: '?origin=register',
+    //     }} />
+    //   );
+    // }
     return (
       <main id="register">
         <section className="row align-center">
@@ -194,12 +183,12 @@ class Register extends React.Component {
                     name="lastName"
                     id="last-name"
                     required />
-                  <label htmlFor="email" className={`row${this.props.error.type === 'register' ? ' invalid' : ''}${(validEmail(this.state.email) || this.state.email.length === 0) ? '' : ' invalid'}`}>
+                  <label htmlFor="email" className={`row${(validEmail(this.state.email) || this.state.email.length === 0) ? '' : ' invalid'}`}>
                     <div className="small-12 columns">
                       Email: <span className="required">*</span>
                     </div>
                     <div className=" small-12 columns">
-                      <span className='error'>{this.props.error.type === 'register' ? this.props.error.message : 'Please enter a valid email address.'}</span>
+                      <span className='error'>Please enter a valid email address.</span>
                     </div>
                   </label>
                   <input
@@ -210,107 +199,10 @@ class Register extends React.Component {
                     required
                     id="email" />
                 </fieldset>
-                <hr />
-                <label htmlFor="password">
-                  Password: <span className="required">*</span>
-                </label>
-                <input
-                  value={this.state.password}
-                  onChange={this.onChange}
-                  type="password"
-                  name="password"
-                  id="password"
-                  required />
-                <label htmlFor="confirm-password" className={`row${doPasswordsMatch(this.state.password, this.state.confirmPassword) ? '' : ' invalid'}`}>
-                  <div className="small-12 columns">
-                    Confirm Password: <span className="required">*</span>
-                  </div>
-                  <div className=" small-12 columns">
-                    <span className='error'>Your passwords don't match.</span>
-                  </div>
-                </label>
-                <input
-                  value={this.state.confirmPassword}
-                  onChange={this.onChange}
-                  type="password"
-                  name="confirmPassword"
-                  id="confirm-password"
-                  required />
-                <hr className="hide-for-large" />
-              </div>
-              <div className="small-12 large-4 columns">
-                <fieldset className="user-type">
-                  <legend>
-                    Are you a donor or non-profit? <span className="required">*</span>
-                  </legend>
-                  <label htmlFor="donor">
-                    <input
-                      onChange={this.onChange}
-                      onClick={this.onClick}
-                      type="radio"
-                      checked={this.state.userType === 'donor'}
-                      name="userType"
-                      value="donor"
-                      id="donor" />
-                    <span></span>
-                    Donor
-                  </label>
-                  <label htmlFor="non-profit">
-                    <input
-                      onChange={this.onChange}
-                      onClick={this.onClick}
-                      checked={this.state.userType === 'non-profit'}
-                      type="radio"
-                      name="userType"
-                      value="non-profit"
-                      id="non-profit" />
-                    <span></span>
-                    Non-Profit
-                  </label>
-                </fieldset>
-                <div className={this.state.userType === 'non-profit' ? '' : 'hide'}>
-                  <label htmlFor="position">
-                    Position at Non-Profit: <span className="required">*</span>
-                  </label>
-                  <input
-                    value={this.state.position}
-                    onChange={this.onChange}
-                    type="text"
-                    name="position"
-                    id="position"
-                    required={this.state.userType === 'non-profit'} />
-                  <label htmlFor="non-profit-name">
-                    Non-Profit Name: <span className="required">*</span>
-                  </label>
-                  <input
-                    value={this.state.nonProfitName}
-                    onChange={this.onChange}
-                    type="text"
-                    name="nonProfitName"
-                    id="non-profit-name"
-                    required={this.state.userType === 'non-profit'} />
-                  <label
-                    htmlFor="ein"
-                    className={`row align-bottom${(isNumber(this.state.ein) && numLength(this.state.ein, 9)) ? '' : ' invalid'}${numLength(this.state.ein, 0) ? ' empty' : ''}`}>
-                    <div className="small-12 columns">
-                      Employer Identification Number (EIN): <span className="required">*</span>
-                    </div>
-                    <div className="small-12 columns">
-                      <span className='error'>You entered an invlaid EIN.</span>
-                    </div>
-                  </label>
-                  <input
-                    value={this.state.ein}
-                    onChange={this.onChange}
-                    type="text"
-                    name="ein"
-                    id="ein"
-                    required={this.state.userType === 'non-profit'} />
-                  <hr className="hide-for-large" />
-                </div>
               </div>
               <div className='small-12 large-4 columns'>
                 <div className={this.state.userType === 'non-profit' ? '' : 'hide'}>
+                  <hr className="hide-for-large" />
                   <label htmlFor="address">
                     Address: <span className="required">*</span>
                   </label>
@@ -364,19 +256,36 @@ class Register extends React.Component {
                     required={this.state.userType === 'non-profit'} />
                 </div>
               </div>
+              <div className="small-12 large-4 columns">
+                <hr />
+                <label htmlFor="password">
+                  Password: <span className="required">*</span>
+                </label>
+                <input
+                  value={this.state.password}
+                  onChange={this.onChange}
+                  type="password"
+                  name="password"
+                  id="password"
+                  required />
+                <label htmlFor="confirm-password" className={`row${doPasswordsMatch(this.state.password, this.state.confirmPassword) ? '' : ' invalid'}`}>
+                  <div className="small-12 columns">
+                    Confirm Password: <span className="required">*</span>
+                  </div>
+                  <div className=" small-12 columns">
+                    <span className='error'>Your passwords don't match.</span>
+                  </div>
+                </label>
+                <input
+                  value={this.state.confirmPassword}
+                  onChange={this.onChange}
+                  type="password"
+                  name="confirmPassword"
+                  id="confirm-password"
+                  required />
+              </div>
             </div>
             <div className="row align-center">
-              <label htmlFor="terms" className="small-12 columns terms">
-                <input
-                  checked={this.state.agreed}
-                  onChange={this.onChange}
-                  type="checkbox"
-                  name="agreed"
-                  id="terms"
-                  required />
-                <span></span> {this.state.userType === 'non-profit' ? 'I am authorized to represent the non-profit listed above and' : 'I '} agree to the Design Bright <Link to="/help/terms">terms of
-            service.</Link> <span className='required'>*</span>
-              </label>
               <button
                 className={`primary small-11 medium-10 large-8${this.state.valid ? '' : ' disabled'}`}
                 disabled={!this.state.valid}
@@ -392,4 +301,4 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+export default editProfile;

@@ -14,14 +14,15 @@ if (STATUS !== undefined) {
   app.use(logger(STATUS));
 }
 
-app.use(express.static('build/dist'));
+app.use(express.static(path.join(__dirname, '../build/dist')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../build/dist', 'index.html'));
 });
 
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  console.log('Get attempt');
+  res.sendFile(path.join(__dirname, '../build/dist', 'index.html'));
 });
 
 http.createServer((req, res) => {

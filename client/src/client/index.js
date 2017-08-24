@@ -8,7 +8,6 @@ import App from './app';
 
 window.React = React;
 window.store = store;
-console.log('test');
 
 render((
   <Provider store={store}>
