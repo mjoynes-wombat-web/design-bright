@@ -3,7 +3,6 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';
 
-import requireAuth from '../../../../../helpers/requireAuth';
 import validEmail from '../../../../../helpers/validEmail';
 
 class Login extends React.Component {
@@ -13,6 +12,7 @@ class Login extends React.Component {
       email: '',
       password: '',
       loginError: '',
+      loginSubmitted: false,
     };
 
     this.onChange = this.onChange.bind(this);
@@ -37,6 +37,7 @@ class Login extends React.Component {
     });
 
     this.state.password = '';
+    this.setState({ loginSubmitted: true });
     
     window.scroll(0, 0);
   }
@@ -62,13 +63,16 @@ class Login extends React.Component {
   }
 
   render() {
-    if (requireAuth()) {
-      return (
-        <Redirect to={{
-          pathname: '/profile',
-          search: '?origin=login',
-        }} />
-      );
+    if (this.state.loginSubmitted) {
+      if (this.props.onRequireAuth()) {
+        return (
+          <Redirect to={{
+            pathname: '/profile',
+            search: '?origin=login',
+          }} />
+        );
+      }
+      this.setState({ loginSubmitted: false });
     }
     return (
       <main id="login">

@@ -3,7 +3,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import './scss/style.scss';
-import requireAuth from '../../../helpers/requireAuth';
 
 class Header extends React.Component {
   constructor(props) {
@@ -77,7 +76,7 @@ class Header extends React.Component {
               </li>
               <li className="user shrink">
                 <a
-                  className={requireAuth() ? 'logged-in' : ''}>
+                  className={this.props.onRequireAuth() ? 'logged-in' : ''}>
                   
                 </a>
                 {

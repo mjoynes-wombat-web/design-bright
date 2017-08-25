@@ -8,15 +8,15 @@ var _express = require('express');
 
 var _nonprofits = require('../models/nonprofits');
 
-var _requireAuth = require('../helpers/requireAuth');
-
-var _requireAuth2 = _interopRequireDefault(_requireAuth);
-
 var _Auth = require('../models/Auth0');
 
 var _response = require('../helpers/response');
 
 var _response2 = _interopRequireDefault(_response);
+
+var _requireAuth = require('../helpers/requireAuth');
+
+var _requireAuth2 = _interopRequireDefault(_requireAuth);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

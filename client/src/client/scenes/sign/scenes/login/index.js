@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { login, newMessage } from '../../../../actions';
+import { login, newMessage, requireAuth } from '../../../../actions';
 import Login from './components';
 
 const mapStateToProps = state => ({
@@ -17,6 +17,11 @@ const mapDispatchToProps = dispatch => ({
   onNewMessage(msg) {
     dispatch(
       newMessage('login', msg),
+    );
+  },
+  onRequireAuth() {
+    return dispatch(
+      requireAuth(),
     );
   },
 });

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { logout } from '../../actions';
+import { logout, requireAuth } from '../../actions';
 import Header from './components';
 
 const mapStateToProps = state => ({
@@ -15,6 +15,11 @@ const mapDispatchToProps = dispatch => ({
   },
   onSearch(search) {
     console.log(`A search attempt was made for ${search}`);
+  },
+  onRequireAuth() {
+    return dispatch(
+      requireAuth(),
+    );
   },
 });
 

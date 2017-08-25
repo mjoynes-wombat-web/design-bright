@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { addNonProfit, findNonProfitByID } from '../models/nonprofits';
 
-import requireAuth from '../helpers/requireAuth';
 import { getUserInfo } from '../models/Auth0';
 import jsonResponse from '../helpers/response';
+import requireAuth from '../helpers/requireAuth';
 
 const router = Router();
 

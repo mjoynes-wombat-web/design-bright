@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getUserInfo = exports.createNewUser = undefined;
+exports.getUserInfo = exports.editUserInfo = exports.createNewUser = undefined;
 
 var _axios = require('axios');
 
@@ -44,6 +44,43 @@ const createNewUser = exports.createNewUser = ({ email, password, user_metadata,
         nonProfitID: app_metadata.nonProfitID
       }
     }, {
+      headers: {
+        Authorization: `Bearer ${results.data.access_token}`,
+        'content-type': 'application/json'
+      }
+    }).then(newUser => success(newUser)).catch(userErr => error(userErr));
+  }).catch(authErr => error(authErr));
+};
+
+const editUserInfo = exports.editUserInfo = (userId, updatedUserInfo, success, error) => {
+  const userInfo = updatedUserInfo;
+
+  if (userInfo.password !== '') {
+    userInfo.user_metadata.passwordDate = new Date();
+  } else {
+    delete userInfo.password;
+    delete userInfo.user_metadata.passwordDate;
+  }
+
+  userInfo.connection = 'Username-Password-Authentication';
+
+  _axios2.default.post('https://designbright.auth0.com/oauth/token', {
+    client_id: AUTH0_API_ID,
+    client_secret: AUTH0_API_SECRET,
+    audience: 'https://designbright.auth0.com/api/v2/',
+    grant_type: 'client_credentials'
+  }, { 'content-type': 'application/json' }).then(results => {
+    if ('password' in userInfo) {
+      _axios2.default.patch(`https://designbright.auth0.com/api/v2/users/${userId}`, { password: userInfo.password }, {
+        headers: {
+          Authorization: `Bearer ${results.data.access_token}`,
+          'content-type': 'application/json'
+        }
+      }).catch(userErr => error(userErr));
+
+      delete userInfo.password;
+    }
+    _axios2.default.patch(`https://designbright.auth0.com/api/v2/users/${userId}`, userInfo, {
       headers: {
         Authorization: `Bearer ${results.data.access_token}`,
         'content-type': 'application/json'

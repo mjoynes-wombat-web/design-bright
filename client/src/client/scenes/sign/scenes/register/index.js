@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { newError, clearError, newMessage, clearMessage } from '../../../../actions';
+import { newError, clearError, newMessage, clearMessage, requireAuth } from '../../../../actions';
 import Register from './components';
 
 const mapStateToProps = state => ({
@@ -27,6 +27,11 @@ const mapDispatchToProps = dispatch => ({
   onClearMessage() {
     dispatch(
       clearMessage(),
+    );
+  },
+  onRequireAuth() {
+    return dispatch(
+      requireAuth(),
     );
   },
 });

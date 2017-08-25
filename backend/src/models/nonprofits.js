@@ -21,13 +21,37 @@ export const addNonProfit = (nonProfitData, success, error) => {
         return success(nonProfit);
       }
       db.nonProfits.create(nonProfitData)
-        .then(
-          (createResults) => {
-            const nonProfit = createResults;
-            nonProfit.status = 201;
-            return success(nonProfit);
-          })
+        .then((createResults) => {
+          const nonProfit = createResults;
+          nonProfit.status = 201;
+          return success(nonProfit);
+        })
         .catch(createError => error(createError));
+      return null;
     },
     error);
+};
+
+export const editNonProfit = (nonprofitId, updateData, success, error) => {
+  const nonprofit = db.nonProfits.update(
+    updateData,
+    {
+      where: {
+        nonprofitId,
+      },
+    },
+  )
+    .then((recordsAffected) => {
+      if (recordsAffected[0] === 0) {
+        return error(recordsAffected, 'There were no records updated.');
+      }
+      
+      db.nonProfits.find({ where: { nonprofitId } })
+        .then((results) => {
+          const updatedNonProfit = results;
+          updatedNonProfit.status = 200;
+          return success(updatedNonProfit, 'The nonprofit info was updated successfully.');
+        }).catch(findUpdated => error(findUpdated, 'Couldn\'t find the updated nonprofit.'));
+    })
+    .catch(updateError => error(updateError, 'The update was unable to complete.'));
 };

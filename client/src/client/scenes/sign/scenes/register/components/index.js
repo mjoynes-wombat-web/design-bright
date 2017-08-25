@@ -6,7 +6,6 @@ import axios from 'axios';
 import './scss/style.scss';
 import states from '../../../../../helpers/states';
 import validEmail from '../../../../../helpers/validEmail';
-import requireAuth from '../../../../../helpers/requireAuth';
 
 const doPasswordsMatch = (pass, confPass) => pass === confPass;
 const isNumber = (num) => {
@@ -156,7 +155,7 @@ class Register extends React.Component {
   }
 
   render() {
-    if (requireAuth()) {
+    if (this.props.onRequireAuth()) {
       return (
         <Redirect to={{
           pathname: '/profile',

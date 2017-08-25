@@ -1,8 +1,8 @@
 // Create API Users Router
 import { Router } from 'express';
 
-import { addNonProfit } from '../models/nonprofits';
-import { createNewUser } from '../models/Auth0';
+import { addNonProfit, editNonProfit } from '../models/nonprofits';
+import { createNewUser, getUserInfo, editUserInfo } from '../models/Auth0';
 import jsonResponse from '../helpers/response';
 
 const router = Router();
@@ -36,7 +36,7 @@ router.post('/create', (req, res) => {
           },
           (error) => {
             const { statusCode, message } = error.response.data;
-    
+
             return jsonResponse(statusCode, newUser.email, message, res);
           },
         );
@@ -64,11 +64,66 @@ router.post('/create', (req, res) => {
 
 // Accepts new information for the user with the userId param.
 // Returns the updated user information. Requires authorization.
-router.patch('/:userId/edit', (req, res) => {
-  res.send(`
-  Accepts new information for the user with the id of ${req.params.userId}. 
-  Returns the updated user information. Requires authorization.
-  `);
+router.patch('/edit', (req, res) => {
+  const { accessToken, editData } = req.body;
+  const updatedUserInfo = editData.userInfo;
+
+  getUserInfo(
+    accessToken,
+    (user) => {
+      editUserInfo(
+        user.user_id,
+        updatedUserInfo,
+        (editUserResponse) => {
+          const updatedUser = editUserResponse.data;
+          if (updatedUser.app_metadata.userType === 'non-profit') {
+            const nonprofitId = updatedUser.app_metadata.nonProfitID;
+            const updatedNonProfitInfo = editData.nonProfitInfo;
+
+            editNonProfit(
+              nonprofitId,
+              updatedNonProfitInfo,
+              (updatedNonProfit) => {
+                console.log(updatedUser);
+                return jsonResponse(
+                  200,
+                  {
+                    updatedUser,
+                    updatedNonProfit,
+                  },
+                  `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
+                  res)
+              },
+              editNonProfitError => jsonResponse(
+                500,
+                { editNonProfitError },
+                'There was an error editing the nonprofit. Please contact support.',
+                res,
+              ),
+            );
+          } else {
+            return jsonResponse(
+              200,
+              { updatedUser },
+              `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
+              res);
+          }
+        },
+        editUserError => jsonResponse(
+          editUserError.response.status,
+          { userId: user.user_id },
+          editUserError.response.data.message,
+          res,
+        ),
+      );
+    },
+    findUserError => jsonResponse(
+      findUserError.statusCode,
+      findUserError.original,
+      'This access token is not authorized.',
+      res),
+  );
+  // res.status(200).json(req.body);
 });
 
 // Exporting router as default.

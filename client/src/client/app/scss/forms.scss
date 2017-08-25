@@ -2,6 +2,7 @@ $light-graphite: #999999;
 $maui-orange: #ffaa00;
 $graphite: #808080;
 $error-red: #ff5800;
+$blue-hydrangea: #4097ff;
 
 $medium-break: 40.063em;
 $large-break: 64.063em;
@@ -30,10 +31,19 @@ form {
       margin-right: 0.75rem;
     }
 
-    span.error {
-      display: none;
+    span {
       font-size: 0.75rem;
       margin-top: 0.25rem;
+
+      &.detail {
+        color: darken($maui-orange, 2);
+        text-align: right;
+        font-weight: normal;
+      }
+
+      &.error {
+        display: none;
+      }
     }
     
     &.invalid:not(.empty) {
@@ -41,9 +51,6 @@ form {
       border-width: 0.2rem;
       font-weight: normal;
     
-      > div:last-child{
-        text-align: left;
-      }
       span.error {
         display: initial;
       }

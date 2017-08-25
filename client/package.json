@@ -10,7 +10,7 @@
     "build-client": "webpack -p",
     "build": "npm run clean && npm run build-server && npm run build-client",
     "start": "node ./build/server.js",
-    "dev-build": "webpack -p && babel-node ./src/server.js",
+    "dev-build": "webpack && babel-node ./src/server.js",
     "dev": "nodemon --ignore build/dist --exec npm run dev-build"
   },
   "author": "Simeon Smith",
