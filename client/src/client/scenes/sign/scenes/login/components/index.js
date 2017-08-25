@@ -12,7 +12,7 @@ class Login extends React.Component {
       email: '',
       password: '',
       loginError: '',
-      loginSubmitted: false,
+      loginAttempted: false,
     };
 
     this.onChange = this.onChange.bind(this);
@@ -31,14 +31,15 @@ class Login extends React.Component {
   onLogin(event) {
     event.preventDefault();
 
-    this.props.onLogin({
-      email: this.state.email,
-      password: this.state.password,
-    });
+    this.props.onLogin(
+      {
+        email: this.state.email,
+        password: this.state.password,
+      },
+    );
 
-    this.state.password = '';
-    this.setState({ loginSubmitted: true });
-    
+    this.setState({ loginAttempted: true });
+    this.setState({ password: '' });
     window.scroll(0, 0);
   }
 
@@ -53,8 +54,8 @@ class Login extends React.Component {
 
     if ('origin' in search) {
       switch (search.origin) {
-        case 'profile':
-          return this.props.onNewMessage('You have been logged out.');
+        case 'secure':
+          return this.props.onNewMessage('You must be logged in to access this page.');
         default:
           return null;
       }
@@ -63,16 +64,20 @@ class Login extends React.Component {
   }
 
   render() {
-    if (this.state.loginSubmitted) {
-      if (this.props.onRequireAuth()) {
+    if (this.props.onRequireAuth()) {
+      if (this.state.loginAttempted) {
         return (
           <Redirect to={{
             pathname: '/profile',
-            search: '?origin=login',
           }} />
         );
       }
-      this.setState({ loginSubmitted: false });
+      return (
+        <Redirect to={{
+          pathname: '/profile',
+          search: '?origin=profile',
+        }} />
+      );
     }
     return (
       <main id="login">

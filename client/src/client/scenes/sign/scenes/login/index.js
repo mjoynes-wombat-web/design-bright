@@ -9,9 +9,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLogin(loginInfo) {
+  onLogin(loginInfo, callback) {
     dispatch(
-      login(loginInfo),
+      login(loginInfo, callback),
     );
   },
   onNewMessage(msg) {

@@ -41,21 +41,30 @@ class Profile extends React.Component {
         return (
           <main id="profile" className="small-12 columns">
             <section className="row align-center">
-              <div className="profile-wrapper small-3 columns">
+              <div className="profile-img-wrapper small-3 columns">
                 <img src={this.props.userInfo.picture} className="profile-img" />
                 <Link to='/profile/upload-photo'>
                   <span></span> Upload Profile Photo
                 </Link>
               </div>
               <div className="small-12 medium-9 columns">
-                <h1>
-                  <span className="underlined">
-                    {this.props.userInfo.userType === 'non-profit'
-                      ? this.props.userInfo.nonProfitName
-                      : `${this.props.userInfo.firstName} ${this.props.userInfo.lastName}`
-                    }'s Profile
-                  </span>
-                </h1>
+                <div className="row align-middle profile-header">
+                  <div className="columns expand">
+                    <h1>
+                      <span className="underlined">
+                        {this.props.userInfo.userType === 'non-profit'
+                          ? this.props.userInfo.nonProfitName
+                          : `${this.props.userInfo.firstName} ${this.props.userInfo.lastName}`
+                        }'s Profile
+                      </span>
+                    </h1>
+                  </div>
+                  <div className="columns large-3 small-12">
+                    <Link to='/profile/edit' className="edit">
+                      <span className="text">Edit Profile</span> <span className="icon"></span>
+                    </Link>
+                  </div>
+                </div>
                 <p className="title">Name:</p>
                 <p>{this.props.userInfo.firstName} {this.props.userInfo.lastName}</p>
                 <p className="title">Email:</p>
@@ -85,7 +94,7 @@ class Profile extends React.Component {
     return (
       <Redirect to={{
         pathname: '/login',
-        search: '?origin=profile',
+        search: '?origin=secure',
       }} />
     );
   }

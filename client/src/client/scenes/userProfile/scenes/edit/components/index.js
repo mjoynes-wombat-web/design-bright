@@ -283,7 +283,7 @@ class editProfile extends React.Component {
     return (
       <Redirect to={{
         pathname: '/login',
-        search: '?origin=editProfile',
+        search: '?origin=secure',
       }} />
     );
   }

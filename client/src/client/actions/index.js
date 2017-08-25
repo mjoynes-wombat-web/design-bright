@@ -87,7 +87,7 @@ export const requireAuth = () => (dispatch, getState) => {
   return false;
 };
 
-export const login = loginInfo => (dispatch, getState) => {
+export const login = (loginInfo, callback) => (dispatch, getState) => {
   const webAuth = new auth0.WebAuth({
     domain: 'designbright.auth0.com',
     clientID: 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh',
@@ -106,17 +106,19 @@ export const login = loginInfo => (dispatch, getState) => {
     const authorization = authResults;
     authorization.date = new Date();
 
-    return dispatch({
+    dispatch({
       type: C.USER_AUTH,
       payload: authorization,
     });
+
+    callback();
   });
 };
 
 export const getUserInfo = callback =>
   (dispatch, getState) => {
     const state = getState();
-    if (requireAuth(state.userAuth.accessToken)) {
+    if (dispatch(requireAuth())) {
       const webAuth = new auth0.WebAuth({
         domain: 'designbright.auth0.com',
         clientID: 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh',

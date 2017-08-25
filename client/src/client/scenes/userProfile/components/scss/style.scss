@@ -10,7 +10,7 @@ $xlarge-break: 90.063em;
 $xxlarge-break: 120.063em;
 
 main#profile {
-  .profile-wrapper {
+  .profile-img-wrapper {
     margin: 1rem 0;
     text-align:center;
     position: relative;
@@ -77,6 +77,41 @@ main#profile {
 
         @media screen and (min-width: $large-break) {
           font-size: 1.125rem;
+        }
+      }
+    }
+  }
+
+  div.profile-header {
+    a.edit {
+      display: block;
+      border: none;
+      margin-bottom: 1.125rem;
+
+      @media screen and (min-width: $medium-break) {
+        margin-top: 1.125rem;
+      }
+
+      span {
+        vertical-align: middle;
+
+        &.text {
+          border-bottom: 0.0625rem solid #8CC0FF;
+          font-size: 1rem;
+
+          @media screen and (min-width: $medium-break) {
+            font-size: 1.25rem;
+          }
+        }
+  
+        &.icon {
+          font-family: 'font-awesome-light';
+          font-size: 1.25rem;
+
+          @media screen and (min-width: $medium-break) {
+            font-size: 1.5rem;
+            size: shrink;
+          }
         }
       }
     }
