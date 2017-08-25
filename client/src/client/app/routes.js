@@ -8,6 +8,7 @@ import Profile from '../scenes/userProfile';
 import editProfile from '../scenes/userProfile/scenes/edit';
 import routeRefresh from '../helpers/routeRefresh';
 import Message from '../partials/messages';
+import Campaign from '../scenes/campaign';
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -39,6 +40,9 @@ const Routes = () => (
         exact
         path='/profile/edit'
         component={editProfile}/>
+      <Route
+        path='/campaigns/:id'
+        component={Campaign}/>
     </Switch>
   </div>
 );
