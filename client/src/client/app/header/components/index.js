@@ -53,16 +53,16 @@ class Header extends React.Component {
   render() {
     return (
       <header className={('ontouchstart' in document.documentElement) ? '' : 'no-touch'}>
-        <div className="row align-bottom">
-          <div className="logo small-5 columns">
+        <div className="row align-bottom align-center">
+          <div className="logo small-10 medium-6 columns">
             <Link to="/">
               <img src="/assets/img/logo.png" alt="Design Bright Logo" />
             </Link>
           </div>
-          <nav className="columns expand">
-            <ul className="row align-right">
+          <nav className="columns small-9 medium-6 large-5">
+            <ul className="row align-justify">
               <li className="shrink columns"><Link to="browser">Explore</Link></li>
-              <li className="small-6 medium-5 large-4 columns search">
+              <li className="columns search expand">
                 <form onSubmit={this.onSubmit}>
                   <input
                     type="search"

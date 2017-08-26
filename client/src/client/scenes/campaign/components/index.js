@@ -23,7 +23,7 @@ class Campaign extends React.Component {
   render() {
     if (this.state.fetched) {
       return (
-        <main id="campaign" className="small-12 columns">
+        <main id="campaign" className={`small-12 columns${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
           <section className="row">
             <div className="small-12 columns">
               <h1>
@@ -35,11 +35,11 @@ class Campaign extends React.Component {
             <div className="small-12 columns">
               <div className="progress">
                 <div className="line small-12 columns"></div>
-                <div className="funded columns" style={{ width: '45%' }}></div>
+                <div className="funded columns" style={{ width: 'calc(48% - 0.25rem)' }}></div>
               </div>
             </div>
             <div className="small-12 columns">
-              <div className="row align-justify">
+              <div className="row align-justify campaign-details">
                 <div className="shrink columns">
                   <p className="details">48% Funded</p>
                 </div>
@@ -61,11 +61,16 @@ class Campaign extends React.Component {
                       <img src="/assets/img/veteran.jpg" alt="Senior veteran at a march." className="main" />
                     </div>
                     <button
-                      className="primary"
+                      className="secondary"
                       type="submit">
                       Make a Donation
                     </button>
                   </div>
+                  <button
+                    className="primary mobile"
+                    type="submit">
+                    Make a Donation
+                    </button>
                   <p>“Dear Father, God reward you, our benefactor, who prays for all of us and for our sins!”</p>
                   <p>But the elder had already noticed in the crowd two glowing eyes fixed upon him. An exhausted, consumptive‐looking, though young peasant woman was gazing at him in silence. Her eyes besought him, but she seemed afraid to approach.</p>
                   <p>“What is it, my child?”</p>
