@@ -54,7 +54,7 @@ class Header extends React.Component {
     return (
       <header className={('ontouchstart' in document.documentElement) ? '' : 'no-touch'}>
         <div className="row align-bottom align-center">
-          <div className="logo small-10 medium-6 columns">
+          <div className="logo small-10 medium-6 large-7 columns">
             <Link to="/">
               <img src="/assets/img/logo.png" alt="Design Bright Logo" />
             </Link>
