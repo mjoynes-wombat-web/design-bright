@@ -268,7 +268,7 @@ class editProfile extends React.Component {
               </div>
               <div className="row align-center">
                 <button
-                  className={`primary small-11 medium-10 large-8${this.state.valid ? '' : ' disabled'}`}
+                  className={`primary small-11 medium-10 large-8 columns${this.state.valid ? '' : ' disabled'}`}
                   disabled={!this.state.valid}
                   type="submit">
                   Submit Request

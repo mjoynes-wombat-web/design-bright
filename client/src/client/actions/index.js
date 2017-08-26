@@ -5,6 +5,7 @@ import axios from 'axios';
 import C from '../constants';
 
 export const newError = (errType, errMsg) => (dispatch, getState) => {
+  console.log('newError ran.');
   dispatch({
     type: C.ERROR,
     payload: {
@@ -15,6 +16,7 @@ export const newError = (errType, errMsg) => (dispatch, getState) => {
 };
 
 export const clearError = () => (dispatch, getState) => {
+  console.log('clearError ran.');
   dispatch({
     type: C.ERROR,
     payload: {
@@ -25,6 +27,7 @@ export const clearError = () => (dispatch, getState) => {
 };
 
 export const newMessage = (msgType, msg) => (dispatch, getState) => {
+  console.log('newMessage ran.');
   dispatch({
     type: C.MESSAGE,
     payload: {
@@ -35,6 +38,7 @@ export const newMessage = (msgType, msg) => (dispatch, getState) => {
 };
 
 export const clearMessage = () => (dispatch, getState) => {
+  console.log('clearMessage ran.');
   dispatch({
     type: C.MESSAGE,
     payload: {
@@ -45,6 +49,7 @@ export const clearMessage = () => (dispatch, getState) => {
 };
 
 export const clearUserInfo = () => (dispatch, getState) => {
+  console.log('clearUserInfo ran.');
   dispatch({
     type: C.USER,
     payload: {},
@@ -53,6 +58,7 @@ export const clearUserInfo = () => (dispatch, getState) => {
 
 
 export const logout = () => (dispatch, getState) => {
+  console.log('logout ran.');
   dispatch({
     type: C.USER_AUTH,
     payload: {},
@@ -64,12 +70,12 @@ export const logout = () => (dispatch, getState) => {
 };
 
 export const requireAuth = () => (dispatch, getState) => {
+  console.log('requireAuth ran.');
   const currentState = getState();
   const auth = currentState.userAuth;
   const authDate = new Date(Date.parse(auth.date));
   const expireDate = new Date(authDate.setSeconds(authDate.getSeconds() + auth.expiresIn));
   const currentDate = new Date();
-
   if (Object.keys(auth).length > 0) {
     if (auth.accessToken && auth.accessToken.length === 16) {
       if (expireDate > currentDate) {
@@ -88,6 +94,7 @@ export const requireAuth = () => (dispatch, getState) => {
 };
 
 export const login = (loginInfo, callback) => (dispatch, getState) => {
+  console.log('login ran.');
   const webAuth = new auth0.WebAuth({
     domain: 'designbright.auth0.com',
     clientID: 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh',
@@ -117,6 +124,7 @@ export const login = (loginInfo, callback) => (dispatch, getState) => {
 
 export const getUserInfo = callback =>
   (dispatch, getState) => {
+    console.log('getUserInfo ran.');
     const state = getState();
     if (dispatch(requireAuth())) {
       const webAuth = new auth0.WebAuth({
@@ -178,6 +186,7 @@ export const getUserInfo = callback =>
   };
 
 export const editUser = (editData, callback) => (dispatch, getState) => {
+  console.log('editUser ran.');
   const state = getState();
   const data = {
     editData,
@@ -211,8 +220,4 @@ export const editUser = (editData, callback) => (dispatch, getState) => {
 
       window.scroll(0, 0);
     });
-};
-
-export const getCampaigns = () => {
-  return null;
 };

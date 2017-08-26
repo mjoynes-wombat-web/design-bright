@@ -377,7 +377,7 @@ class Register extends React.Component {
             service.</Link> <span className='required'>*</span>
               </label>
               <button
-                className={`primary small-11 medium-10 large-8${this.state.valid ? '' : ' disabled'}`}
+                className={`primary small-11 medium-10 large-8 columns${this.state.valid ? '' : ' disabled'}`}
                 disabled={!this.state.valid}
                 type="submit">
                 Submit Request

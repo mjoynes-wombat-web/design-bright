@@ -10,11 +10,11 @@ const userInfo = (state = {}, action) => (
   (action.type === C.USER) ? action.payload : state
 );
 
-const error = (state = '', action) => (
+const error = (state = { type: '', message: '' }, action) => (
   (action.type === C.ERROR) ? action.payload : state
 );
 
-const message = (state = '', action) => (
+const message = (state = { type: '', message: '' }, action) => (
   (action.type === C.MESSAGE) ? action.payload : state
 );
 

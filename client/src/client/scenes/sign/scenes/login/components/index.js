@@ -116,7 +116,7 @@ class Login extends React.Component {
             </div>
             <div className="row align-center">
               <button
-                className="primary small-11 medium-10 large-10"
+                className="primary small-11 medium-10 large-10 columns"
                 type="submit">
                 Login
               </button>
