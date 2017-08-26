@@ -6,6 +6,14 @@ Object.defineProperty(exports, "__esModule", {
 
 var _express = require('express');
 
+var _campaigns = require('../models/campaigns');
+
+var _response = require('../helpers/response');
+
+var _response2 = _interopRequireDefault(_response);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 const router = (0, _express.Router)();
 
 /*
@@ -39,15 +47,7 @@ router.get('/', (req, res) => {
 // Returns the information for the campaign with the campaignId param.
 router.get('/:campaignId', (req, res) => {
   const id = req.params.campaignId;
-  if (!isNaN(id)) {
-    res.send(`
-    Returns the campaign information for the campaign with the id of ${req.params.campaignId}
-    `);
-  } else {
-    res.status(404).send(`
-    You provided ${id} for an id but it is not a number. Please provide a number.
-    `);
-  }
+  (0, _campaigns.getCampaignContent)(id, results => (0, _response2.default)(200, results, `This is the content for the campaign id ${id}`, res), error => (0, _response2.default)(500, error, 'There was an error on the server.', res));
 });
 
 // Accepts information changes to a campaign with the campaignId param.

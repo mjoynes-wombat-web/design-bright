@@ -1,6 +1,9 @@
 // Create API Users Router
 import { Router } from 'express';
 
+import { getCampaignContent } from '../models/campaigns';
+import jsonResponse from '../helpers/response';
+
 const router = Router();
 
 /*
@@ -33,15 +36,20 @@ router.get('/', (req, res) => {
 // Returns the information for the campaign with the campaignId param.
 router.get('/:campaignId', (req, res) => {
   const id = req.params.campaignId;
-  if (!isNaN(id)) {
-    res.send(`
-    Returns the campaign information for the campaign with the id of ${req.params.campaignId}
-    `);
-  } else {
-    res.status(404).send(`
-    You provided ${id} for an id but it is not a number. Please provide a number.
-    `);
-  }
+  getCampaignContent(
+    id,
+    results => jsonResponse(
+      200,
+      results,
+      `This is the content for the campaign id ${id}`,
+      res,
+    ),
+    error => jsonResponse(500,
+      error,
+      'There was an error on the server.',
+      res,
+    ),
+  );
 });
 
 // Accepts information changes to a campaign with the campaignId param.

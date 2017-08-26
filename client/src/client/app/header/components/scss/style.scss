@@ -37,13 +37,14 @@ header {
       background-color: #ffffff;
       background-position-x: calc(100% - 0.55rem), 50%;
       background-position-y: calc(100% - 50%), 50%;
-      background-size:1.25rem, 200% 120%;
+      background-size:1.25rem, 200% 140%;
       background-repeat: no-repeat;
       width: calc(100% - 2rem);
+      color: #fff;
       z-index: 100;
 
       @media screen and (min-width: $medium-break) {
-        background-size:1.5rem, 200% 120%;
+        background-size:1.5rem, 200% 140%;
         left: 0;
         width: calc(100% - 1rem);
       }
@@ -120,14 +121,14 @@ header {
               background-color: #ffffff;
               background-position-x: calc(100% - 0.55rem), 50%;
               background-position-y: calc(100% - 50%), 50%;
-              background-size:1.25rem, 200% 120%;
+              background-size:1.25rem, 200% 140%;
               background-repeat: no-repeat;
               color: #fff;
               width: calc(100% - 2rem);
               z-index: 100;
 
               @media screen and (min-width: $medium-break) {
-                background-size:1.5rem, 200% 120%;
+                background-size:1.5rem, 200% 140%;
               }
             }
           }

@@ -1,23 +1,113 @@
 /* eslint-env browser */
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
-import queryString from 'query-string';
+import axios from 'axios';
 
 import './scss/style.scss';
+
+const formatCampaignContent = (buttonAction, content, i) => {
+  if ('text' in content) {
+    switch (content.textType) {
+      case 'p':
+        return <p key={i}>{content.text}</p>;
+      case 'h2':
+        return (
+          <h2 key={i}>
+            <span className="underlined">
+              {content.text}
+            </span>
+          </h2>
+        );
+      default:
+        return null;
+    }
+  } else if ('src' in content) {
+    if (content.imageType === 'main') {
+      return (
+        <div key={i}>
+          <div className="main-image-wrapper">
+            <div className="overlay"></div>
+            <div className="main-image">
+              <img
+                src={content.src}
+                alt={content.alt}
+                className={content.imageType} />
+            </div>
+            <button className="secondary" onClick={buttonAction}>Make a Donation</button>
+          </div>
+          <button className="primary mobile" onClick={buttonAction}>
+            Make a Donation
+          </button>
+        </div>
+      );
+    } else if (content.imageType === 'left') {
+      return (
+        <img
+          src={content.src}
+          alt={content.alt}
+          className={content.imageType}
+          key={i} />
+      );
+    }
+  }
+  return null;
+};
 
 class Campaign extends React.Component {
   constructor(props) {
     super(props);
-    console.log('Remeber to set fetched to false.');
     this.state = {
-      fetched: true,
+      campaignInfo: {},
+      contentInfo: {},
+      campaignContent: [],
+      fetched: false,
     };
 
     this.componentWillMount = this.componentWillMount.bind(this);
+    this.makeDonation = this.makeDonation.bind(this);
   }
 
   componentWillMount() {
-    console.log(this.props.match.params.id);
+    axios.get(`https://${window.location.hostname}:3000/api/campaigns/${this.props.match.params.id}`)
+      .then((results) => {
+        const unsortedCampaignContent = [
+          ...results.data.data.campaignImages,
+          ...results.data.data.campaignText,
+        ];
+
+        const campaignContent = () =>
+          unsortedCampaignContent.sort(
+            (a, b) => a.contentPosition - b.contentPosition,
+          );
+
+        const campaignInfo = results.data.data.campaignInfo;
+
+        campaignInfo.timeRemaining = (
+          (new Date(Date.parse(campaignInfo.endDate)) - new Date())
+          / 1000 / 60 / 60 / 24
+        );
+
+        this.setState({ campaignInfo });
+        this.setState({
+          contentInfo: results.data.data.contentInfo,
+        });
+        this.setState({ campaignContent: campaignContent() });
+        this.setState({ fetched: true });
+      })
+      .catch(error => console.log(error));
+  }
+
+  determineTimeLeft() {
+    if (this.state.campaignInfo.timeRemaining > 1) {
+      return `${Math.round(this.state.campaignInfo.timeRemaining)} Days Left`;
+    } else if ((this.state.campaignInfo.timeRemaining * 24) > 1) {
+      return `${Math.round(this.state.campaignInfo.timeRemaining * 24)} Hours Left`;
+    }
+    return 'Less than an Hour left';
+  }
+
+  makeDonation() {
+    console.log(`Make donation for Campaign ${this.state.campaignInfo.campaignId}`);
   }
 
   render() {
@@ -28,67 +118,55 @@ class Campaign extends React.Component {
             <div className="small-12 columns">
               <h1>
                 <span className="underlined">
-                  Homes for Veterans' Website
+                  {this.state.campaignInfo.name}
                 </span>
               </h1>
             </div>
             <div className="small-12 columns">
               <div className="progress">
                 <div className="line small-12 columns"></div>
-                <div className="funded columns" style={{ width: 'calc(48% - 0.25rem)' }}></div>
+                <div className="funded columns" style={{ width: `calc(${(((parseFloat(this.state.campaignInfo.donationsMade) / parseFloat(this.state.campaignInfo.fundingNeeded)) * 100) < 100) ? ((parseFloat(this.state.campaignInfo.donationsMade) / parseFloat(this.state.campaignInfo.fundingNeeded)) * 100) : '100'}% - 0.25rem)` }}></div>
               </div>
             </div>
             <div className="small-12 columns">
               <div className="row align-justify campaign-details">
                 <div className="shrink columns">
-                  <p className="details">48% Funded</p>
+                  <p className="details">{`${(((parseFloat(this.state.campaignInfo.donationsMade) / parseFloat(this.state.campaignInfo.fundingNeeded)) * 100) < 100) ? Math.round((parseFloat(this.state.campaignInfo.donationsMade) / parseFloat(this.state.campaignInfo.fundingNeeded)) * 100) : '100'}`}% Funded</p>
                 </div>
                 <div className="shrink columns">
-                  <p className="details">25 Days Left</p>
+                  <p className="details">
+                    {this.determineTimeLeft()}
+                  </p>
                 </div>
                 <div className="shrink columns">
-                  <p className="details">$8,500 Needed</p>
+                  <p className="details">${parseInt(this.state.campaignInfo.fundingNeeded, 10).toLocaleString()} Needed</p>
                 </div>
               </div>
             </div>
             <div className="small-12 columns">
               <section className="campaign-content row">
                 <div className="small-12 medium-6 columns">
-                  <p>Fyodor Pavlovitch got excited and pathetic, though it was perfectly clear to every one by now that he was playing a part again. Yet Miüsov was stung by his words.</p>
-                  <div className="main-image-wrapper">
-                    <div className="overlay"></div>
-                    <div className="main-image">
-                      <img src="/assets/img/veteran.jpg" alt="Senior veteran at a march." className="main" />
-                    </div>
-                    <button
-                      className="secondary"
-                      type="submit">
-                      Make a Donation
-                    </button>
-                  </div>
-                  <button
-                    className="primary mobile"
-                    type="submit">
-                    Make a Donation
-                    </button>
-                  <p>“Dear Father, God reward you, our benefactor, who prays for all of us and for our sins!”</p>
-                  <p>But the elder had already noticed in the crowd two glowing eyes fixed upon him. An exhausted, consumptive‐looking, though young peasant woman was gazing at him in silence. Her eyes besought him, but she seemed afraid to approach.</p>
-                  <p>“What is it, my child?”</p>
+                  {this.state.campaignContent.map(
+                    (content, i) => (
+                      (i < ((this.state.campaignContent.length / 2) - 1))
+                        ? formatCampaignContent(this.makeDonation, content, i)
+                        : null
+                    ),
+                  )}
                 </div>
                 <div className="small-12 medium-6 columns">
-                  <p>“Absolve my soul, Father,” she articulated softly, and slowly sank on her knees and bowed down at his feet. “I have sinned, Father. I am afraid of my sin.”</p>
-                  <p>The elder sat down on the lower step. The woman crept closer to him, still on her knees.</p>
-                  <h2><span className="underlined">Sub-Heading</span></h2>
-                  <img src="/assets/img/flag-home.jpg" alt="A flag on a home." />
-                  <p>“I am a widow these three years,” she began in a half‐whisper, with a sort of shudder. “I had a hard life with my husband. He was an old man. He used to beat me  cruelly. He lay ill; I thought looking at him, if he were to get well, if he were to get up again, what then? And then the thought came to me—”</p>
-                  <p>“Stay!” said the elder, and he put his ear close to her lips.</p>
-                  <p>The woman went on in a low whisper, so that it was almost impossible to catch anything. She had soon done.</p>
+                  {this.state.campaignContent.map(
+                    (content, i) => ((i > ((this.state.campaignContent.length / 2) - 2))
+                      ? formatCampaignContent(this.makeDonation, content, i)
+                      : null
+                    ),
+                  )}
                 </div>
                 <div className="small-12 columns">
                   <div className="row align-center">
                     <button
                       className="primary small-11 medium-10 large-10 columns"
-                      type="submit">
+                      onClick={this.makeDonation}>
                       Make a Donation
                     </button>
                   </div>
