@@ -9,7 +9,7 @@
 }
 
 $blue-hydrangea: #4097ff;
-$light-hydrangea: #8CC0FF;
+$light-hydrangea: lighten($blue-hydrangea,14.9%);
 $error-red: #ff5800;
 $maui-orange: #ffaa00;
 $graphite: #808080;
@@ -27,7 +27,7 @@ body {
   font-size: 0.875rem;
   position: relative;
   min-height: 100vh;
-  padding-bottom:130px;
+  padding-bottom:9rem;
 
   @media screen and (min-width: $medium-break) {
     font-size: 1rem;

@@ -9,6 +9,7 @@ import editProfile from '../scenes/userProfile/scenes/edit';
 import routeRefresh from '../helpers/routeRefresh';
 import Message from '../partials/messages';
 import Campaign from '../scenes/campaign';
+import mngCampaigns from '../scenes/mngCampaigns';
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -43,6 +44,10 @@ const Routes = () => (
       <Route
         path='/campaigns/:id'
         component={Campaign}/>
+      <Route
+        exact
+        path='/manage-campaigns'
+        component={mngCampaigns}/>
     </Switch>
   </div>
 );

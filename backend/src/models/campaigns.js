@@ -1,5 +1,53 @@
 import * as db from './db';
 
+const gatherCampaignImages = (rawCampaignImages) => {
+  const imageData = [];
+  rawCampaignImages.forEach((
+    {
+      img_id,
+      content_id,
+      content_position,
+      image_type,
+      src,
+      alt,
+    },
+  ) => {
+    const imgElement = {
+      imgId: img_id,
+      contentId: content_id,
+      contentPosition: content_position,
+      imageType: image_type,
+      src,
+      alt,
+    };
+    imageData.push(imgElement);
+  });
+  return imageData;
+};
+
+const gatherCampaignText = (rawTextData) => {
+  const textData = [];
+  rawTextData.forEach((
+    {
+      text_id,
+      content_id,
+      content_position,
+      text_type,
+      text,
+    },
+  ) => {
+    const textElement = {
+      textId: text_id,
+      contentId: content_id,
+      contentPosition: content_position,
+      textType: text_type,
+      text,
+    };
+    textData.push(textElement);
+  });
+  return textData;
+};
+
 export const getCampaignContent = (campaignId, success, error) => {
   db.campaigns.find({
     where: { campaignId },
@@ -43,54 +91,6 @@ export const getCampaignContent = (campaignId, success, error) => {
         updatedDate: rawContentData.updatedAt,
       };
 
-      const gatherCampaignText = (rawTextData) => {
-        const textData = [];
-        rawTextData.forEach((
-          {
-            text_id,
-            content_id,
-            content_position,
-            text_type,
-            text,
-          },
-        ) => {
-          const textElement = {
-            textId: text_id,
-            contentId: content_id,
-            contentPosition: content_position,
-            textType: text_type,
-            text,
-          };
-          textData.push(textElement);
-        });
-        return textData;
-      };
-
-      const gatherCampaignImages = (rawCampaignImages) => {
-        const imageData = [];
-        rawCampaignImages.forEach((
-          {
-            img_id,
-            content_id,
-            content_position,
-            image_type,
-            src,
-            alt,
-          },
-        ) => {
-          const imgElement = {
-            imgId: img_id,
-            contentId: content_id,
-            contentPosition: content_position,
-            imageType: image_type,
-            src,
-            alt,
-          };
-          imageData.push(imgElement);
-        });
-        return imageData;
-      };
-
       const campaignText = gatherCampaignText(rawContentData.campaign_texts);
       const campaignImages = gatherCampaignImages(rawContentData.campaign_images);
 
@@ -104,4 +104,42 @@ export const getCampaignContent = (campaignId, success, error) => {
     .catch(findErr => error(findErr));
 };
 
-export default null;
+export const getNonprofitsCampaigns = (nonprofitId, success, error) => {
+  db.campaigns.findAll({
+    where: { nonprofitId },
+  })
+    .then((findResults) => {
+      const campaigns = [];
+
+      Array.forEach(findResults, (result) => {
+        campaigns.push(result.dataValues);
+      });
+
+      success(campaigns);
+    })
+    .catch(findErr => error(findErr));
+};
+
+export const launchCampaign = (campaignId, nonprofitId, success, error) => {
+  db.campaigns.update(
+    { startDate: new Date() },
+    { where: { campaignId, nonprofitId, startDate: null, endDate: null } },
+  )
+    .then(updateResults => success(updateResults))
+    .catch(updateErr => error(updateErr));
+};
+
+export const stopCampaign = (campaignId, nonprofitId, success, error) => {
+  db.campaigns.update(
+    { endDate: new Date() },
+    { where: {
+      campaignId,
+      nonprofitId,
+      startDate: {
+        $ne: null,
+      },
+      endDate: null } },
+  )
+    .then(updateResults => success(updateResults))
+    .catch(updateErr => error(updateErr));
+};

@@ -36,7 +36,7 @@ const addNonProfit = exports.addNonProfit = (nonProfitData, success, error) => {
 };
 
 const editNonProfit = exports.editNonProfit = (nonprofitId, updateData, success, error) => {
-  const nonprofit = db.nonProfits.update(updateData, {
+  db.nonProfits.update(updateData, {
     where: {
       nonprofitId
     }
@@ -44,7 +44,6 @@ const editNonProfit = exports.editNonProfit = (nonprofitId, updateData, success,
     if (recordsAffected[0] === 0) {
       return error(recordsAffected, 'There were no records updated.');
     }
-
     db.nonProfits.find({ where: { nonprofitId } }).then(results => {
       const updatedNonProfit = results;
       updatedNonProfit.status = 200;

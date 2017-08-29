@@ -106,7 +106,7 @@ const campaigns = exports.campaigns = sequelize.define('campaigns', {
   },
   donationsMade: {
     type: _sequelize2.default.DECIMAL,
-    allowNull: false,
+    allowNull: true,
     field: 'donations_made'
   },
   startDate: {

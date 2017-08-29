@@ -44,7 +44,7 @@ router.get('/', (req, res) => {
   }
 });
 
-// Returns the information for the campaign with the campaignId param.
+// Returns the information for the campaign with the identity param.
 router.get('/:campaignId', (req, res) => {
   const id = req.params.campaignId;
   (0, _campaigns.getCampaignContent)(id, results => (0, _response2.default)(200, results, `This is the content for the campaign id ${id}`, res), error => (0, _response2.default)(500, error, 'There was an error on the server.', res));
