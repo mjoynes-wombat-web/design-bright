@@ -114,7 +114,7 @@ export const getNonprofitsCampaigns = (nonprofitId, success, error) => {
       Array.forEach(findResults, (result) => {
         campaigns.push(result.dataValues);
       });
-
+      console.log(campaigns);
       success(campaigns);
     })
     .catch(findErr => error(findErr));

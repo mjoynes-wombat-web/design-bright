@@ -139,7 +139,6 @@ router.get('/campaigns/:accessToken', (req, res) => {
         findNonProfitByID(
           nonprofitId,
           (nonprofit) => {
-            console.log(nonprofit);
             getNonprofitsCampaigns(
               nonprofitId,
               campaigns => jsonResponse(
