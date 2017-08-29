@@ -147,12 +147,15 @@ router.get('/campaigns/:accessToken', (req, res) => {
                 `The campaigns were successfully retrieved for the nonprofit with the id ${nonprofitId}.`,
                 res,
               ),
-              error => jsonResponse(
+              error =>{
+                console.log(error);
+                jsonResponse(
                 404,
                 error,
                 `Could not find campaigns for the nonprofit with the id ${nonprofitId}.`,
                 res,
-              ),
+              )
+            },
             );
           },
           error => jsonResponse(

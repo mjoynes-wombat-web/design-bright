@@ -62,7 +62,10 @@ router.get('/campaigns/:accessToken', (req, res) => {
     (0, _Auth.getUserInfo)(accessToken, user => {
       const nonprofitId = user.app_metadata.nonProfitID;
       (0, _nonprofits.findNonProfitByID)(nonprofitId, nonprofit => {
-        (0, _campaigns.getNonprofitsCampaigns)(nonprofitId, campaigns => (0, _response2.default)(200, { nonprofit, campaigns }, `The campaigns were successfully retrieved for the nonprofit with the id ${nonprofitId}.`, res), error => (0, _response2.default)(404, error, `Could not find campaigns for the nonprofit with the id ${nonprofitId}.`, res));
+        (0, _campaigns.getNonprofitsCampaigns)(nonprofitId, campaigns => (0, _response2.default)(200, { nonprofit, campaigns }, `The campaigns were successfully retrieved for the nonprofit with the id ${nonprofitId}.`, res), error => {
+          console.log(error);
+          (0, _response2.default)(404, error, `Could not find campaigns for the nonprofit with the id ${nonprofitId}.`, res);
+        });
       }, error => (0, _response2.default)(404, error, `Could not find campaigns for the nonprofit with the id ${nonprofitId}.`, res));
     }, error => (0, _response2.default)(error.statusCode, error.original, 'This access token is not authorized.', res));
   } else {

@@ -109,11 +109,9 @@ const getNonprofitsCampaigns = exports.getNonprofitsCampaigns = (nonprofitId, su
     where: { nonprofitId }
   }).then(findResults => {
     const campaigns = [];
-
-    Array.forEach(findResults, result => {
-      campaigns.push(result.dataValues);
-    });
-    console.log(campaigns);
+    for (let i = 0; i < findResults.length; i += 1) {
+      campaigns.push(findResults[i].dataValues);
+    }
     success(campaigns);
   }).catch(findErr => error(findErr));
 };
