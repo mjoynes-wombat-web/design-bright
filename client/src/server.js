@@ -21,7 +21,6 @@ app.get('/', (req, res) => {
 });
 
 app.get('/*', (req, res) => {
-  console.log('Get attempt');
   res.sendFile(path.join(__dirname, '../build/dist', 'index.html'));
 });
 

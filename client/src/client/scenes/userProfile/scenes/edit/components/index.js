@@ -78,10 +78,8 @@ class editProfile extends React.Component {
         )
       )
     ) {
-      console.log('TRUE');
       return true;
     }
-    console.log('FALSE');
     return false;
   }
 
