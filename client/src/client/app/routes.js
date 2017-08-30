@@ -8,7 +8,6 @@ import Register from '../scenes/sign/scenes/register';
 import Login from '../scenes/sign/scenes/login';
 import Profile from '../scenes/userProfile';
 import editProfile from '../scenes/userProfile/scenes/edit';
-import routeRefresh from '../helpers/routeRefresh';
 import Message from '../partials/messages';
 import Campaign from '../scenes/campaign';
 import mngCampaigns from '../scenes/mngCampaigns';
@@ -22,7 +21,7 @@ import gaTracker from '../helpers/gaTracker';
 const Routes = () => (
   <div className={('ontouchstart' in document.documentElement) ? '' : 'no-touch'}>
     <Message />
-    <Switch onComponentWillMount={routeRefresh}>
+    <Switch>
       <Route
         exact path='/'
         component={gaTracker(Home)}/>
