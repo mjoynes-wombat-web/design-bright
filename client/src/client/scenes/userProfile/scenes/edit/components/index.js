@@ -129,11 +129,11 @@ class editProfile extends React.Component {
   render() {
     if (this.props.onRequireAuth()) {
       return (
-        <main id="register">
+        <main id="editProfile">
           <section className="row align-center">
             <form className="small-12 columns" onSubmit={this.onSubmit}>
               <div className="row">
-                <h1 className="small-12 columns"><span className="underlined">Register</span></h1>
+                <h1 className="small-12 columns"><span className="underlined">Edit Profile</span></h1>
               </div>
               <div className="row align-center">
                 <div className="small-12 large-4 columns">
