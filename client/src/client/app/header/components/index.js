@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import './scss/style.scss';
+import UserMenu from './userMenu';
 
 class Header extends React.Component {
   constructor(props) {
@@ -79,17 +80,10 @@ class Header extends React.Component {
                   className={this.props.onRequireAuth() ? 'logged-in' : ''}>
                   
                 </a>
-                {
-                  this.props.userAuth.accessToken ?
-                    <ul className="user-menu">
-                      <li><Link to="/profile">Profile</Link></li>
-                      <li><Link to="/" onClick={this.props.onLogout}>Logout</Link></li>
-                    </ul>
-                    : <ul className="user-menu">
-                      <li><Link to="/register">Register</Link></li>
-                      <li><Link to="/login">Login</Link></li>
-                    </ul>
-                }
+                <UserMenu
+                  requireAuth={this.props.onRequireAuth}
+                  userType={this.props.userInfo.userType}
+                  onLogout={this.props.onLogout} />
               </li>
             </ul>
           </nav>

@@ -2,7 +2,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-
 import Home from '../scenes/home';
 import Register from '../scenes/sign/scenes/register';
 import Login from '../scenes/sign/scenes/login';
@@ -12,6 +11,7 @@ import Message from '../partials/messages';
 import Campaign from '../scenes/campaign';
 import mngCampaigns from '../scenes/mngCampaigns';
 import gaTracker from '../helpers/gaTracker';
+import routeRefresh from '../helpers/routeRefresh';
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -21,7 +21,7 @@ import gaTracker from '../helpers/gaTracker';
 const Routes = () => (
   <div className={('ontouchstart' in document.documentElement) ? '' : 'no-touch'}>
     <Message />
-    <Switch>
+    <Switch onComponentWillMount={routeRefresh}>
       <Route
         exact path='/'
         component={gaTracker(Home)}/>
