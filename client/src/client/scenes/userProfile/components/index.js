@@ -28,6 +28,8 @@ class Profile extends React.Component {
           return this.props.onNewMessage('You can\'t create a new user while logged in.');
         case 'login':
           return this.props.onNewMessage('You are already logged in.');
+        case 'nonprofit-page':
+          return this.props.onNewMessage('You aren\'t authorized to access that page.');
         default:
           return null;
       }
