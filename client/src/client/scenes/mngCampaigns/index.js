@@ -5,6 +5,7 @@ import mngCampaigns from './components';
 
 const mapStateToProps = state => ({
   userAuth: state.userAuth,
+  userInfo: state.userInfo,
 });
 
 const mapDispatchToProps = dispatch => ({

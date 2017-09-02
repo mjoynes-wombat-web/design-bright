@@ -72,33 +72,41 @@ class mngCampaigns extends React.Component {
 
   render() {
     if (this.props.onRequireAuth()) {
-      if (this.state.fetched) {
+      if (this.props.userInfo.userType === 'non-profit') {
+        if (this.state.fetched) {
+          return (
+            <main id="mngCampaigns" className={`small-12 columns${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
+              <section className="row">
+                <div className="small-12 columns">
+                  <h1>
+                    <span className="underlined">
+                      {this.state.nonprofitInfo.name}'s Campaigns
+                    </span>
+                  </h1>
+                </div>
+                {this.state.campaigns.map(
+                  (campaign, i) => <CampaignActions
+                    name={campaign.name}
+                    id={campaign.campaignId}
+                    key={i}
+                    launch={this.launchCampaign}
+                    stop={this.stopCampaign}
+                    startDate={campaign.startDate}
+                    endDate={campaign.endDate} />,
+                )}
+              </section>
+            </main >
+          );
+        }
         return (
-          <main id="mngCampaigns" className={`small-12 columns${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
-            <section className="row">
-              <div className="small-12 columns">
-                <h1>
-                  <span className="underlined">
-                    {this.state.nonprofitInfo.name}'s Campaigns
-                  </span>
-                </h1>
-              </div>
-              {this.state.campaigns.map(
-                (campaign, i) => <CampaignActions
-                  name={campaign.name}
-                  id={campaign.campaignId}
-                  key={i}
-                  launch={this.launchCampaign}
-                  stop={this.stopCampaign}
-                  startDate={campaign.startDate}
-                  endDate={campaign.endDate} />,
-              )}
-            </section>
-          </main >
+          <h1>Loading</h1>
         );
       }
       return (
-        <h1>Loading</h1>
+        <Redirect to={{
+          pathname: '/profile',
+          search: '?origin=nonprofit-page',
+        }} />
       );
     }
     return (
