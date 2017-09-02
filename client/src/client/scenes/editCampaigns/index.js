@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
 
 import { requireAuth } from '../../actions';
-import Campaign from './components';
+import editCampaigns from './components';
 
 const mapStateToProps = state => ({
   userAuth: state.userAuth,
+  userInfo: state.userInfo,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -15,4 +16,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Campaign);
+export default connect(mapStateToProps, mapDispatchToProps)(editCampaigns);

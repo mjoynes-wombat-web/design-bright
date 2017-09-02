@@ -10,6 +10,7 @@ import editProfile from '../scenes/userProfile/scenes/edit';
 import Message from '../partials/messages';
 import Campaign from '../scenes/campaign';
 import mngCampaigns from '../scenes/mngCampaigns';
+import editCampaigns from '../scenes/editCampaigns';
 import gaTracker from '../helpers/gaTracker';
 import routeRefresh from '../helpers/routeRefresh';
 
@@ -43,6 +44,11 @@ const Routes = () => (
         path='/profile/edit'
         component={gaTracker(editProfile)}/>
       <Route
+        exact
+        path='/campaigns/:id/edit'
+        component={gaTracker(editCampaigns)}/>
+      <Route
+        exact
         path='/campaigns/:id'
         component={gaTracker(Campaign)}/>
       <Route

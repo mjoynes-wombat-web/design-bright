@@ -32,16 +32,18 @@ form {
     }
 
     span {
-      font-size: 0.75rem;
-      margin-top: 0.25rem;
-
       &.detail {
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
         color: darken($maui-orange, 2);
         text-align: right;
         font-weight: normal;
+        display: inline-block;
       }
 
       &.error {
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
         display: none;
       }
     }
@@ -52,7 +54,7 @@ form {
       font-weight: normal;
     
       span.error {
-        display: initial;
+        display: inline-block;
       }
     }
   }
