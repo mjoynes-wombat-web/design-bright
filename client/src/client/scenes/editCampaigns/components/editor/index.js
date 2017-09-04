@@ -1,8 +1,8 @@
 
 import { Editor, Block, Raw } from 'slate';
 import React from 'react';
-import isImage from 'is-image';
 import isUrl from 'is-url';
+import ifIsImage from 'if-is-image';
 
 import Images from './images';
 import Toolbar from './toolbar';
@@ -186,7 +186,7 @@ class CampaignEditor extends React.Component {
 
   onPaste(e, data, state) {
     if (!isUrl(data.text)) return null;
-    if (!isImage(data.text)) return null;
+    if (!ifIsImage(data.text)) return null;
     return this.insertImage(state, data.target, data.text);
   }
 

@@ -21,7 +21,7 @@ const CreateLink = props => (
       <div className="columns small-12 medium-2 large-3">
         <label htmlFor="newUrl">
           Link Url:
-      </label>
+        </label>
       </div>
       <div className="columns expand">
         <input
