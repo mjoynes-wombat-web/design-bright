@@ -45,7 +45,7 @@ const Routes = () => (
         component={gaTracker(editProfile)}/>
       <Route
         exact
-        path='/campaigns/:id/edit'
+        path='/campaigns/edit/:id'
         component={gaTracker(editCampaigns)}/>
       <Route
         exact

@@ -5,6 +5,7 @@ import axios from 'axios';
 import CampaignEditor from './editor';
 
 import './scss/style.scss';
+import './scss/draft.css';
 
 const isNumber = (num) => {
   const numbers = String(num).match('[0-9]+');
@@ -165,7 +166,9 @@ class mngCampaigns extends React.Component {
                             Campaign Length (Days): <span className="required">*</span>
                           </div>
                           <div className="small-12 columns">
-                            <span className="error">The campaign length must be between 10 and 99 days.</span>
+                            <span className="error">
+                              The campaign length must be between 10 and 99 days.
+                            </span>
                           </div>
                         </label>
                         <input
@@ -182,7 +185,9 @@ class mngCampaigns extends React.Component {
                             Funding Needed: <span className="required">*</span>
                           </div>
                           <div className="small-12 columns">
-                            <span className="error">Funding must be more than $100 but less than $1,000,000.</span>
+                            <span className="error">
+                              Funding must be more than $100 but less than $1,000,000.
+                            </span>
                           </div>
                         </label>
                         <input
@@ -193,10 +198,13 @@ class mngCampaigns extends React.Component {
                           id="campaignFunding"
                           required />
                       </div>
-                    </div>
-                    <div className="row">
                       <div className="small-12 large-6 columns">
-                        <CampaignEditor content={this.state.campaignInfo}/>
+                        <label htmlFor="campaignEditor">
+                          Campaign Content: <span className="required">*</span>
+                        </label>
+                        <CampaignEditor
+                          content={this.state.campaignContent}
+                          info={this.state.campaignInfo}/>
                       </div>
                     </div>
                   </form>
