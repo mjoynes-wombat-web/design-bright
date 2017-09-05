@@ -8,9 +8,9 @@ const MainImg = props =>
         <div className="main-image">
           <img src={props.src} alt={props.alt} className={`main ${props.className}`} />
         </div>
-        <button className="secondary">Make a Donation</button>
+        <button className="secondary" type="button" disabled>Make a Donation</button>
       </div>
-      <button className="primary mobile">Make a Donation</button>
+      <button className="primary mobile" type="button" disabled>Make a Donation</button>
     </div>
   );
 

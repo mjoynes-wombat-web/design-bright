@@ -1,12 +1,14 @@
-
+/* eslint-env browser */
 import { Editor, Block, Raw } from 'slate';
 import React from 'react';
 import isUrl from 'is-url';
 import ifIsImage from 'if-is-image';
+import axios from 'axios';
 
 import Images from './images';
 import Toolbar from './toolbar';
 import CreateLink from './createLink';
+import CreateImage from './createImage';
 
 import './scss/style.scss';
 
@@ -148,13 +150,14 @@ class CampaignEditor extends React.Component {
 
     this.onChangeEditor = this.onChangeEditor.bind(this);
     this.onAddImage = this.onAddImage.bind(this);
-    this.onPaste = this.onPaste.bind(this);
+    this.onCreateImage = this.onCreateImage.bind(this);
+    this.cancelCreateImage = this.cancelCreateImage.bind(this);
     this.onChangeFormat = this.onChangeFormat.bind(this);
     this.onNewLink = this.onNewLink.bind(this);
     this.isBlock = this.isBlock.bind(this);
     this.isLink = this.isLink.bind(this);
     this.onCreateLink = this.onCreateLink.bind(this);
-    this.onChangeUrl = this.onChangeUrl.bind(this);
+    this.onChangeInput = this.onChangeInput.bind(this);
     this.cancelCreateLink = this.cancelCreateLink.bind(this);
   }
 
@@ -162,38 +165,81 @@ class CampaignEditor extends React.Component {
     this.setState({ editorState });
   }
 
-  onChangeUrl(e) {
+  onChangeInput(e) {
     const target = e.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const value = () => {
+      if (target.type === 'checkbox') {
+        return target.checked;
+      } else if (target.type === 'file') {
+        return target.files[0];
+      }
+      return target.value;
+    };
+
     const name = target.name;
 
-    this.setState({ [name]: value });
+    this.setState({ [name]: value() });
   }
 
   onAddImage(e) {
     e.preventDefault();
-    const src = window.prompt('Enter the URL of the image:');
-    const alt = window.prompt('Please enter a description:');
-    const imageType = window.prompt('Please enter the image type:');
+    // const src = window.prompt('Enter the URL of the image:');
+    // const alt = window.prompt('Please enter a description:');
+    // const imageType = window.prompt('Please enter the image type:');
 
     const { editorState } = this.state;
 
-    return this.setState({
+    this.cancelCreateLink();
+    this.setState({
       heldEditorState: editorState,
       showAddImage: true,
     });
   }
 
-  onPaste(e, data, state) {
-    if (!isUrl(data.text)) return null;
-    if (!ifIsImage(data.text)) return null;
-    return this.insertImage(state, data.target, data.text);
+  onCreateImage(e) {
+    e.preventDefault();
+
+    this.setState({ heldState: this.state.editorState });
+
+    const formData = new FormData();
+    formData.append('file', this.state.newSrc);
+    formData.append('campaignId', this.props.campaignInfo.campaignId);
+    formData.append('campaignName', this.props.campaignInfo.name);
+    formData.append('nonprofitId', this.props.nonprofitInfo.nonprofitId);
+    formData.append('imageType', this.state.newImageType);
+    formData.append('imageAlt', this.state.newAlt);
+
+    axios.post(
+      `https://${window.location.hostname}:3000/api/campaigns/${this.props.campaignInfo.campaignId}/upload/photo`,
+      formData,
+      { headers:
+        { 'Content-Type': 'multipart/form-data' },
+      },
+    )
+      .then(({ data }) => {
+        const newImage = data.data;
+        console.log(newImage);
+        const { newAlt, newImageType, heldState } = this.state;
+        this.insertImage(newImage.secure_url, newAlt, newImageType, heldState);
+      })
+      .catch(error => console.log(error));
   }
 
-  insertImage(e) {
-    e.preventDefault();
-    const { newSrc, newAlt, newImageType, heldState } = this.state;
+  cancelCreateImage(e) {
+    if (e) {
+      e.preventDefault();
+    }
 
+    return this.setState({
+      heldEditorState: {},
+      showAddImage: false,
+      newSrc: '',
+      newAlt: '',
+      newImageType: 'main',
+    });
+  }
+
+  insertImage(src, alt, imageType, heldState) {
     const transform = heldState.transform();
 
     const newEditorState = transform
@@ -201,9 +247,9 @@ class CampaignEditor extends React.Component {
         type: 'image',
         isVoid: true,
         data: {
-          src: newSrc,
-          alt: newAlt,
-          imageType: newImageType,
+          src,
+          alt,
+          imageType,
         },
       })
       .apply();
@@ -256,6 +302,8 @@ class CampaignEditor extends React.Component {
     const { editorState } = this.state;
     const isLink = this.isLink();
     let newEditorState = editorState;
+
+    this.cancelCreateImage();
 
     if (this.state.showCreateLink) {
       return this.cancelCreateLink(e);
@@ -320,7 +368,9 @@ class CampaignEditor extends React.Component {
   }
 
   cancelCreateLink(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
 
     return this.setState({
       heldEditorState: {},
@@ -344,19 +394,28 @@ class CampaignEditor extends React.Component {
             editorState={this.state.heldEditorState}
             onCreateLink={this.onCreateLink}
             cancelCreateLink={this.cancelCreateLink}
-            url={this.state.newUrl}
-            linkText={this.state.newUrlText}
-            onChange={this.onChangeUrl}
+            newUrl={this.state.newUrl}
+            newUrlText={this.state.newUrlText}
+            onChange={this.onChangeInput}
             validate={url => isUrl(url)} />
+          : null}
+        {this.state.showAddImage
+          ? <CreateImage
+            editorState={this.state.heldEditorState}
+            onCreateImage={this.onCreateImage}
+            cancelCreateImage={this.cancelCreateImage}
+            onChange={this.onChangeInput}
+            newSrc={this.state.newSrc}
+            newAlt={this.state.newAlt}
+            newImageType={this.state.newImageType}
+            validate={src => ifIsImage(src)} />
           : null}
         <div className="grey-line"></div>
         <div className="editor">
           <Editor
             schema={schema}
             state={this.state.editorState}
-            onChange={this.onChangeEditor}
-            onPaste={this.onPaste}
-          />
+            onChange={this.onChangeEditor} />
         </div>
       </div >
     );

@@ -28,6 +28,7 @@ class mngCampaigns extends React.Component {
       campaignContent: [],
       fetched: false,
       hasCampaign: false,
+      campaignId: '',
       valid: false,
     };
 
@@ -44,6 +45,8 @@ class mngCampaigns extends React.Component {
         this.setState({ nonprofitInfo: results.data.data.nonprofit });
 
         const editCampaignId = this.props.match.params.id;
+
+        this.setState({ campaignId: editCampaignId });
 
         if (this.state.campaigns.find(
           campaign => campaign.campaignId === parseInt(editCampaignId, 10))
@@ -148,7 +151,7 @@ class mngCampaigns extends React.Component {
                       </h1>
                     </div>
                     <div className="row">
-                      <div className="small-12 large-6 columns">
+                      <div className="small-12 large-5 columns">
                         <label htmlFor="name">
                           Campaign Name: <span className="required">*</span>
                         </label>
@@ -198,13 +201,15 @@ class mngCampaigns extends React.Component {
                           id="campaignFunding"
                           required />
                       </div>
-                      <div className="small-12 large-6 columns">
+                      <div className="small-12 large-7 columns">
                         <label htmlFor="campaignEditor">
                           Campaign Content: <span className="required">*</span>
                         </label>
                         <CampaignEditor
                           content={this.state.campaignContent}
-                          info={this.state.campaignInfo}/>
+                          campaignInfo={this.state.campaignInfo}
+                          nonprofitInfo={this.state.nonprofitInfo}
+                          campaignId={this.state.campaignId} />
                       </div>
                     </div>
                   </form>

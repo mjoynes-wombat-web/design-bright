@@ -246,7 +246,6 @@ class Register extends React.Component {
                   <label htmlFor="donor">
                     <input
                       onChange={this.onChange}
-                      onClick={this.onClick}
                       type="radio"
                       checked={this.state.userType === 'donor'}
                       name="userType"
@@ -258,7 +257,6 @@ class Register extends React.Component {
                   <label htmlFor="non-profit">
                     <input
                       onChange={this.onChange}
-                      onClick={this.onClick}
                       checked={this.state.userType === 'non-profit'}
                       type="radio"
                       name="userType"

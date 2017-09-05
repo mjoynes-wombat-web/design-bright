@@ -4,14 +4,14 @@ const CreateLink = props => (
       ? null
       : <div className="row align-middle">
         <div className="columns small-12 medium-2 large-3">
-          <label htmlFor="newUrl">
+          <label htmlFor="newUrlText">
             Link Text:
           </label>
         </div>
         <div className="columns expand">
           <input
             type="text"
-            value={props.linkText}
+            value={props.newUrlText}
             name="newUrlText"
             id="newUrlText"
             onChange={props.onChange} />
@@ -26,7 +26,7 @@ const CreateLink = props => (
       <div className="columns expand">
         <input
           type="text"
-          value={props.url}
+          value={props.newUrl}
           name="newUrl"
           id="newUrl"
           onChange={props.onChange} />
@@ -38,7 +38,7 @@ const CreateLink = props => (
           <button
             className="small-11 medium-6 large-8 secondary"
             onClick={props.onCreateLink}
-            disabled={!props.validate(props.url)}
+            disabled={!props.validate(props.newUrl)}
             type='button'>
             {props.editorState.isExpanded ? 'Create Link' : 'Insert Link'}
           </button>

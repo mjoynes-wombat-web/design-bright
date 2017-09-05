@@ -4,7 +4,22 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // Create API Users Router
+
+
 var _express = require('express');
+
+var _multer = require('multer');
+
+var _multer2 = _interopRequireDefault(_multer);
+
+var _cloudinary = require('cloudinary');
+
+var _cloudinary2 = _interopRequireDefault(_cloudinary);
+
+var _dotenv = require('dotenv');
+
+var _dotenv2 = _interopRequireDefault(_dotenv);
 
 var _campaigns = require('../models/campaigns');
 
@@ -12,8 +27,21 @@ var _response = require('../helpers/response');
 
 var _response2 = _interopRequireDefault(_response);
 
+var _Cloudinary = require('../models/Cloudinary');
+
+var _Cloudinary2 = _interopRequireDefault(_Cloudinary);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+const { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = _dotenv2.default.config().parsed;
+
+_cloudinary2.default.config({
+  cloud_name: CLOUDINARY_NAME,
+  api_key: CLOUDINARY_KEY,
+  api_secret: CLOUDINARY_SECRET
+});
+
+const upload = (0, _multer2.default)();
 const router = (0, _express.Router)();
 
 /*
@@ -21,7 +49,6 @@ const router = (0, _express.Router)();
 */
 
 // Returns the list of campaigns based on the search as sort queries.
-// Create API Users Router
 router.get('/', (req, res) => {
   if (Object.keys(req.query).length > 0) {
     const search = req.query.search;
@@ -64,6 +91,36 @@ router.patch('/:campaignId/edit', (req, res) => {
     You provided ${id} for an id but it is not a number. Please provide a number.
     `);
   }
+});
+
+router.post('/:campaignId/upload/photo', upload.single('file'), (req, res) => {
+  const id = req.params.campaignId;
+  const { campaignName, imageType, imageAlt, nonprofitId } = req.body;
+  const image = req.file;
+
+  const imageDimensions = imgType => {
+    switch (imgType) {
+      case 'main':
+        return { width: 1440, height: 820 };
+      case 'left':
+        return { width: 235, height: 290 };
+      case 'right':
+        return { width: 235, height: 290 };
+      default:
+        return { width: 235, height: 290 };
+    }
+  };
+
+  const dimensions = imageDimensions(imageType);
+  const originalName = image.originalname;
+  const fileName = `${originalName.substring(0, originalName.lastIndexOf('.'))}-campaignId${id}-${new Date().toISOString()}`;
+
+  (0, _Cloudinary2.default)(image, _extends({
+    public_id: fileName,
+    folder: nonprofitId
+  }, dimensions, {
+    tags: [id, 'campaign-image', campaignName, imageAlt]
+  }), success => (0, _response2.default)(200, success, 'Image created successfully.', res), error => (0, _response2.default)(error.http_code, error, error.message, res));
 });
 
 // Accepts a new campaign information. Returns the new created campaign.

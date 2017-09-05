@@ -1,9 +1,24 @@
 // Create API Users Router
 import { Router } from 'express';
+import multer from 'multer';
+
+import cloudinary from 'cloudinary';
+import dotenv from 'dotenv';
 
 import { getCampaignContent } from '../models/campaigns';
 import jsonResponse from '../helpers/response';
+import uploadImage from '../models/Cloudinary';
 
+
+const { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = dotenv.config().parsed;
+
+cloudinary.config({
+  cloud_name: CLOUDINARY_NAME,
+  api_key: CLOUDINARY_KEY,
+  api_secret: CLOUDINARY_SECRET,
+});
+
+const upload = multer();
 const router = Router();
 
 /*
@@ -66,6 +81,51 @@ router.patch('/:campaignId/edit', (req, res) => {
     You provided ${id} for an id but it is not a number. Please provide a number.
     `);
   }
+});
+
+router.post('/:campaignId/upload/photo', upload.single('file'), (req, res) => {
+  const id = req.params.campaignId;
+  const { campaignName, imageType, imageAlt, nonprofitId } = req.body;
+  const image = req.file;
+
+  const imageDimensions = (imgType) => {
+    switch (imgType) {
+      case 'main':
+        return { width: 1440, height: 820 };
+      case 'left':
+        return { width: 235, height: 290 };
+      case 'right':
+        return { width: 235, height: 290 };
+      default:
+        return { width: 235, height: 290 };
+    }
+  };
+
+  const dimensions = imageDimensions(imageType);
+  const originalName = image.originalname;
+  const fileName = `${originalName.substring(0, originalName.lastIndexOf('.'))}-campaignId${id}-${(new Date()).toISOString()}`;
+
+  uploadImage(
+    image,
+    {
+      public_id: fileName,
+      folder: nonprofitId,
+      ...dimensions,
+      tags: [id, 'campaign-image', campaignName, imageAlt],
+    },
+    success => jsonResponse(
+      200,
+      success,
+      'Image created successfully.',
+      res,
+    ),
+    error => jsonResponse(
+      error.http_code,
+      error,
+      error.message,
+      res,
+    ),
+  );
 });
 
 // Accepts a new campaign information. Returns the new created campaign.
