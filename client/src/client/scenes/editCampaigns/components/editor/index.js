@@ -90,51 +90,112 @@ class CampaignEditor extends React.Component {
   constructor(props) {
     super(props);
 
-    const initialState = props.content.reduce(
-      (formattedContent, node) => {
-        const content = formattedContent;
-
-        if ('textType' in node) {
-          const newNode = {
+    let initialState;
+    if (props.content.length > 0) {
+      initialState = { nodes: props.content };
+      console.log(initialState);
+    } else {
+      initialState = {
+        nodes: [
+          {
             kind: 'block',
+            type: 'paragraph',
             nodes: [
               {
                 kind: 'text',
-                text: node.text,
+                text: 'We recommend that you follow the following format for you campaign. This is where you would write your initial introduction for your campaign. This will also serve as the description on the search and browse pages. Anything over X characters will be cut off.',
               },
             ],
-          };
-
-          switch (node.textType) {
-            case 'p':
-              newNode.type = 'paragraph';
-              content.nodes.push(newNode);
-              return content;
-            case 'h2':
-              newNode.type = 'header';
-              content.nodes.push(newNode);
-              return content;
-            default:
-              return content;
-          }
-        } else if ('imageType' in node) {
-          const newNode = {
+          },
+          {
+            kind: 'block',
+            type: 'header',
+            nodes: [
+              {
+                kind: 'text',
+                text: 'Main Image',
+              },
+            ],
+          },
+          {
             kind: 'block',
             type: 'image',
             isVoid: true,
             data: {
-              src: node.src,
-              alt: node.alt,
-              imageType: node.imageType,
+              alt: 'Senior veteran at a march.',
+              imageType: 'main',
+              src: '/assets/img/veteran.jpg',
             },
-          };
-          content.nodes.push(newNode);
-          return content;
-        }
-        return content;
-      },
-      { nodes: [] },
-    );
+          },
+          {
+            kind: 'block',
+            type: 'paragraph',
+            nodes: [
+              {
+                kind: 'text',
+                text: 'You should delete the image above and replace it with your own.',
+              },
+            ],
+          },
+          {
+            kind: 'block',
+            type: 'header',
+            nodes: [
+              {
+                kind: 'text',
+                text: 'You Can Use Headers to Organize Your Content',
+              },
+            ],
+          },
+          {
+            kind: 'block',
+            type: 'image',
+            isVoid: true,
+            data: {
+              alt: 'A flag on a home.',
+              imageType: 'left',
+              src: '/assets/img/flag-home.jpg',
+            },
+          },
+          {
+            kind: 'block',
+            type: 'paragraph',
+            nodes: [
+              {
+                kind: 'text',
+                text: 'Images can be inserted so that they flow with your content. These can be on the left or right side.',
+              },
+            ],
+          },
+          {
+            kind: 'block',
+            type: 'paragraph',
+            nodes: [
+              {
+                kind: 'text',
+                text: 'You can also use ',
+              },
+              {
+                kind: 'inline',
+                text: 'links',
+                type: 'link',
+                data: { url: 'https://www.designbright.org' },
+                nodes: [
+                  {
+                    kind: 'text',
+                    text: 'links',
+                  },
+                ],
+              },
+              {
+                kind: 'text',
+                text: ' in your text to provide a connection to your non-profit\'s information.',
+              },
+            ],
+          },
+        ],
+      };
+    }
 
     this.state = {
       editorState: Raw.deserialize(initialState, { terse: true }),
@@ -159,10 +220,18 @@ class CampaignEditor extends React.Component {
     this.onCreateLink = this.onCreateLink.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
     this.cancelCreateLink = this.cancelCreateLink.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
+  }
+
+  componentDidMount() {
+    this.onChangeEditor(this.state.editorState);
   }
 
   onChangeEditor(editorState) {
-    this.setState({ editorState });
+    this.setState(
+      { editorState },
+      this.props.onChangeEditorData(Raw.serialize(editorState)),
+    );
   }
 
   onChangeInput(e) {
@@ -210,15 +279,15 @@ class CampaignEditor extends React.Component {
     formData.append('imageAlt', this.state.newAlt);
 
     axios.post(
-      `https://${window.location.hostname}:3000/api/campaigns/${this.props.campaignInfo.campaignId}/upload/photo`,
+      `https://${window.location.hostname}:3000/api/campaigns/upload/photo/${this.props.campaignInfo.campaignId}`,
       formData,
-      { headers:
+      {
+        headers:
         { 'Content-Type': 'multipart/form-data' },
       },
     )
       .then(({ data }) => {
         const newImage = data.data;
-        console.log(newImage);
         const { newAlt, newImageType, heldState } = this.state;
         this.insertImage(newImage.secure_url, newAlt, newImageType, heldState);
       })
@@ -260,8 +329,8 @@ class CampaignEditor extends React.Component {
       newSrc: '',
       newAlt: '',
       newImageType: 'main',
-      editorState: newEditorState,
-    });
+    },
+    this.onChangeEditor(newEditorState));
   }
 
   onChangeFormat(e) {
@@ -273,7 +342,7 @@ class CampaignEditor extends React.Component {
       const isBlock = this.isBlock(type);
       transform.setBlock(isBlock ? 'paragraph' : type);
       const newEditorState = transform.apply();
-      this.setState({ editorState: newEditorState });
+      this.onChangeEditor(newEditorState);
     }
   }
 
@@ -315,15 +384,15 @@ class CampaignEditor extends React.Component {
         .unwrapInline('link')
         .apply();
 
-      return this.setState({
-        editorState: newEditorState,
-      });
+      return this.onChangeEditor(newEditorState);
     }
-    return this.setState({
-      editorState: newEditorState,
-      heldEditorState: newEditorState,
-      showCreateLink: true,
-    });
+    return this.setState(
+      {
+        heldEditorState: newEditorState,
+        showCreateLink: true,
+      },
+      this.onChangeEditor(newEditorState),
+    );
   }
 
   onCreateLink(e) {
@@ -358,13 +427,15 @@ class CampaignEditor extends React.Component {
         .apply();
     }
 
-    this.setState({
-      editorState: newEditorState,
-      showCreateLink: false,
-      newUrl: 'http://',
-      newUrlText: '',
-      heldEditorState: {},
-    });
+    this.setState(
+      {
+        showCreateLink: false,
+        newUrl: 'http://',
+        newUrlText: '',
+        heldEditorState: {},
+      },
+      this.onChangeEditor(newEditorState),
+    );
   }
 
   cancelCreateLink(e) {

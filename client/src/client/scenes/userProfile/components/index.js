@@ -16,7 +16,10 @@ class Profile extends React.Component {
   }
 
   componentWillMount() {
-    return this.props.onGetUserInfo(() => this.setState({ fetched: true }));
+    document.title = this.props.userInfo.userType === 'non-profit'
+      ? `${this.props.userInfo.nonProfitName}'s Profile - Design Bright`
+      : `${this.props.userInfo.firstName} ${this.props.userInfo.lastName}'s Profile - Design Bright`;
+    this.props.onGetUserInfo(() => this.setState({ fetched: true }));
   }
 
   componentDidMount() {
@@ -62,7 +65,7 @@ class Profile extends React.Component {
                     </h1>
                   </div>
                   <div className="columns large-3 small-12">
-                    <Link to='/profile/edit' className="edit">
+                    <Link to='/user/profile/edit' className="edit">
                       <span className="text">Edit Profile</span> <span className="icon"></span>
                     </Link>
                   </div>

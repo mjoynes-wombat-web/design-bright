@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.advisors = exports.campaignImages = exports.campaignText = exports.campaignContent = exports.campaigns = exports.nonProfits = exports.sequelize = undefined;
+exports.advisors = exports.campaignImages2 = exports.campaignImages = exports.campaignText2 = exports.campaignText = exports.campaignContent = exports.campaigns = exports.nonProfits = exports.sequelize = undefined;
 
 var _sequelize = require('sequelize');
 
@@ -123,24 +123,28 @@ const campaigns = exports.campaigns = sequelize.define('campaigns', {
   tableName: 'campaigns'
 });
 
-const campaignContent = exports.campaignContent = sequelize.define('campaign_content', {
-  content_id: {
+const campaignContent = exports.campaignContent = sequelize.define('campaignContent', {
+  contentId: {
     type: _sequelize2.default.INTEGER(11),
     allowNull: false,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
+    field: 'content_id'
   },
-  campaign_id: {
+  campaignId: {
     type: _sequelize2.default.INTEGER(11),
-    allowNull: false
+    allowNull: false,
+    field: 'campaign_id'
   },
-  content_status: {
+  contentStatus: {
     type: _sequelize2.default.STRING(75),
-    allowNull: false
+    allowNull: false,
+    field: 'content_status'
   },
-  created_date: {
+  createdDate: {
     type: _sequelize2.default.DATE,
-    allowNull: false
+    allowNull: false,
+    field: 'created_date'
   },
   createdAt: {
     type: _sequelize2.default.DATE,
@@ -154,24 +158,28 @@ const campaignContent = exports.campaignContent = sequelize.define('campaign_con
   tableName: 'campaign_content'
 });
 
-const campaignText = exports.campaignText = sequelize.define('campaign_text', {
-  text_id: {
+const campaignText = exports.campaignText = sequelize.define('campaignText', {
+  textId: {
     type: _sequelize2.default.INTEGER(11),
     allowNull: false,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
+    field: 'text_id'
   },
-  content_id: {
+  contentId: {
     type: _sequelize2.default.INTEGER(11),
-    allowNull: false
+    allowNull: false,
+    field: 'content_id'
   },
-  content_position: {
+  contentPosition: {
     type: _sequelize2.default.INTEGER(11),
-    allowNull: false
+    allowNull: false,
+    field: 'content_position'
   },
-  text_type: {
+  textType: {
     type: _sequelize2.default.STRING(45),
-    allowNull: false
+    allowNull: false,
+    field: 'text_type'
   },
   text: {
     type: _sequelize2.default.TEXT,
@@ -189,24 +197,78 @@ const campaignText = exports.campaignText = sequelize.define('campaign_text', {
   tableName: 'campaign_text'
 });
 
-const campaignImages = exports.campaignImages = sequelize.define('campaign_images', {
-  img_id: {
+const campaignText2 = exports.campaignText2 = sequelize.define('campaignText2', {
+  textId: {
     type: _sequelize2.default.INTEGER(11),
     allowNull: false,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
+    field: 'text_id'
   },
-  content_id: {
+  contentId: {
+    type: _sequelize2.default.INTEGER(11),
+    allowNull: false,
+    field: 'content_id',
+    references: {
+      model: 'campaign_content',
+      key: 'content_id'
+    }
+  },
+  position: {
     type: _sequelize2.default.INTEGER(11),
     allowNull: false
   },
-  content_position: {
-    type: _sequelize2.default.INTEGER(11),
-    allowNull: false
-  },
-  image_type: {
+  kind: {
     type: _sequelize2.default.STRING(45),
     allowNull: false
+  },
+  isVoid: {
+    type: _sequelize2.default.INTEGER(4),
+    allowNull: false,
+    field: 'is_void'
+  },
+  type: {
+    type: _sequelize2.default.STRING(45),
+    allowNull: false
+  },
+  nodes: {
+    type: _sequelize2.default.TEXT,
+    allowNull: false
+  },
+  createdAt: {
+    type: _sequelize2.default.DATE,
+    allowNull: false
+  },
+  updatedAt: {
+    type: _sequelize2.default.DATE,
+    allowNull: false
+  }
+}, {
+  tableName: 'campaign_text2'
+});
+
+const campaignImages = exports.campaignImages = sequelize.define('campaignImages', {
+  imgId: {
+    type: _sequelize2.default.INTEGER(11),
+    allowNull: false,
+    primaryKey: true,
+    autoIncrement: true,
+    field: 'imgId'
+  },
+  contentId: {
+    type: _sequelize2.default.INTEGER(11),
+    allowNull: false,
+    field: 'content_id'
+  },
+  contentPosition: {
+    type: _sequelize2.default.INTEGER(11),
+    allowNull: false,
+    field: 'content_position'
+  },
+  imageType: {
+    type: _sequelize2.default.STRING(45),
+    allowNull: false,
+    field: 'image_type'
   },
   src: {
     type: _sequelize2.default.STRING(99),
@@ -226,6 +288,65 @@ const campaignImages = exports.campaignImages = sequelize.define('campaign_image
   }
 }, {
   tableName: 'campaign_images'
+});
+
+const campaignImages2 = exports.campaignImages2 = sequelize.define('campaignImages2', {
+  imgId: {
+    type: _sequelize2.default.INTEGER(11),
+    allowNull: false,
+    primaryKey: true,
+    autoIncrement: true,
+    field: 'img_id'
+  },
+  contentId: {
+    type: _sequelize2.default.INTEGER(11),
+    allowNull: false,
+    field: 'content_id',
+    references: {
+      model: 'campaign_content',
+      key: 'content_id'
+    }
+  },
+  position: {
+    type: _sequelize2.default.INTEGER(11),
+    allowNull: false
+  },
+  kind: {
+    type: _sequelize2.default.STRING(45),
+    allowNull: false
+  },
+  isVoid: {
+    type: _sequelize2.default.INTEGER(4),
+    allowNull: false,
+    field: 'is_void'
+  },
+  type: {
+    type: _sequelize2.default.STRING(45),
+    allowNull: false
+  },
+  alt: {
+    type: _sequelize2.default.STRING(45),
+    allowNull: false
+  },
+  src: {
+    type: _sequelize2.default.STRING(99),
+    allowNull: false
+  },
+  imageType: {
+    type: _sequelize2.default.STRING(45),
+    allowNull: false,
+    field: 'image_type'
+  },
+  createdAt: {
+    type: _sequelize2.default.DATE,
+    allowNull: false
+  },
+  updatedAt: {
+    type: _sequelize2.default.DATE,
+    allowNull: false
+  }
+}, {
+  tableName: 'campaign_images2'
 });
 
 const advisors = exports.advisors = sequelize.define('advisors', {
@@ -281,6 +402,8 @@ nonProfits.hasMany(campaigns, { foreignKey: 'nonprofit_id' });
 campaigns.hasMany(campaignContent, { foreignKey: 'campaign_id' });
 campaignContent.hasMany(campaignImages, { foreignKey: 'content_id' });
 campaignContent.hasMany(campaignText, { foreignKey: 'content_id' });
+campaignContent.hasMany(campaignImages2, { foreignKey: 'content_id' });
+campaignContent.hasMany(campaignText2, { foreignKey: 'content_id' });
 
 sequelize.sync();
 //# sourceMappingURL=db.js.map

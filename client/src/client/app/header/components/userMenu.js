@@ -5,15 +5,15 @@ const UserMenu = ({ requireAuth, userType, onLogout }) => {
     if (userType === 'donor') {
       return (
         <ul className="user-menu">
-          <li><Link to="/profile">Profile</Link></li>
+          <li><Link to="/user/profile">Profile</Link></li>
           <li><Link to="/" onClick={onLogout}>Logout</Link></li>
         </ul>
       );
     } else if (userType === 'non-profit') {
       return (
         <ul className="user-menu">
-          <li><Link to="/profile">Profile</Link></li>
-          <li><Link to="/manage-campaigns">Campaigns</Link></li>
+          <li><Link to="/user/profile">Profile</Link></li>
+          <li><Link to="/user/manage-campaigns">Campaigns</Link></li>
           <li><Link to="/" onClick={onLogout}>Logout</Link></li>
         </ul>
       );

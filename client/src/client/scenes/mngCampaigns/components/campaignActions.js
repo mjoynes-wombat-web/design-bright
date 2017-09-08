@@ -35,7 +35,7 @@ const CampaignActions = ({ name, k, id, launch, stop, startDate, endDate }) => (
       </div>
       <div className="small-12 columns show-for-small-only"></div>
       <div className="shrink columns campaign-action edit">
-        <Link to={`/campaigns/edit/${id}`}>
+        <Link to={`/campaign/edit/${id}`}>
           <span className="icon"></span><span className="text">Edit Campaign</span>
         </Link>
       </div>

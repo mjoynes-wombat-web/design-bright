@@ -21,6 +21,8 @@ var _dotenv = require('dotenv');
 
 var _dotenv2 = _interopRequireDefault(_dotenv);
 
+var _Auth = require('../models/Auth0');
+
 var _campaigns = require('../models/campaigns');
 
 var _response = require('../helpers/response');
@@ -30,6 +32,10 @@ var _response2 = _interopRequireDefault(_response);
 var _Cloudinary = require('../models/Cloudinary');
 
 var _Cloudinary2 = _interopRequireDefault(_Cloudinary);
+
+var _requireAuth = require('../helpers/requireAuth');
+
+var _requireAuth2 = _interopRequireDefault(_requireAuth);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -74,26 +80,22 @@ router.get('/', (req, res) => {
 // Returns the information for the campaign with the identity param.
 router.get('/:campaignId', (req, res) => {
   const id = req.params.campaignId;
-  (0, _campaigns.getCampaignContent)(id, results => (0, _response2.default)(200, results, `This is the content for the campaign id ${id}`, res), error => (0, _response2.default)(500, error, 'There was an error on the server.', res));
+  (0, _campaigns.getCampaignContent)(id, results => (0, _response2.default)(200, results, `This is the content for the campaign id ${id}`, res), error => {
+    if (Object.keys(error).length) {
+      return (0, _response2.default)(500, error, 'There was an error on the server.', res);
+    }
+    return (0, _response2.default)(404, error, 'You are trying to access a campaign that doesn\'t exist.', res);
+  });
 });
 
 // Accepts information changes to a campaign with the campaignId param.
 // Returns the update campaign information.
-router.patch('/:campaignId/edit', (req, res) => {
+router.patch('/edit/:campaignId', (req, res) => {
   const id = req.params.campaignId;
-  if (!isNaN(id)) {
-    res.send(`
-    Accepts new information for the campaign with the id of ${id}.
-    Returns the newly updated campaign information for that campaign.
-  `);
-  } else {
-    res.send(`
-    You provided ${id} for an id but it is not a number. Please provide a number.
-    `);
-  }
+  console.log(req.body);
 });
 
-router.post('/:campaignId/upload/photo', upload.single('file'), (req, res) => {
+router.post('/upload/photo/:campaignId', upload.single('file'), (req, res) => {
   const id = req.params.campaignId;
   const { campaignName, imageType, imageAlt, nonprofitId } = req.body;
   const image = req.file;
@@ -125,10 +127,16 @@ router.post('/:campaignId/upload/photo', upload.single('file'), (req, res) => {
 
 // Accepts a new campaign information. Returns the new created campaign.
 router.post('/create', (req, res) => {
-  res.send(`
-  Accepts a new campaign.
-  Returns the newly created campaign information for that campaign.
-  `);
+  const { newCampaign, accessToken } = req.body;
+  if ((0, _requireAuth2.default)(accessToken)) {
+    (0, _Auth.getUserInfo)(accessToken, user => {
+      const nonprofitId = user.app_metadata.nonProfitID;
+
+      (0, _campaigns.createCampaign)(nonprofitId, newCampaign, success => console.log(success), error => console.log(error));
+    }, error => (0, _response2.default)(error.statusCode, error.original, 'There was an error getting the user info.', res));
+  } else {
+    (0, _response2.default)(401, { accessToken }, 'The access token is not a valid access token.', res);
+  }
 });
 
 // Exporting router as default.

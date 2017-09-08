@@ -5,9 +5,11 @@ import multer from 'multer';
 import cloudinary from 'cloudinary';
 import dotenv from 'dotenv';
 
-import { getCampaignContent } from '../models/campaigns';
+import { getUserInfo } from '../models/Auth0';
+import { getCampaignContent, createCampaign } from '../models/campaigns';
 import jsonResponse from '../helpers/response';
 import uploadImage from '../models/Cloudinary';
+import requireAuth from '../helpers/requireAuth';
 
 
 const { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = dotenv.config().parsed;
@@ -59,31 +61,33 @@ router.get('/:campaignId', (req, res) => {
       `This is the content for the campaign id ${id}`,
       res,
     ),
-    error => jsonResponse(500,
-      error,
-      'There was an error on the server.',
-      res,
-    ),
+    (error) => {
+      if (Object.keys(error).length) {
+        return jsonResponse(
+          500,
+          error,
+          'There was an error on the server.',
+          res,
+        );
+      }
+      return jsonResponse(
+        404,
+        error,
+        'You are trying to access a campaign that doesn\'t exist.',
+        res,
+      );
+    },
   );
 });
 
 // Accepts information changes to a campaign with the campaignId param.
 // Returns the update campaign information.
-router.patch('/:campaignId/edit', (req, res) => {
+router.patch('/edit/:campaignId', (req, res) => {
   const id = req.params.campaignId;
-  if (!isNaN(id)) {
-    res.send(`
-    Accepts new information for the campaign with the id of ${id}.
-    Returns the newly updated campaign information for that campaign.
-  `);
-  } else {
-    res.send(`
-    You provided ${id} for an id but it is not a number. Please provide a number.
-    `);
-  }
+  console.log(req.body);
 });
 
-router.post('/:campaignId/upload/photo', upload.single('file'), (req, res) => {
+router.post('/upload/photo/:campaignId', upload.single('file'), (req, res) => {
   const id = req.params.campaignId;
   const { campaignName, imageType, imageAlt, nonprofitId } = req.body;
   const image = req.file;
@@ -130,10 +134,34 @@ router.post('/:campaignId/upload/photo', upload.single('file'), (req, res) => {
 
 // Accepts a new campaign information. Returns the new created campaign.
 router.post('/create', (req, res) => {
-  res.send(`
-  Accepts a new campaign.
-  Returns the newly created campaign information for that campaign.
-  `);
+  const { newCampaign, accessToken } = req.body;
+  if (requireAuth(accessToken)) {
+    getUserInfo(
+      accessToken,
+      (user) => {
+        const nonprofitId = user.app_metadata.nonProfitID;
+
+        createCampaign(
+          nonprofitId,
+          newCampaign,
+          success => console.log(success),
+          error => console.log(error),
+        );
+      },
+      error => jsonResponse(
+        error.statusCode,
+        error.original,
+        'There was an error getting the user info.',
+        res),
+    );
+  } else {
+    jsonResponse(
+      401,
+      { accessToken },
+      'The access token is not a valid access token.',
+      res,
+    );
+  }
 });
 
 // Exporting router as default.

@@ -3,4 +3,4 @@ Server Render:
   ☐ Link underline and heading underline aren't different enough. @low
   ☐ Optimize page speed with google page speed. @high
   ☐ Use Gatsby for prerendering and auth-caching. @low
-  ☐ Minify Javascript @high
+  ✔ Minify Javascript @high @done (9/7/2017, 9:07:49 PM)

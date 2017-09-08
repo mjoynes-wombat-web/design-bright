@@ -52,6 +52,8 @@ class Login extends React.Component {
   componentWillMount() {
     const search = queryString.parse(this.props.location.search);
 
+    document.title = 'Login - Design Bright';
+
     if ('origin' in search) {
       switch (search.origin) {
         case 'secure':

@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import CampaignEditor from './editor';
 
@@ -23,69 +23,70 @@ class mngCampaigns extends React.Component {
     this.state = {
       nonprofitInfo: {},
       campaigns: {},
-      campaignInfo: {},
+      campaignInfo: {
+        name: '',
+        fundingNeeded: 100,
+        length: 10,
+      },
       contentInfo: {},
       campaignContent: [],
       fetched: false,
       hasCampaign: false,
       campaignId: '',
       valid: false,
+      editorData: {},
     };
-
     this.componentWillMount = this.componentWillMount.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.validate = this.validate.bind(this);
+    this.onChangeEditorData = this.onChangeEditorData.bind(this);
   }
 
   componentWillMount() {
-    axios.get(`https://${window.location.hostname}:3000/api/nonprofits/campaigns/${this.props.userAuth.accessToken}`)
-      .then((results) => {
-        this.setState({ campaigns: results.data.data.campaigns });
-        this.setState({ nonprofitInfo: results.data.data.nonprofit });
+    if ('id' in this.props.match.params) {
+      const editCampaignId = this.props.match.params.id;
+      this.setState({ valid: true });
 
-        const editCampaignId = this.props.match.params.id;
+      axios.get(`https://${window.location.hostname}:3000/api/nonprofits/campaigns/${this.props.userAuth.accessToken}`)
+        .then((results) => {
+          this.setState({ campaigns: results.data.data.campaigns });
+          this.setState({ nonprofitInfo: results.data.data.nonprofit });
 
-        this.setState({ campaignId: editCampaignId });
+          this.setState({ campaignId: editCampaignId });
 
-        if (this.state.campaigns.find(
-          campaign => campaign.campaignId === parseInt(editCampaignId, 10))
-        ) {
-          this.setState({ hasCampaign: true });
+          if (this.state.campaigns.find(
+            campaign => campaign.campaignId === parseInt(editCampaignId, 10))
+          ) {
+            this.setState({ hasCampaign: true });
 
-          axios.get(`https://${window.location.hostname}:3000/api/campaigns/${editCampaignId}`)
-            .then((campaignResults) => {
-              const unsortedCampaignContent = [
-                ...campaignResults.data.data.campaignImages,
-                ...campaignResults.data.data.campaignText,
-              ];
+            axios.get(`https://${window.location.hostname}:3000/api/campaigns/${editCampaignId}`)
+              .then((campaignResults) => {
+                const { campaignContent } = campaignResults.data.data;
+                const campaignInfo = campaignResults.data.data.campaignInfo;
 
-              const campaignContent = () =>
-                unsortedCampaignContent.sort(
-                  (a, b) => a.contentPosition - b.contentPosition,
-                );
+                document.title = `Edit ${campaignInfo.name} Campaign - Design Bright`;
 
-              const campaignInfo = campaignResults.data.data.campaignInfo;
-
-              campaignInfo.timeRemaining = (
-                (new Date(Date.parse(campaignInfo.endDate)) - new Date())
-                / 1000 / 60 / 60 / 24
-              );
-
-              this.setState({ campaignInfo });
-              this.setState({
-                contentInfo: results.data.data.contentInfo,
-              });
-              this.setState({ campaignContent: campaignContent() });
-              this.setState({ fetched: true });
-            })
-            .catch(error => console.log(error));
-        } else {
-          this.setState({ hasCampaign: false });
-          this.setState({ fetched: true });
-        }
-      })
-      .catch(error => console.log(error));
+                this.setState({ campaignInfo });
+                this.setState({
+                  contentInfo: results.data.data.contentInfo,
+                });
+                this.setState({ campaignContent });
+                this.setState({ fetched: true });
+              })
+              .catch(error => console.log(error));
+          } else {
+            this.setState({ hasCampaign: false });
+            this.setState({ fetched: true });
+          }
+        })
+        .catch(error => console.log(error));
+    } else {
+      this.setState({
+        fetched: true,
+        hasCampaign: true,
+      });
+    }
   }
 
   onChange(e) {
@@ -118,7 +119,40 @@ class mngCampaigns extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state.campaignName);
+    const accessToken = this.props.userAuth.accessToken;
+    if (this.state.campaignContent.length > 0) {
+      axios.patch(
+        `https://${window.location.hostname}:3000/api/campaigns/edit/${this.state.campaignInfo.campaignId}`,
+        {
+          updatedCampaign: this.state.editorData,
+          accessToken,
+        },
+      );
+    } else {
+      axios.post(
+        `https://${window.location.hostname}:3000/api/campaigns/create`,
+        {
+          newCampaign: {
+            ...this.state.campaignInfo,
+            content: this.state.editorData,
+          },
+          accessToken,
+        },
+      );
+    }
+  }
+
+  onChangeEditorData(editorData) {
+    this.setState(
+      { editorData },
+      () => {
+        if (this.validate()) {
+          this.setState({ valid: true });
+        } else {
+          this.setState({ valid: false });
+        }
+      },
+    );
   }
 
   validate() {
@@ -128,6 +162,7 @@ class mngCampaigns extends React.Component {
         && numLength(this.state.campaignInfo.length, 2, 2))
       && (isNumber(this.state.campaignInfo.fundingNeeded)
         && numLength(this.state.campaignInfo.fundingNeeded, 3, 6))
+      && this.state.editorData.document.nodes[0].nodes[0].ranges[0].text !== ''
     ) {
       return true;
     }
@@ -209,8 +244,23 @@ class mngCampaigns extends React.Component {
                           content={this.state.campaignContent}
                           campaignInfo={this.state.campaignInfo}
                           nonprofitInfo={this.state.nonprofitInfo}
-                          campaignId={this.state.campaignId} />
+                          campaignId={this.state.campaignId}
+                          onChangeEditorData={this.onChangeEditorData} />
                       </div>
+                    </div>
+                    <div className="row align-center">
+                      <button
+                        className={`primary small-11 medium-10 large-8 columns${this.state.valid ? '' : ' disabled'}`}
+                        disabled={!this.state.valid}
+                        type="submit"
+                        onClick={this.onSubmit}>
+                        {this.state.campaignContent.length > 0
+                          ? 'Save Changes'
+                          : 'Create Campaign'}
+                      </button>
+                      <span className='error small-12'>
+                        Please make sure you've entered all your information.
+                      </span>
                     </div>
                   </form>
                 </section>

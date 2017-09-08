@@ -37,6 +37,13 @@ class editProfile extends React.Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.componentWillMount = this.componentWillMount.bind(this);
+  }
+
+  componentWillMount() {
+    document.title = this.props.userInfo.userType === 'non-profit'
+      ? `Edit ${this.props.userInfo.nonProfitName}'s Profile - Design Bright`
+      : `Edit ${this.props.userInfo.firstName} ${this.props.userInfo.lastName}'s Profile - Design Bright`;
   }
 
   onChange(e) {

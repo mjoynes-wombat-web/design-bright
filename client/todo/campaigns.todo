@@ -1,0 +1,5 @@
+Campaign Fetch:
+  ☐ Require auth to fetch campaign that hasn't started. @high
+
+Campaigns:
+  ☐ Handle various status code error messgaes. @high

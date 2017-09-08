@@ -122,25 +122,29 @@ export const campaigns = sequelize.define(
 );
 
 export const campaignContent = sequelize.define(
-  'campaign_content',
+  'campaignContent',
   {
-    content_id: {
+    contentId: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
+      field: 'content_id',
     },
-    campaign_id: {
+    campaignId: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
+      field: 'campaign_id',
     },
-    content_status: {
+    contentStatus: {
       type: Sequelize.STRING(75),
       allowNull: false,
+      field: 'content_status',
     },
-    created_date: {
+    createdDate: {
       type: Sequelize.DATE,
       allowNull: false,
+      field: 'created_date',
     },
     createdAt: {
       type: Sequelize.DATE,
@@ -157,25 +161,29 @@ export const campaignContent = sequelize.define(
 );
 
 export const campaignText = sequelize.define(
-  'campaign_text',
+  'campaignText',
   {
-    text_id: {
+    textId: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
+      field: 'text_id',
     },
-    content_id: {
+    contentId: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
+      field: 'content_id',
     },
-    content_position: {
+    contentPosition: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
+      field: 'content_position',
     },
-    text_type: {
+    textType: {
       type: Sequelize.STRING(45),
       allowNull: false,
+      field: 'text_type',
     },
     text: {
       type: Sequelize.TEXT,
@@ -195,26 +203,82 @@ export const campaignText = sequelize.define(
   },
 );
 
-export const campaignImages = sequelize.define(
-  'campaign_images',
-  {
-    img_id: {
+export const campaignText2 = sequelize.define(
+  'campaignText2', {
+    textId: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
+      field: 'text_id',
     },
-    content_id: {
+    contentId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      field: 'content_id',
+      references: {
+        model: 'campaign_content',
+        key: 'content_id',
+      },
+    },
+    position: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
     },
-    content_position: {
-      type: Sequelize.INTEGER(11),
-      allowNull: false,
-    },
-    image_type: {
+    kind: {
       type: Sequelize.STRING(45),
       allowNull: false,
+    },
+    isVoid: {
+      type: Sequelize.INTEGER(4),
+      allowNull: false,
+      field: 'is_void',
+    },
+    type: {
+      type: Sequelize.STRING(45),
+      allowNull: false,
+    },
+    nodes: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
+    createdAt: {
+      type: Sequelize.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: Sequelize.DATE,
+      allowNull: false,
+    },
+  }, {
+    tableName: 'campaign_text2',
+  },
+);
+
+export const campaignImages = sequelize.define(
+  'campaignImages',
+  {
+    imgId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      field: 'imgId',
+    },
+    contentId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      field: 'content_id',
+    },
+    contentPosition: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      field: 'content_position',
+    },
+    imageType: {
+      type: Sequelize.STRING(45),
+      allowNull: false,
+      field: 'image_type',
     },
     src: {
       type: Sequelize.STRING(99),
@@ -234,6 +298,67 @@ export const campaignImages = sequelize.define(
     },
   }, {
     tableName: 'campaign_images',
+  },
+);
+
+export const campaignImages2 = sequelize.define(
+  'campaignImages2', {
+    imgId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      field: 'img_id',
+    },
+    contentId: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      field: 'content_id',
+      references: {
+        model: 'campaign_content',
+        key: 'content_id',
+      },
+    },
+    position: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+    },
+    kind: {
+      type: Sequelize.STRING(45),
+      allowNull: false,
+    },
+    isVoid: {
+      type: Sequelize.INTEGER(4),
+      allowNull: false,
+      field: 'is_void',
+    },
+    type: {
+      type: Sequelize.STRING(45),
+      allowNull: false,
+    },
+    alt: {
+      type: Sequelize.STRING(45),
+      allowNull: false,
+    },
+    src: {
+      type: Sequelize.STRING(99),
+      allowNull: false,
+    },
+    imageType: {
+      type: Sequelize.STRING(45),
+      allowNull: false,
+      field: 'image_type',
+    },
+    createdAt: {
+      type: Sequelize.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: Sequelize.DATE,
+      allowNull: false,
+    },
+  }, {
+    tableName: 'campaign_images2',
   },
 );
 
@@ -294,5 +419,7 @@ nonProfits.hasMany(campaigns, { foreignKey: 'nonprofit_id' });
 campaigns.hasMany(campaignContent, { foreignKey: 'campaign_id' });
 campaignContent.hasMany(campaignImages, { foreignKey: 'content_id' });
 campaignContent.hasMany(campaignText, { foreignKey: 'content_id' });
+campaignContent.hasMany(campaignImages2, { foreignKey: 'content_id' });
+campaignContent.hasMany(campaignText2, { foreignKey: 'content_id' });
 
 sequelize.sync();

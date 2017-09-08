@@ -37,24 +37,28 @@ const Routes = () => (
         component={gaTracker(Login)}/>
       <Route
         exact
-        path='/profile'
+        path='/user/profile'
         component={gaTracker(Profile)}/>
       <Route
         exact
-        path='/profile/edit'
+        path='/user/profile/edit'
         component={gaTracker(editProfile)}/>
       <Route
         exact
-        path='/campaigns/edit/:id'
+        path='/user/manage-campaigns'
+        component={gaTracker(mngCampaigns)}/>
+      <Route
+        exact
+        path='/campaign/create'
         component={gaTracker(editCampaigns)}/>
       <Route
         exact
-        path='/campaigns/:id'
-        component={gaTracker(Campaign)}/>
+        path='/campaign/edit/:id'
+        component={gaTracker(editCampaigns)}/>
       <Route
         exact
-        path='/manage-campaigns'
-        component={gaTracker(mngCampaigns)}/>
+        path='/campaign/:id'
+        component={gaTracker(Campaign)}/>
     </Switch>
   </div>
 );

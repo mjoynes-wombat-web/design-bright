@@ -50,7 +50,49 @@ router.get('/:accessToken', (req, res) => {
       error => jsonResponse(
         error.statusCode,
         error.original,
-        'This access token is not authorized.',
+        'There was an error getting the user info.',
+        res),
+    );
+  } else {
+    jsonResponse(
+      401,
+      { accessToken },
+      'The access token is not a valid access token.',
+      res,
+    );
+  }
+});
+
+router.patch('/campaigns/launch/:campaignId', (req, res) => {
+  const id = req.params.campaignId;
+  const accessToken = req.body.accessToken;
+  if (requireAuth(accessToken)) {
+    getUserInfo(
+      accessToken,
+      userInfo => launchCampaign(
+        id,
+        userInfo.nonProfitID,
+        launchResults => (launchResults[0] === 0
+          ? jsonResponse(
+            304,
+            launchResults,
+            'Could not start the campaign. Either it doesn\'t exists or is already started.',
+            res)
+          : jsonResponse(
+            200,
+            launchResults,
+            'You have successfully started your campaign.',
+            res)),
+        launchErr => jsonResponse(
+          500,
+          launchErr,
+          'There was an server error launching the campiagn.',
+          res),
+      ),
+      getUserErr => jsonResponse(
+        404,
+        getUserErr,
+        'There was an error getting the user info.',
         res),
     );
   } else {
@@ -63,70 +105,46 @@ router.get('/:accessToken', (req, res) => {
   }
 });
 
-router.patch('/campaigns/launch/:campaignId', (req, res) => {
-  const id = req.params.campaignId;
-  const accessToken = req.body.accessToken;
-  getUserInfo(
-    accessToken,
-    userInfo => launchCampaign(
-      id,
-      userInfo.nonProfitID,
-      launchResults => (launchResults[0] === 0
-        ? jsonResponse(
-          304,
-          launchResults,
-          'Could not start the campaign. Either it doesn\'t exists or is already started.',
-          res)
-        : jsonResponse(
-          200,
-          launchResults,
-          'You have successfully started your campaign.',
-          res)),
-      launchErr => jsonResponse(
-        500,
-        launchErr,
-        'There was an server error launching the campiagn.',
-        res),
-    ),
-    getUserErr => jsonResponse(
-      404,
-      getUserErr,
-      'There was an error getting the user info.',
-      res),
-  );
-});
-
 router.patch('/campaigns/stop/:campaignId', (req, res) => {
   const id = req.params.campaignId;
   const accessToken = req.body.accessToken;
-  getUserInfo(
-    accessToken,
-    userInfo => stopCampaign(
-      id,
-      userInfo.nonProfitID,
-      stopResults => (stopResults[0] === 0
-        ? jsonResponse(
-          304,
-          stopResults,
-          'Could not stop the campaign. Either it doesn\'t exists, hasn\'t been started or is already stopped.',
-          res)
-        : jsonResponse(
-          200,
-          stopResults,
-          'You have successfully stopped your campaign.',
-          res)),
-      stopErr => jsonResponse(
-        500,
-        stopErr,
-        'There was an server error stopping the campaign.',
+  if (requireAuth(accessToken)) {
+    getUserInfo(
+      accessToken,
+      userInfo => stopCampaign(
+        id,
+        userInfo.nonProfitID,
+        stopResults => (stopResults[0] === 0
+          ? jsonResponse(
+            304,
+            stopResults,
+            'Could not stop the campaign. Either it doesn\'t exists, hasn\'t been started or is already stopped.',
+            res)
+          : jsonResponse(
+            200,
+            stopResults,
+            'You have successfully stopped your campaign.',
+            res)),
+        stopErr => jsonResponse(
+          500,
+          stopErr,
+          'There was an server error stopping the campaign.',
+          res),
+      ),
+      getUserErr => jsonResponse(
+        404,
+        getUserErr,
+        'There was an error getting the user info.',
         res),
-    ),
-    getUserErr => jsonResponse(
-      404,
-      getUserErr,
-      'There was an error getting the user info.',
-      res),
-  );
+    );
+  } else {
+    jsonResponse(
+      401,
+      { accessToken },
+      'The access token is not a valid access token.',
+      res,
+    );
+  }
 });
 
 router.get('/campaigns/:accessToken', (req, res) => {
@@ -147,15 +165,12 @@ router.get('/campaigns/:accessToken', (req, res) => {
                 `The campaigns were successfully retrieved for the nonprofit with the id ${nonprofitId}.`,
                 res,
               ),
-              error =>{
-                console.log(error);
-                jsonResponse(
+              error => jsonResponse(
                 404,
                 error,
                 `Could not find campaigns for the nonprofit with the id ${nonprofitId}.`,
                 res,
-              )
-            },
+              ),
             );
           },
           error => jsonResponse(
@@ -169,7 +184,7 @@ router.get('/campaigns/:accessToken', (req, res) => {
       error => jsonResponse(
         error.statusCode,
         error.original,
-        'This access token is not authorized.',
+        'There was an error getting the user info.',
         res,
       ),
     );
@@ -177,7 +192,7 @@ router.get('/campaigns/:accessToken', (req, res) => {
     jsonResponse(
       401,
       { accessToken },
-      'This access token is not authorized.',
+      'The access token is not a valid access token.',
       res,
     );
   }

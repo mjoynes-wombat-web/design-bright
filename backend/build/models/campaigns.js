@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.stopCampaign = exports.launchCampaign = exports.getNonprofitsCampaigns = exports.getCampaignContent = undefined;
+exports.createCampaign = exports.updateCampaign = exports.stopCampaign = exports.launchCampaign = exports.getNonprofitsCampaigns = exports.getCampaignContent = undefined;
 
 var _db = require('./db');
 
@@ -14,18 +14,18 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 const gatherCampaignImages = rawCampaignImages => {
   const imageData = [];
   rawCampaignImages.forEach(({
-    img_id,
-    content_id,
-    content_position,
-    image_type,
+    imgId,
+    contentId,
+    contentPosition,
+    imageType,
     src,
     alt
   }) => {
     const imgElement = {
-      imgId: img_id,
-      contentId: content_id,
-      contentPosition: content_position,
-      imageType: image_type,
+      imgId,
+      contentId,
+      contentPosition,
+      imageType,
       src,
       alt
     };
@@ -37,17 +37,17 @@ const gatherCampaignImages = rawCampaignImages => {
 const gatherCampaignText = rawTextData => {
   const textData = [];
   rawTextData.forEach(({
-    text_id,
-    content_id,
-    content_position,
-    text_type,
+    textId,
+    contentId,
+    contentPosition,
+    textType,
     text
   }) => {
     const textElement = {
-      textId: text_id,
-      contentId: content_id,
-      contentPosition: content_position,
-      textType: text_type,
+      textId,
+      contentId,
+      contentPosition,
+      textType,
       text
     };
     textData.push(textElement);
@@ -61,45 +61,79 @@ const getCampaignContent = exports.getCampaignContent = (campaignId, success, er
     include: [{
       model: db.campaignContent,
       where: {
-        campaign_id: campaignId,
-        content_status: 'current'
+        campaignId,
+        contentStatus: 'current'
       },
       include: [{
-        model: db.campaignText
+        model: db.campaignText2
       }, {
-        model: db.campaignImages
+        model: db.campaignImages2
       }]
     }]
   }).then(results => {
-    const rawCampaignData = results;
-    const rawContentData = results.campaign_contents[0];
-
+    const { name, length, fundingNeeded, donationsMade, startDate, endDate } = results;
+    const { contentId, contentStatus, createdDate, updatedAt, campaignText2s, campaignImages2s } = results.campaignContents[0];
     const campaignInfo = {
-      campaignId: rawCampaignData.campaignId,
-      name: rawCampaignData.name,
-      length: rawCampaignData.length,
-      fundingNeeded: rawCampaignData.fundingNeeded,
-      donationsMade: rawCampaignData.donationsMade,
-      startDate: rawCampaignData.startDate,
-      endDate: rawCampaignData.endDate
+      campaignId,
+      name,
+      length,
+      fundingNeeded,
+      donationsMade,
+      startDate,
+      endDate
     };
 
     const contentInfo = {
-      contentId: rawContentData.content_id,
-      campaignId: rawContentData.campaign_id,
-      contentStatus: rawContentData.content_status,
-      createdDate: rawContentData.created_date,
-      updatedDate: rawContentData.updatedAt
+      contentId,
+      campaignId,
+      contentStatus,
+      createdDate,
+      updatedAt
     };
 
-    const campaignText = gatherCampaignText(rawContentData.campaign_texts);
-    const campaignImages = gatherCampaignImages(rawContentData.campaign_images);
+    const campaignText = campaignText2s.reduce((parsedCampaignText, block) => {
+      const parsedBlock = {
+        textId: block.textId,
+        contentId: block.contentId,
+        position: block.position,
+        kind: block.kind,
+        isVoid: block.isVoid,
+        type: block.type,
+        nodes: JSON.parse(block.nodes),
+        createdAt: block.createdAt,
+        updatedAt: block.updatedAt
+      };
+      parsedCampaignText.push(parsedBlock);
+      return parsedCampaignText;
+    }, []);
 
+    const campaignImages = campaignImages2s.reduce((cleanedImageData, block) => {
+      const cleanedBlock = {
+        imgId: block.imgId,
+        contentId: block.contentId,
+        position: block.position,
+        kind: block.kind,
+        isVoid: block.isVoid,
+        type: block.type,
+        data: {
+          alt: block.alt,
+          src: block.src,
+          imageType: block.imageType
+        },
+        createdAt: block.createdAt,
+        updatedAt: block.updatedAt
+      };
+
+      cleanedImageData.push(cleanedBlock);
+      return cleanedImageData;
+    }, []);
+    const unsortedCampaignContent = [...campaignImages, ...campaignText];
+
+    const campaignContent = unsortedCampaignContent.sort((a, b) => a.position - b.position);
     success({
       campaignInfo,
       contentInfo,
-      campaignText,
-      campaignImages
+      campaignContent
     });
   }).catch(findErr => error(findErr));
 };
@@ -121,12 +155,71 @@ const launchCampaign = exports.launchCampaign = (campaignId, nonprofitId, succes
 };
 
 const stopCampaign = exports.stopCampaign = (campaignId, nonprofitId, success, error) => {
-  db.campaigns.update({ endDate: new Date() }, { where: {
+  db.campaigns.update({ endDate: new Date() }, {
+    where: {
       campaignId,
       nonprofitId,
       startDate: {
         $ne: null
       },
-      endDate: null } }).then(updateResults => success(updateResults)).catch(updateErr => error(updateErr));
+      endDate: null
+    }
+  }).then(updateResults => success(updateResults)).catch(updateErr => error(updateErr));
+};
+
+const updateCampaign = exports.updateCampaign = () => {
+  // db.campaignContent.update(
+  //   { status: 'previous' },
+  //   { where: campaignId },
+  // )
+};
+
+const createCampaign = exports.createCampaign = (nonprofitId, { name, fundingNeeded, length, content }, success, error) => {
+  db.campaigns.create({
+    nonprofitId,
+    name,
+    length,
+    fundingNeeded
+  }).then(newCampaign => {
+    const { campaignId } = newCampaign;
+    db.campaignContent.create({
+      campaignId,
+      contentStatus: 'current',
+      createdDate: new Date()
+    }).then(newContent => {
+      const contentId = newContent.contentId;
+      const rawContent = content.document.nodes;
+
+      const blocks = rawContent.reduce((formattedBlocks, block, index) => {
+        const newBlocks = formattedBlocks;
+        const formattedBlock = {
+          contentId,
+          position: index + 1,
+          kind: block.kind,
+          isVoid: block.isVoid,
+          type: block.type
+        };
+
+        if (['paragraph', 'header'].includes(block.type)) {
+          formattedBlock.nodes = JSON.stringify(block.nodes);
+          newBlocks.text.push(formattedBlock);
+          return newBlocks;
+        } else if (block.type === 'image') {
+          formattedBlock.alt = block.data.alt;
+          formattedBlock.src = block.data.src;
+          formattedBlock.imageType = block.data.imageType;
+          newBlocks.images.push(formattedBlock);
+          return newBlocks;
+        }
+        return newBlocks;
+      }, {
+        text: [],
+        images: []
+      });
+      db.campaignText2.bulkCreate(blocks.text).then(() => {
+        db.campaignImages2.bulkCreate(blocks.images).then(() => success({ message: `The campaign with the id ${campaignId} was successfully created.`, campaignId })).catch(createImagesErr => error({ message: 'There was an error creating the image content.', error: createImagesErr }));
+      }).catch(createTextErr => error({ message: 'There was an error creating the text content.', error: createTextErr }));
+    }).catch(createContentErr => error({ message: 'There was an error creating the content information.', error: createContentErr }));
+  }).catch(createCampaignErr => error({ message: 'There was an error creating the campaign information.', error: createCampaignErr }));
 };
 //# sourceMappingURL=campaigns.js.map

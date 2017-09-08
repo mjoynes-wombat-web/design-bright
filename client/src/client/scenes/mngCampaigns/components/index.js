@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import './scss/style.scss';
@@ -23,8 +23,11 @@ class mngCampaigns extends React.Component {
   componentWillMount() {
     axios.get(`https://${window.location.hostname}:3000/api/nonprofits/campaigns/${this.props.userAuth.accessToken}`)
       .then((results) => {
-        this.setState({ campaigns: results.data.data.campaigns });
-        this.setState({ nonprofitInfo: results.data.data.nonprofit });
+        const { nonprofit, campaigns } = results.data.data;
+
+        document.title = `Manage ${nonprofit.name}'s Campaign - Design Bright`;
+        this.setState({ campaigns });
+        this.setState({ nonprofitInfo: nonprofit });
         this.setState({ fetched: true });
       })
       .catch(error => console.log(error));
