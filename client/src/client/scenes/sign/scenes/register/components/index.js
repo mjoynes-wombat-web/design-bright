@@ -42,11 +42,6 @@ class Register extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.validate = this.validate.bind(this);
-    this.componentWillMount = this.componentWillMount(this);
-  }
-
-  componentWillMount() {
-    document.title = 'Register User - Design Bright';
   }
 
   onChange(e) {
@@ -161,10 +156,11 @@ class Register extends React.Component {
   }
 
   render() {
+    document.title = 'Register User - Design Bright';
     if (this.props.onRequireAuth()) {
       return (
         <Redirect to={{
-          pathname: '/profile',
+          pathname: '/user/profile',
           search: '?origin=register',
         }} />
       );

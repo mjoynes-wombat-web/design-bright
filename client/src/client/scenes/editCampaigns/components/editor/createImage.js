@@ -6,7 +6,7 @@ const CreateImage = (props) => {
         <div className="columns small-12 medium-3 large-3">
           <label htmlFor="newSrc">
             Image Src:
-        </label>
+          </label>
         </div>
         <div className="columns small-12 medium-9 large-9">
           <input
@@ -20,7 +20,7 @@ const CreateImage = (props) => {
         <div className="columns small-12 medium-3 large-3">
           <label htmlFor="newAlt">
             Description:
-        </label>
+          </label>
         </div>
         <div className="columns small-12 medium-9 large-9">
           <input
@@ -46,7 +46,7 @@ const CreateImage = (props) => {
               value="main" />
             <span></span>
             Main Image
-        </label>
+          </label>
           <label htmlFor="imageType2">
             <input
               type="radio"
@@ -57,7 +57,7 @@ const CreateImage = (props) => {
               value="left" />
             <span></span>
             Left Image
-        </label>
+          </label>
           <label htmlFor="imageType3">
             <input
               type="radio"
@@ -68,7 +68,7 @@ const CreateImage = (props) => {
               value="right" />
             <span></span>
             Right Image
-        </label>
+          </label>
         </div>
       </div>
       <div className="row align-middle">
@@ -80,14 +80,14 @@ const CreateImage = (props) => {
               disabled={!props.validate(props.newSrc !== '' ? props.newSrc.name : '')}
               type='button'>
               Add Image
-          </button>
+            </button>
             <div className="small-12 columns">
               <button
                 className="cancel"
                 onClick={props.cancelCreateImage}
                 type='button'>
                 Cancel
-            </button>
+              </button>
             </div>
           </div>
         </div>

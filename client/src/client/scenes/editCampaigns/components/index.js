@@ -5,7 +5,6 @@ import axios from 'axios';
 import CampaignEditor from './editor';
 
 import './scss/style.scss';
-import './scss/draft.css';
 
 const isNumber = (num) => {
   const numbers = String(num).match('[0-9]+');
@@ -181,7 +180,11 @@ class mngCampaigns extends React.Component {
                     <div className="row">
                       <h1 className="small-12 columns">
                         <span className="underlined">
-                          Edit {this.state.campaignInfo.name} Campaign
+                          {this.state.campaignContent.length > 0
+                            ? `Edit ${this.state.campaignInfo.name}'s Campaign`
+                            : `Create ${this.state.campaignInfo.name
+                              ? `${this.state.campaignInfo.name}'s`
+                              : ''} Campaign`}
                         </span>
                       </h1>
                     </div>
@@ -280,7 +283,7 @@ class mngCampaigns extends React.Component {
       }
       return (
         <Redirect to={{
-          pathname: '/profile',
+          pathname: '/user/profile',
           search: '?origin=nonprofit-page',
         }} />
       );

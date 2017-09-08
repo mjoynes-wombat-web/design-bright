@@ -5,8 +5,9 @@ import { clearError, clearMessage } from '../actions';
 const routeRefresh = () => {
   window.scrollTo(0, 0);
   document.activeElement.blur();
-  store.dispatch(clearError());
-  store.dispatch(clearMessage());
+  console.log('Route refresh ran.');
+  // store.dispatch(clearError());
+  // store.dispatch(clearMessage());
 };
 
 export default routeRefresh;

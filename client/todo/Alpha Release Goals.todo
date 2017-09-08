@@ -1,0 +1,16 @@
+Edit Campaigns:
+  ☐ Create edit campaigns functionality. @critical 
+  ☐ Create server feedback message handling. @high
+
+Campagins:
+  ☐ Create preview page. @critical 
+  ☐ Create functionality that allows links. @critical 
+
+Profile:
+  ☐ Create profile photo upload. @high
+
+Manage Campaigns: 
+  ☐ Create stop campaign warning. @high
+
+Messages:
+  ☐ Refactor messages. @high

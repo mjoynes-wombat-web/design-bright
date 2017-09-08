@@ -48,7 +48,7 @@ class Profile extends React.Component {
             <section className="row align-center">
               <div className="profile-img-wrapper small-3 columns">
                 <img src={this.props.userInfo.picture} className="profile-img" />
-                <Link to='/profile/upload-photo'>
+                <Link to='/user/profile/upload-photo'>
                   <span></span> Upload Profile Photo
                 </Link>
               </div>
@@ -78,7 +78,10 @@ class Profile extends React.Component {
                   ? <div className='non-profit-info'>
                     <p className="title">Address:</p>
                     <p>{this.props.userInfo.address}<br />
-                      {this.props.userInfo.city}, {this.props.userInfo.state} {this.props.userInfo.zip}</p>
+                      {this.props.userInfo.city},
+                      {this.props.userInfo.state}
+                      {this.props.userInfo.zip}
+                    </p>
                     <p className="title">Employer Identification Number (EIN):</p>
                     <p>{this.props.userInfo.ein}</p>
                   </div>

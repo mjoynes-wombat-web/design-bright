@@ -83,17 +83,14 @@ router.patch('/edit', (req, res) => {
             editNonProfit(
               nonprofitId,
               updatedNonProfitInfo,
-              (updatedNonProfit) => {
-                console.log(updatedUser);
-                return jsonResponse(
-                  200,
-                  {
-                    updatedUser,
-                    updatedNonProfit,
-                  },
-                  `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
-                  res)
-              },
+              updatedNonProfit => jsonResponse(
+                200,
+                {
+                  updatedUser,
+                  updatedNonProfit,
+                },
+                `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
+                res),
               editNonProfitError => jsonResponse(
                 500,
                 { editNonProfitError },
@@ -101,13 +98,12 @@ router.patch('/edit', (req, res) => {
                 res,
               ),
             );
-          } else {
-            return jsonResponse(
-              200,
-              { updatedUser },
-              `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
-              res);
           }
+          return jsonResponse(
+            200,
+            { updatedUser },
+            `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
+            res);
         },
         editUserError => jsonResponse(
           editUserError.response.status,

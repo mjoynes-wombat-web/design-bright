@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import C from '../constants';
 
-export const newError = (errType, errMsg) => (dispatch, getState) => {
+export const newError = (errType, errMsg) => (dispatch) => {
   console.log('newError ran.');
   dispatch({
     type: C.ERROR,
@@ -15,7 +15,7 @@ export const newError = (errType, errMsg) => (dispatch, getState) => {
   });
 };
 
-export const clearError = () => (dispatch, getState) => {
+export const clearError = () => (dispatch) => {
   console.log('clearError ran.');
   dispatch({
     type: C.ERROR,
@@ -26,7 +26,7 @@ export const clearError = () => (dispatch, getState) => {
   });
 };
 
-export const newMessage = (msgType, msg) => (dispatch, getState) => {
+export const newMessage = (msgType, msg) => (dispatch) => {
   console.log('newMessage ran.');
   dispatch({
     type: C.MESSAGE,
@@ -37,7 +37,7 @@ export const newMessage = (msgType, msg) => (dispatch, getState) => {
   });
 };
 
-export const clearMessage = () => (dispatch, getState) => {
+export const clearMessage = () => (dispatch) => {
   console.log('clearMessage ran.');
   dispatch({
     type: C.MESSAGE,
@@ -48,7 +48,7 @@ export const clearMessage = () => (dispatch, getState) => {
   });
 };
 
-export const clearUserInfo = () => (dispatch, getState) => {
+export const clearUserInfo = () => (dispatch) => {
   console.log('clearUserInfo ran.');
   dispatch({
     type: C.USER,
@@ -57,7 +57,7 @@ export const clearUserInfo = () => (dispatch, getState) => {
 };
 
 
-export const logout = () => (dispatch, getState) => {
+export const logout = () => (dispatch) => {
   console.log('logout ran.');
   dispatch({
     type: C.USER_AUTH,
@@ -93,7 +93,7 @@ export const requireAuth = () => (dispatch, getState) => {
   return false;
 };
 
-export const login = (loginInfo, callback) => (dispatch, getState) => {
+export const login = loginInfo => (dispatch) => {
   console.log('login ran.');
   const webAuth = new auth0.WebAuth({
     domain: 'designbright.auth0.com',
@@ -113,12 +113,10 @@ export const login = (loginInfo, callback) => (dispatch, getState) => {
     const authorization = authResults;
     authorization.date = new Date();
 
-    dispatch({
+    return dispatch({
       type: C.USER_AUTH,
       payload: authorization,
     });
-
-    callback();
   });
 };
 
@@ -172,7 +170,13 @@ export const getUserInfo = callback =>
                 });
                 callback();
               })
-              .catch(error => (error.response.data.statusCode === 401 ? dispatch(logout()) : dispatch(newError(error.response.data.message))));
+              .catch(
+                error => (
+                  error.response.data.statusCode === 401
+                    ? dispatch(logout())
+                    : dispatch(newError(error.response.data.message))
+                ),
+              );
           } else {
             dispatch({
               type: C.USER,

@@ -29,6 +29,28 @@ $xxlarge-break: 120em;
       }
     }
 
+    .preview {
+      margin-bottom: 0.5rem;
+      a {
+        border: none;
+        display: inline-block;
+        span {
+          display: inline-block;
+          line-height: initial;
+          vertical-align: middle;
+          &.icon{
+            font-size: 1.125rem;
+            padding: 0.2rem 0.275rem 0 0.1rem;
+            font-family: 'font-awesome-light';
+          }
+
+          &.text {
+            border-bottom: 0.0625rem solid #8cc0ff;
+          }
+        }
+      }
+    }
+
     hr {
       margin:0;
       margin-top: 1.375rem;

@@ -11,50 +11,6 @@ var db = _interopRequireWildcard(_db);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-const gatherCampaignImages = rawCampaignImages => {
-  const imageData = [];
-  rawCampaignImages.forEach(({
-    imgId,
-    contentId,
-    contentPosition,
-    imageType,
-    src,
-    alt
-  }) => {
-    const imgElement = {
-      imgId,
-      contentId,
-      contentPosition,
-      imageType,
-      src,
-      alt
-    };
-    imageData.push(imgElement);
-  });
-  return imageData;
-};
-
-const gatherCampaignText = rawTextData => {
-  const textData = [];
-  rawTextData.forEach(({
-    textId,
-    contentId,
-    contentPosition,
-    textType,
-    text
-  }) => {
-    const textElement = {
-      textId,
-      contentId,
-      contentPosition,
-      textType,
-      text
-    };
-    textData.push(textElement);
-  });
-  return textData;
-};
-
 const getCampaignContent = exports.getCampaignContent = (campaignId, success, error) => {
   db.campaigns.find({
     where: { campaignId },
@@ -65,14 +21,20 @@ const getCampaignContent = exports.getCampaignContent = (campaignId, success, er
         contentStatus: 'current'
       },
       include: [{
-        model: db.campaignText2
+        model: db.campaignText
       }, {
-        model: db.campaignImages2
+        model: db.campaignImages
       }]
     }]
   }).then(results => {
     const { name, length, fundingNeeded, donationsMade, startDate, endDate } = results;
-    const { contentId, contentStatus, createdDate, updatedAt, campaignText2s, campaignImages2s } = results.campaignContents[0];
+    const {
+      contentId,
+      contentStatus,
+      createdDate,
+      updatedAt,
+      campaignTexts,
+      campaignImages } = results.campaignContents[0];
     const campaignInfo = {
       campaignId,
       name,
@@ -91,7 +53,7 @@ const getCampaignContent = exports.getCampaignContent = (campaignId, success, er
       updatedAt
     };
 
-    const campaignText = campaignText2s.reduce((parsedCampaignText, block) => {
+    const campaignTextBlocks = campaignTexts.reduce((parsedCampaignText, block) => {
       const parsedBlock = {
         textId: block.textId,
         contentId: block.contentId,
@@ -107,7 +69,7 @@ const getCampaignContent = exports.getCampaignContent = (campaignId, success, er
       return parsedCampaignText;
     }, []);
 
-    const campaignImages = campaignImages2s.reduce((cleanedImageData, block) => {
+    const campaignImagesBlocks = campaignImages.reduce((cleanedImageData, block) => {
       const cleanedBlock = {
         imgId: block.imgId,
         contentId: block.contentId,
@@ -127,8 +89,7 @@ const getCampaignContent = exports.getCampaignContent = (campaignId, success, er
       cleanedImageData.push(cleanedBlock);
       return cleanedImageData;
     }, []);
-    const unsortedCampaignContent = [...campaignImages, ...campaignText];
-
+    const unsortedCampaignContent = [...campaignImagesBlocks, ...campaignTextBlocks];
     const campaignContent = unsortedCampaignContent.sort((a, b) => a.position - b.position);
     success({
       campaignInfo,
@@ -216,8 +177,8 @@ const createCampaign = exports.createCampaign = (nonprofitId, { name, fundingNee
         text: [],
         images: []
       });
-      db.campaignText2.bulkCreate(blocks.text).then(() => {
-        db.campaignImages2.bulkCreate(blocks.images).then(() => success({ message: `The campaign with the id ${campaignId} was successfully created.`, campaignId })).catch(createImagesErr => error({ message: 'There was an error creating the image content.', error: createImagesErr }));
+      db.campaignText.bulkCreate(blocks.text).then(() => {
+        db.campaignImages.bulkCreate(blocks.images).then(() => success({ message: `The campaign with the id ${campaignId} was successfully created.`, campaignId })).catch(createImagesErr => error({ message: 'There was an error creating the image content.', error: createImagesErr }));
       }).catch(createTextErr => error({ message: 'There was an error creating the text content.', error: createTextErr }));
     }).catch(createContentErr => error({ message: 'There was an error creating the content information.', error: createContentErr }));
   }).catch(createCampaignErr => error({ message: 'There was an error creating the campaign information.', error: createCampaignErr }));

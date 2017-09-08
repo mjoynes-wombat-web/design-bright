@@ -12,7 +12,6 @@ import Campaign from '../scenes/campaign';
 import mngCampaigns from '../scenes/mngCampaigns';
 import editCampaigns from '../scenes/editCampaigns';
 import gaTracker from '../helpers/gaTracker';
-import routeRefresh from '../helpers/routeRefresh';
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -22,7 +21,7 @@ import routeRefresh from '../helpers/routeRefresh';
 const Routes = () => (
   <div className={('ontouchstart' in document.documentElement) ? '' : 'no-touch'}>
     <Message />
-    <Switch onComponentWillMount={routeRefresh}>
+    <Switch>
       <Route
         exact path='/'
         component={gaTracker(Home)}/>

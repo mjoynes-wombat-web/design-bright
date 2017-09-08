@@ -75,16 +75,12 @@ router.patch('/edit', (req, res) => {
         const nonprofitId = updatedUser.app_metadata.nonProfitID;
         const updatedNonProfitInfo = editData.nonProfitInfo;
 
-        (0, _nonprofits.editNonProfit)(nonprofitId, updatedNonProfitInfo, updatedNonProfit => {
-          console.log(updatedUser);
-          return (0, _response2.default)(200, {
-            updatedUser,
-            updatedNonProfit
-          }, `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`, res);
-        }, editNonProfitError => (0, _response2.default)(500, { editNonProfitError }, 'There was an error editing the nonprofit. Please contact support.', res));
-      } else {
-        return (0, _response2.default)(200, { updatedUser }, `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`, res);
+        (0, _nonprofits.editNonProfit)(nonprofitId, updatedNonProfitInfo, updatedNonProfit => (0, _response2.default)(200, {
+          updatedUser,
+          updatedNonProfit
+        }, `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`, res), editNonProfitError => (0, _response2.default)(500, { editNonProfitError }, 'There was an error editing the nonprofit. Please contact support.', res));
       }
+      return (0, _response2.default)(200, { updatedUser }, `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`, res);
     }, editUserError => (0, _response2.default)(editUserError.response.status, { userId: user.user_id }, editUserError.response.data.message, res));
   }, findUserError => (0, _response2.default)(findUserError.statusCode, findUserError.original, 'This access token is not authorized.', res));
   // res.status(200).json(req.body);

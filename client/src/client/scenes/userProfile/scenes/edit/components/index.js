@@ -1,7 +1,6 @@
 /* eslint-env browser */
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
-import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 import './scss/style.scss';
 import states from '../../../../../helpers/states';

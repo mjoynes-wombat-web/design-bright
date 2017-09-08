@@ -90,7 +90,7 @@ class Header extends React.Component {
         </div>
         <div className="orange-line"></div>
       </header>
-    )
+    );
   }
 }
 

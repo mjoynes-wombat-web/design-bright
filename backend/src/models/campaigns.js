@@ -1,53 +1,5 @@
 import * as db from './db';
 
-const gatherCampaignImages = (rawCampaignImages) => {
-  const imageData = [];
-  rawCampaignImages.forEach((
-    {
-      imgId,
-      contentId,
-      contentPosition,
-      imageType,
-      src,
-      alt,
-    },
-  ) => {
-    const imgElement = {
-      imgId,
-      contentId,
-      contentPosition,
-      imageType,
-      src,
-      alt,
-    };
-    imageData.push(imgElement);
-  });
-  return imageData;
-};
-
-const gatherCampaignText = (rawTextData) => {
-  const textData = [];
-  rawTextData.forEach((
-    {
-      textId,
-      contentId,
-      contentPosition,
-      textType,
-      text,
-    },
-  ) => {
-    const textElement = {
-      textId,
-      contentId,
-      contentPosition,
-      textType,
-      text,
-    };
-    textData.push(textElement);
-  });
-  return textData;
-};
-
 export const getCampaignContent = (campaignId, success, error) => {
   db.campaigns.find({
     where: { campaignId },
@@ -60,10 +12,10 @@ export const getCampaignContent = (campaignId, success, error) => {
         },
         include: [
           {
-            model: db.campaignText2,
+            model: db.campaignText,
           },
           {
-            model: db.campaignImages2,
+            model: db.campaignImages,
           },
         ],
       },
@@ -71,7 +23,13 @@ export const getCampaignContent = (campaignId, success, error) => {
   })
     .then((results) => {
       const { name, length, fundingNeeded, donationsMade, startDate, endDate } = results;
-      const { contentId, contentStatus, createdDate, updatedAt, campaignText2s, campaignImages2s } = results.campaignContents[0];
+      const {
+        contentId,
+        contentStatus,
+        createdDate,
+        updatedAt,
+        campaignTexts,
+        campaignImages } = results.campaignContents[0];
       const campaignInfo = {
         campaignId,
         name,
@@ -90,7 +48,7 @@ export const getCampaignContent = (campaignId, success, error) => {
         updatedAt,
       };
 
-      const campaignText = campaignText2s.reduce(
+      const campaignTextBlocks = campaignTexts.reduce(
         (parsedCampaignText, block) => {
           const parsedBlock = {
             textId: block.textId,
@@ -99,7 +57,7 @@ export const getCampaignContent = (campaignId, success, error) => {
             kind: block.kind,
             isVoid: block.isVoid,
             type: block.type,
-            nodes:  JSON.parse(block.nodes),
+            nodes: JSON.parse(block.nodes),
             createdAt: block.createdAt,
             updatedAt: block.updatedAt,
           };
@@ -109,7 +67,7 @@ export const getCampaignContent = (campaignId, success, error) => {
         [],
       );
 
-      const campaignImages = campaignImages2s.reduce(
+      const campaignImagesBlocks = campaignImages.reduce(
         (cleanedImageData, block) => {
           const cleanedBlock = {
             imgId: block.imgId,
@@ -133,10 +91,9 @@ export const getCampaignContent = (campaignId, success, error) => {
         [],
       );
       const unsortedCampaignContent = [
-        ...campaignImages,
-        ...campaignText,
+        ...campaignImagesBlocks,
+        ...campaignTextBlocks,
       ];
-      
       const campaignContent = unsortedCampaignContent.sort(
         (a, b) => a.position - b.position);
       success({
@@ -250,11 +207,11 @@ export const createCampaign = (
             images: [],
           },
           );
-          db.campaignText2.bulkCreate(
+          db.campaignText.bulkCreate(
             blocks.text,
           )
             .then(() => {
-              db.campaignImages2.bulkCreate(
+              db.campaignImages.bulkCreate(
                 blocks.images,
               )
                 .then(() => success({ message: `The campaign with the id ${campaignId} was successfully created.`, campaignId }))

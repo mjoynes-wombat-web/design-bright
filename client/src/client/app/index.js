@@ -6,12 +6,15 @@ import Routes from './routes';
 import Footer from './footer';
 import './scss/style.scss';
 
-const App = () => (
-  <div>
-    <Header />
-    <Routes />
-    <Footer />
-  </div>
-);
+const App = (props) => {
+  props.onComponentDidMount();
+  return (
+    <div>
+      <Header />
+      <Routes />
+      <Footer />
+    </div>
+  );
+};
 
 export default App;

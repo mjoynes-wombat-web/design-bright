@@ -103,7 +103,9 @@ class Campaign extends React.Component {
                     </p>
                   </div>
                   <div className="shrink columns">
-                    <p className="details">${parseInt(this.state.campaignInfo.fundingNeeded, 10).toLocaleString()} Needed</p>
+                    <p className="details">
+                      ${parseInt(this.state.campaignInfo.fundingNeeded, 10).toLocaleString()} Needed
+                    </p>
                   </div>
                 </div>
               </div>
@@ -113,7 +115,11 @@ class Campaign extends React.Component {
                     {this.state.campaignContent.map(
                       (content, i) => (
                         (i < ((this.state.campaignContent.length / 2) - 1))
-                          ? <CampaignBlocks campaignInfo={this.state.campaignInfo} buttonAction={this.makeDonation} content={content} key={i} />
+                          ? <CampaignBlocks
+                            campaignInfo={this.state.campaignInfo}
+                            buttonAction={this.makeDonation}
+                            content={content}
+                            key={i} />
                           : null
                       ),
                     )}
@@ -121,7 +127,11 @@ class Campaign extends React.Component {
                   <div className="small-12 medium-6 columns">
                     {this.state.campaignContent.map(
                       (content, i) => ((i > ((this.state.campaignContent.length / 2) - 2))
-                        ? <CampaignBlocks campaignInfo={this.state.campaignInfo} buttonAction={this.makeDonation} content={content} key={i} />
+                        ? <CampaignBlocks
+                          campaignInfo={this.state.campaignInfo}
+                          buttonAction={this.makeDonation}
+                          content={content}
+                          key={i} />
                         : null
                       ),
                     )}

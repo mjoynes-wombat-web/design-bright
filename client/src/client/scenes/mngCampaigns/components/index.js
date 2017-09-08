@@ -41,7 +41,7 @@ class mngCampaigns extends React.Component {
     )
       .then((results) => {
         if (results.status === 200) {
-          const campaigns  = this.state.campaigns;
+          const campaigns = this.state.campaigns;
           const campaignPosition = campaigns
             .map(campaign => campaign.campaignId)
             .indexOf(campaignId);
@@ -61,7 +61,7 @@ class mngCampaigns extends React.Component {
     )
       .then((results) => {
         if (results.status === 200) {
-          const campaigns  = this.state.campaigns;
+          const campaigns = this.state.campaigns;
           const campaignPosition = campaigns
             .map(campaign => campaign.campaignId)
             .indexOf(campaignId);
@@ -107,7 +107,7 @@ class mngCampaigns extends React.Component {
       }
       return (
         <Redirect to={{
-          pathname: '/profile',
+          pathname: '/user/profile',
           search: '?origin=nonprofit-page',
         }} />
       );
