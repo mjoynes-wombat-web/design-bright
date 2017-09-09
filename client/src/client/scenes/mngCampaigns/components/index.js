@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
 import './scss/style.scss';
@@ -81,11 +81,19 @@ class mngCampaigns extends React.Component {
             <main id="mngCampaigns" className={`small-12 columns${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
               <section className="row">
                 <div className="small-12 columns">
-                  <h1>
-                    <span className="underlined">
-                      {this.state.nonprofitInfo.name}'s Campaigns
-                    </span>
-                  </h1>
+                  <div className="row align-middle main-heading">
+                    <h1 className="expand columns">
+                      <span className="underlined">
+                        {this.state.nonprofitInfo.name}'s Campaigns
+                      </span>
+                    </h1>
+                    <div className="large-4 show-for-large columns button primary">
+                      <Link to="/campaign/create">
+                        <span className="icon"></span>
+                        <span className="text">Create Campaign</span>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
                 {this.state.campaigns.map(
                   (campaign, i) => <CampaignActions
@@ -97,6 +105,16 @@ class mngCampaigns extends React.Component {
                     startDate={campaign.startDate}
                     endDate={campaign.endDate} />,
                 )}
+                <div className="small-12 columns">
+                  <div className="row  align-center">
+                  <div className=" small-11 medium-10 large-8 hide-for-large columns button primary">
+                      <Link to="/campaign/create">
+                        <span className="icon"></span>
+                        <span className="text">Create Campaign</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               </section>
             </main >
           );

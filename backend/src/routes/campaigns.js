@@ -2,23 +2,11 @@
 import { Router } from 'express';
 import multer from 'multer';
 
-import cloudinary from 'cloudinary';
-import dotenv from 'dotenv';
-
 import { getUserInfo } from '../models/Auth0';
-import { getCampaignContent, createCampaign } from '../models/campaigns';
+import { getCampaignById, getCampaignContent, createCampaign, createContent, updateCampaignInfo } from '../models/campaigns';
 import jsonResponse from '../helpers/response';
-import uploadImage from '../models/Cloudinary';
+import { uploadCampaignImage } from '../models/Cloudinary';
 import requireAuth from '../helpers/requireAuth';
-
-
-const { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = dotenv.config().parsed;
-
-cloudinary.config({
-  cloud_name: CLOUDINARY_NAME,
-  api_key: CLOUDINARY_KEY,
-  api_secret: CLOUDINARY_SECRET,
-});
 
 const upload = multer();
 const router = Router();
@@ -120,8 +108,80 @@ router.get('/:campaignId', (req, res) => {
 // Accepts information changes to a campaign with the campaignId param.
 // Returns the update campaign information.
 router.patch('/edit/:campaignId', (req, res) => {
-  const id = req.params.campaignId;
-  console.log(req.body);
+  const getCampaignId = parseInt(req.params.campaignId, 10);
+  const { accessToken, campaignInfo, campaignContent } = req.body;
+
+  getUserInfo(
+    accessToken,
+    (user) => {
+      const nonprofitId = parseInt(user.app_metadata.nonProfitID, 10);
+      if (campaignInfo.nonprofitId === nonprofitId) {
+        getCampaignById(
+          getCampaignId,
+          (getCampaignInfoResults) => {
+            if (getCampaignInfoResults.nonprofitId === nonprofitId) {
+              return createContent(
+                getCampaignId,
+                campaignContent,
+                (createContentResults) => {
+                  if (getCampaignInfoResults.startDate === null) {
+                    return updateCampaignInfo(
+                      nonprofitId,
+                      campaignInfo,
+                      updateCampaignInfoResults => jsonResponse(
+                        200,
+                        updateCampaignInfoResults,
+                        'The campaign changes were successfully saved.',
+                        res,
+                      ),
+                      updateCampaignInfoErr => jsonResponse(
+                        304,
+                        updateCampaignInfoErr,
+                        'The was an error saving the campaign information.',
+                        res,
+                      ),
+                    );
+                  }
+                  return jsonResponse(
+                    200,
+                    createContentResults,
+                    'The campaign content was successfully saved.',
+                    res,
+                  );
+                },
+                createContentError => jsonResponse(
+                  304,
+                  createContentError,
+                  'The was an error saving the campaign content.',
+                  res,
+                ),
+              );
+            }
+            return jsonResponse(
+              401,
+              {
+                nonprofitId,
+                campaignId: getCampaignId,
+              },
+              'You are not authorized to edit this campaign.',
+              res,
+            );
+          },
+          getCampaignError => jsonResponse(
+            getCampaignError.code,
+            getCampaignError,
+            `The campaign with the id ${getCampaignId} could not be found.`,
+            res,
+          ),
+        );
+      }
+    },
+    error => jsonResponse(
+      error.statusCode,
+      error.original,
+      'There was an error getting the user info.',
+      res),
+  );
 });
 
 router.post('/upload/photo/:campaignId', upload.single('file'), (req, res) => {
@@ -146,7 +206,7 @@ router.post('/upload/photo/:campaignId', upload.single('file'), (req, res) => {
   const originalName = image.originalname;
   const fileName = `${originalName.substring(0, originalName.lastIndexOf('.'))}-campaignId${id}-${(new Date()).toISOString()}`;
 
-  uploadImage(
+  uploadCampaignImage(
     image,
     {
       public_id: fileName,

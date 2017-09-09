@@ -2,6 +2,7 @@
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import queryString from 'query-string';
+import axios from 'axios';
 
 import './scss/style.scss';
 
@@ -9,10 +10,14 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      profilePhoto: this.props.userInfo.picture,
+      newProfilePhoto: {},
+      loadingProfilePhoto: false,
       fetched: false,
     };
 
     this.componentWillMount = this.componentWillMount.bind(this);
+    this.changeProfilePhoto = this.changeProfilePhoto.bind(this);
   }
 
   componentWillMount() {
@@ -40,6 +45,45 @@ class Profile extends React.Component {
     return null;
   }
 
+  changeProfilePhoto(e) {
+    const target = e.target;
+    const value = target.files[0];
+
+    this.setState(
+      {
+        newProfilePhoto: value,
+      },
+      () => {
+        const formData = new FormData();
+        formData.append('file', this.state.newProfilePhoto);
+        formData.append('accessToken', this.props.userAuth.accessToken);
+        this.setState({ loadingProfilePhoto: true });
+        axios.patch(
+          `https://${window.location.hostname}:3000/api/users/upload/photo/`,
+          formData,
+          {
+            headers:
+            { 'Content-Type': 'multipart/form-data' },
+          },
+        )
+          .then((postImgResults) => {
+            this.setState({
+              loadingProfilePhoto: false,
+              profilePhoto: postImgResults.data.data.picture,
+            });
+            this.props.onGetUserInfo();
+          })
+          .catch((postImgErr) => {
+            console.log(postImgErr);
+            this.props.onNewError(postImgErr.response.data.message);
+            this.setState({
+              loadingProfilePhoto: false,
+            });
+          });
+      },
+    );
+  }
+
   render() {
     if (this.props.onRequireAuth()) {
       if (this.state.fetched) {
@@ -47,10 +91,23 @@ class Profile extends React.Component {
           <main id="profile" className="small-12 columns">
             <section className="row align-center">
               <div className="profile-img-wrapper small-3 columns">
-                <img src={this.props.userInfo.picture} className="profile-img" />
-                <Link to='/user/profile/upload-photo'>
+                <img
+                  src={this.state.loadingProfilePhoto
+                    ? '/assets/img/spinner.svg'
+                    : this.state.profilePhoto}
+                  alt={`${
+                    this.props.userInfo.userType === 'non-profit'
+                      ? this.props.userInfo.nonProfitName
+                      : `${this.props.userInfo.firstName} ${this.props.userInfo.lastName}`
+                  }'s Profile Photo`}
+                  className="profile-img" />
+                <button type="button" className="edit" onClick={(e) => {
+                  e.preventDefault(e);
+                  document.getElementById('newProfilePhoto').click();
+                }}>
                   <span></span> Upload Profile Photo
-                </Link>
+                </button>
+                <input id="newProfilePhoto" type="file" onChange={this.changeProfilePhoto} />
               </div>
               <div className="small-12 medium-9 columns">
                 <div className="row align-middle profile-header">

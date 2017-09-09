@@ -6,6 +6,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _express = require('express');
 
+var _multer = require('multer');
+
+var _multer2 = _interopRequireDefault(_multer);
+
 var _nonprofits = require('../models/nonprofits');
 
 var _Auth = require('../models/Auth0');
@@ -14,9 +18,12 @@ var _response = require('../helpers/response');
 
 var _response2 = _interopRequireDefault(_response);
 
+var _Cloudinary = require('../models/Cloudinary');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Create API Users Router
+const upload = (0, _multer2.default)();
 const router = (0, _express.Router)();
 
 /*
@@ -62,6 +69,66 @@ router.post('/create', (req, res) => {
   }
 });
 
+router.patch('/upload/photo', upload.single('file'), (req, res) => {
+  const { accessToken } = req.body;
+  const image = req.file;
+  const originalName = image.originalname;
+
+  (0, _Auth.getUserInfo)(accessToken, user => {
+    const fileName = `${originalName.substring(0, originalName.lastIndexOf('.'))}-${user.email}-${new Date().toISOString()}`;
+    (0, _Cloudinary.uploadProfileImage)(image, {
+      public_id: fileName,
+      folder: `profile/${user.email}`,
+      tags: [user.email, 'profile-image']
+    }, uploadSuccess => {
+      (0, _Auth.editUserInfo)(user.user_id, { user_metadata: {
+          picture: uploadSuccess.secure_url
+        } }, editUserRes => (0, _response2.default)(editUserRes.status, { picture: editUserRes.data.user_metadata.picture }, 'You have successfully uploaded the picture.', res), editUserErr => (0, _response2.default)(500, editUserErr, 'There was an error uploading the user picture.', res));
+    }, uploadErr => (0, _response2.default)(500, uploadErr, 'There was an error uploading the user picture.', res));
+    // editUserInfo(
+    //   user.user_id,
+    //   updatedUserInfo,
+    //   (editUserResponse) => {
+    //     const updatedUser = editUserResponse.data;
+    //     if (updatedUser.app_metadata.userType === 'non-profit') {
+    //       const nonprofitId = updatedUser.app_metadata.nonProfitID;
+    //       const updatedNonProfitInfo = editData.nonProfitInfo;
+
+    //       editNonProfit(
+    //         nonprofitId,
+    //         updatedNonProfitInfo,
+    //         updatedNonProfit => jsonResponse(
+    //           200,
+    //           {
+    //             updatedUser,
+    //             updatedNonProfit,
+    //           },
+    //           `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
+    //           res),
+    //         editNonProfitError => jsonResponse(
+    //           500,
+    //           { editNonProfitError },
+    //           'There was an error editing the nonprofit. Please contact support.',
+    //           res,
+    //         ),
+    //       );
+    //     }
+    //     return jsonResponse(
+    //       200,
+    //       { updatedUser },
+    //       `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
+    //       res);
+    //   },
+    //   editUserError => jsonResponse(
+    //     editUserError.response.status,
+    //     { userId: user.user_id },
+    //     editUserError.response.data.message,
+    //     res,
+    //   ),
+    // );
+  }, findUserError => (0, _response2.default)(findUserError.statusCode, findUserError.original, 'This access token is not authorized.', res));
+});
+
 // Accepts new information for the user with the userId param.
 // Returns the updated user information. Requires authorization.
 router.patch('/edit', (req, res) => {
@@ -83,7 +150,6 @@ router.patch('/edit', (req, res) => {
       return (0, _response2.default)(200, { updatedUser }, `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`, res);
     }, editUserError => (0, _response2.default)(editUserError.response.status, { userId: user.user_id }, editUserError.response.data.message, res));
   }, findUserError => (0, _response2.default)(findUserError.statusCode, findUserError.original, 'This access token is not authorized.', res));
-  // res.status(200).json(req.body);
 });
 
 // Exporting router as default.

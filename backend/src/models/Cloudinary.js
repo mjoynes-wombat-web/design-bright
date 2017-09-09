@@ -9,7 +9,7 @@ cloudinary.config({
   api_secret: CLOUDINARY_SECRET,
 });
 
-const uploadImage = (image, options, success, error) => {
+export const uploadCampaignImage = (image, options, success, error) => {
   cloudinary.uploader.upload_stream(
     response => (
       ('error' in response)
@@ -23,4 +23,19 @@ const uploadImage = (image, options, success, error) => {
   ).end(image.buffer);
 };
 
-export default uploadImage;
+export const uploadProfileImage = (image, options, success, error) => {
+  cloudinary.uploader.upload_stream(
+    response => (
+      ('error' in response)
+        ? error(response.error)
+        : success(response)
+    ),
+    {
+      crop: 'fill',
+      gravity: 'face',
+      width: 198,
+      height: 198,
+      ...options,
+    },
+  ).end(image.buffer);
+};

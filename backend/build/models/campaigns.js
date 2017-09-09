@@ -3,13 +3,43 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createCampaign = exports.updateCampaign = exports.stopCampaign = exports.launchCampaign = exports.getNonprofitsCampaigns = exports.getCampaignContent = undefined;
+exports.updateCampaignInfo = exports.createCampaign = exports.createContent = exports.stopCampaign = exports.launchCampaign = exports.getNonprofitsCampaigns = exports.getCampaignContent = exports.getCampaignById = undefined;
 
 var _db = require('./db');
 
 var db = _interopRequireWildcard(_db);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+const getCampaignById = exports.getCampaignById = (getCampaignId, success, error) => {
+  db.campaigns.find({
+    where: { campaignId: getCampaignId }
+  }).then(results => {
+    if (results === null) {
+      return error({ message: `There isn't a campaign with the id ${getCampaignId}.`, error: results, code: 404 });
+    }
+    const {
+      campaignId,
+      nonprofitId,
+      name,
+      duration,
+      fundingNeeded,
+      donationsMade,
+      startDate,
+      endDate } = results;
+
+    return success({
+      nonprofitId,
+      campaignId,
+      name,
+      duration,
+      fundingNeeded,
+      donationsMade,
+      startDate,
+      endDate
+    });
+  }).catch(findErr => error({ message: `There was a database error finding the campaign with the id ${getCampaignId}.`, error: findErr, code: 500 }));
+};
 
 const getCampaignContent = exports.getCampaignContent = (campaignId, success, error) => {
   db.campaigns.find({
@@ -29,11 +59,22 @@ const getCampaignContent = exports.getCampaignContent = (campaignId, success, er
   }).then(results => {
     const {
       nonprofitId,
-      name, length,
+      name,
+      duration,
       fundingNeeded,
       donationsMade,
       startDate,
       endDate } = results;
+    const campaignInfo = {
+      nonprofitId,
+      campaignId,
+      name,
+      duration,
+      fundingNeeded,
+      donationsMade,
+      startDate,
+      endDate
+    };
     const {
       contentId,
       contentStatus,
@@ -41,16 +82,6 @@ const getCampaignContent = exports.getCampaignContent = (campaignId, success, er
       updatedAt,
       campaignTexts,
       campaignImages } = results.campaignContents[0];
-    const campaignInfo = {
-      nonprofitId,
-      campaignId,
-      name,
-      length,
-      fundingNeeded,
-      donationsMade,
-      startDate,
-      endDate
-    };
 
     const contentInfo = {
       contentId,
@@ -135,21 +166,13 @@ const stopCampaign = exports.stopCampaign = (campaignId, nonprofitId, success, e
   }).then(updateResults => success(updateResults)).catch(updateErr => error(updateErr));
 };
 
-const updateCampaign = exports.updateCampaign = () => {
-  // db.campaignContent.update(
-  //   { status: 'previous' },
-  //   { where: campaignId },
-  // )
-};
-
-const createCampaign = exports.createCampaign = (nonprofitId, { name, fundingNeeded, length, content }, success, error) => {
-  db.campaigns.create({
-    nonprofitId,
-    name,
-    length,
-    fundingNeeded
-  }).then(newCampaign => {
-    const { campaignId } = newCampaign;
+const createContent = exports.createContent = (campaignId, content, success, error) => {
+  db.campaignContent.update({ contentStatus: 'previous' }, {
+    where: {
+      campaignId,
+      contentStatus: 'current'
+    }
+  }).then(() => {
     db.campaignContent.create({
       campaignId,
       contentStatus: 'current',
@@ -157,7 +180,6 @@ const createCampaign = exports.createCampaign = (nonprofitId, { name, fundingNee
     }).then(newContent => {
       const contentId = newContent.contentId;
       const rawContent = content.document.nodes;
-
       const blocks = rawContent.reduce((formattedBlocks, block, index) => {
         const newBlocks = formattedBlocks;
         const formattedBlock = {
@@ -167,7 +189,6 @@ const createCampaign = exports.createCampaign = (nonprofitId, { name, fundingNee
           isVoid: block.isVoid,
           type: block.type
         };
-
         if (['paragraph', 'header'].includes(block.type)) {
           formattedBlock.nodes = JSON.stringify(block.nodes);
           newBlocks.text.push(formattedBlock);
@@ -185,9 +206,42 @@ const createCampaign = exports.createCampaign = (nonprofitId, { name, fundingNee
         images: []
       });
       db.campaignText.bulkCreate(blocks.text).then(() => {
-        db.campaignImages.bulkCreate(blocks.images).then(() => success({ message: `The campaign with the id ${campaignId} was successfully created.`, campaignId })).catch(createImagesErr => error({ message: 'There was an error creating the image content.', error: createImagesErr }));
+        db.campaignImages.bulkCreate(blocks.images).then(() => success({ message: `The content for the campaign with the id ${campaignId} was saved.`, campaignId })).catch(createImagesErr => error({ message: 'There was an error creating the image content.', error: createImagesErr }));
       }).catch(createTextErr => error({ message: 'There was an error creating the text content.', error: createTextErr }));
     }).catch(createContentErr => error({ message: 'There was an error creating the content information.', error: createContentErr }));
+  }).catch(updateStatusErr => error({ message: 'There was an error changing the previous content\'s status.', error: updateStatusErr }));
+};
+
+const createCampaign = exports.createCampaign = (nonprofitId, { name, fundingNeeded, duration, content }, success, error) => {
+  db.campaigns.create({
+    nonprofitId,
+    name,
+    duration,
+    fundingNeeded
+  }).then(newCampaign => {
+    const { campaignId } = newCampaign;
+    createContent(campaignId, content, success, error);
   }).catch(createCampaignErr => error({ message: 'There was an error creating the campaign information.', error: createCampaignErr }));
+};
+
+const updateCampaignInfo = exports.updateCampaignInfo = (nonprofitId, { campaignId, name, fundingNeeded, duration }, success, error) => {
+  db.campaigns.update({
+    name,
+    fundingNeeded,
+    duration
+  }, {
+    where: {
+      nonprofitId,
+      campaignId
+    }
+  }).then(updatedCampaignInfo => {
+    if (updatedCampaignInfo[0] === 0) {
+      return error({
+        message: `The nonprofit with the id ${nonprofitId} doesn't exists or the campaign with the id ${campaignId} doesn't exists or belong to that nonprofit.`,
+        error: updatedCampaignInfo
+      });
+    }
+    return success({ message: `The campaign info was saved for campaign id ${campaignId}.`, updatedCampaignInfo });
+  }).catch(updateCampaignErr => error({ message: 'There was an error saving the campaign information.', error: updateCampaignErr }));
 };
 //# sourceMappingURL=campaigns.js.map

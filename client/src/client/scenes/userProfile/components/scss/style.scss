@@ -33,7 +33,7 @@ main#profile {
       border-radius: 0.25rem;
     }
 
-    a {
+    button {
       display: block;
       border-bottom: none;
       background-image: url('/assets/img/yellow-brush5.png');
@@ -49,8 +49,7 @@ main#profile {
       left: 0;
       right: 0;
       margin: 0 auto;
-
-      
+      line-height: 1.5rem;
 
       @media screen and (min-width: $medium-break) {
         position: relative;
@@ -61,7 +60,7 @@ main#profile {
         font-size: 1.125rem;
       }
 
-      &:link:hover{
+      &:hover{
         border: none;
         color: $blue-hydrangea;
         background-image: url('/assets/img/yellow-brush2.png');
@@ -79,6 +78,10 @@ main#profile {
           font-size: 1.125rem;
         }
       }
+    }
+
+    #newProfilePhoto {
+      display: none;
     }
   }
 

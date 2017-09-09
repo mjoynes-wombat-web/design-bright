@@ -90,10 +90,10 @@ export const campaigns = sequelize.define(
       allowNull: false,
       field: 'nonprofit_id',
     },
-    length: {
+    duration: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
-      field: 'length',
+      field: 'duration',
     },
     fundingNeeded: {
       type: Sequelize.DECIMAL,

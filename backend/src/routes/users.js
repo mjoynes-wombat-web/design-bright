@@ -1,10 +1,13 @@
 // Create API Users Router
 import { Router } from 'express';
+import multer from 'multer';
 
 import { addNonProfit, editNonProfit } from '../models/nonprofits';
 import { createNewUser, getUserInfo, editUserInfo } from '../models/Auth0';
 import jsonResponse from '../helpers/response';
+import { uploadProfileImage } from '../models/Cloudinary';
 
+const upload = multer();
 const router = Router();
 
 /*
@@ -60,6 +63,96 @@ router.post('/create', (req, res) => {
       },
     );
   }
+});
+
+router.patch('/upload/photo', upload.single('file'), (req, res) => {
+  const { accessToken } = req.body;
+  const image = req.file;
+  const originalName = image.originalname;
+
+  getUserInfo(
+    accessToken,
+    (user) => {
+      const fileName = `${originalName.substring(0, originalName.lastIndexOf('.'))}-${user.email}-${(new Date()).toISOString()}`;
+      uploadProfileImage(
+        image,
+        {
+          public_id: fileName,
+          folder: `profile/${user.email}`,
+          tags: [user.email, 'profile-image'],
+        },
+        (uploadSuccess) => {
+          editUserInfo(
+            user.user_id,
+            { user_metadata: {
+              picture: uploadSuccess.secure_url,
+            } },
+            editUserRes => jsonResponse(
+              editUserRes.status,
+              { picture: editUserRes.data.user_metadata.picture },
+              'You have successfully uploaded the picture.',
+              res),
+            editUserErr => jsonResponse(
+              500,
+              editUserErr,
+              'There was an error uploading the user picture.',
+              res),
+          );
+        },
+        uploadErr => jsonResponse(
+          500,
+          uploadErr,
+          'There was an error uploading the user picture.',
+          res),
+      );
+      // editUserInfo(
+      //   user.user_id,
+      //   updatedUserInfo,
+      //   (editUserResponse) => {
+      //     const updatedUser = editUserResponse.data;
+      //     if (updatedUser.app_metadata.userType === 'non-profit') {
+      //       const nonprofitId = updatedUser.app_metadata.nonProfitID;
+      //       const updatedNonProfitInfo = editData.nonProfitInfo;
+
+      //       editNonProfit(
+      //         nonprofitId,
+      //         updatedNonProfitInfo,
+      //         updatedNonProfit => jsonResponse(
+      //           200,
+      //           {
+      //             updatedUser,
+      //             updatedNonProfit,
+      //           },
+      //           `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
+      //           res),
+      //         editNonProfitError => jsonResponse(
+      //           500,
+      //           { editNonProfitError },
+      //           'There was an error editing the nonprofit. Please contact support.',
+      //           res,
+      //         ),
+      //       );
+      //     }
+      //     return jsonResponse(
+      //       200,
+      //       { updatedUser },
+      //       `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
+      //       res);
+      //   },
+      //   editUserError => jsonResponse(
+      //     editUserError.response.status,
+      //     { userId: user.user_id },
+      //     editUserError.response.data.message,
+      //     res,
+      //   ),
+      // );
+    },
+    findUserError => jsonResponse(
+      findUserError.statusCode,
+      findUserError.original,
+      'This access token is not authorized.',
+      res),
+  );
 });
 
 // Accepts new information for the user with the userId param.
@@ -119,7 +212,6 @@ router.patch('/edit', (req, res) => {
       'This access token is not authorized.',
       res),
   );
-  // res.status(200).json(req.body);
 });
 
 // Exporting router as default.

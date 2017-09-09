@@ -57,11 +57,10 @@ export const editUserInfo = (
   error) => {
   const userInfo = updatedUserInfo;
 
-  if (userInfo.password !== '') {
+  if (userInfo.password) {
     userInfo.user_metadata.passwordDate = new Date();
   } else {
     delete userInfo.password;
-    delete userInfo.user_metadata.passwordDate;
   }
 
   userInfo.connection = 'Username-Password-Authentication';

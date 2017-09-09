@@ -13,14 +13,6 @@ var _multer = require('multer');
 
 var _multer2 = _interopRequireDefault(_multer);
 
-var _cloudinary = require('cloudinary');
-
-var _cloudinary2 = _interopRequireDefault(_cloudinary);
-
-var _dotenv = require('dotenv');
-
-var _dotenv2 = _interopRequireDefault(_dotenv);
-
 var _Auth = require('../models/Auth0');
 
 var _campaigns = require('../models/campaigns');
@@ -31,21 +23,11 @@ var _response2 = _interopRequireDefault(_response);
 
 var _Cloudinary = require('../models/Cloudinary');
 
-var _Cloudinary2 = _interopRequireDefault(_Cloudinary);
-
 var _requireAuth = require('../helpers/requireAuth');
 
 var _requireAuth2 = _interopRequireDefault(_requireAuth);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = _dotenv2.default.config().parsed;
-
-_cloudinary2.default.config({
-  cloud_name: CLOUDINARY_NAME,
-  api_key: CLOUDINARY_KEY,
-  api_secret: CLOUDINARY_SECRET
-});
 
 const upload = (0, _multer2.default)();
 const router = (0, _express.Router)();
@@ -105,8 +87,28 @@ router.get('/:campaignId', (req, res) => {
 // Accepts information changes to a campaign with the campaignId param.
 // Returns the update campaign information.
 router.patch('/edit/:campaignId', (req, res) => {
-  const id = req.params.campaignId;
-  console.log(req.body);
+  const getCampaignId = parseInt(req.params.campaignId, 10);
+  const { accessToken, campaignInfo, campaignContent } = req.body;
+
+  (0, _Auth.getUserInfo)(accessToken, user => {
+    const nonprofitId = parseInt(user.app_metadata.nonProfitID, 10);
+    if (campaignInfo.nonprofitId === nonprofitId) {
+      (0, _campaigns.getCampaignById)(getCampaignId, getCampaignInfoResults => {
+        if (getCampaignInfoResults.nonprofitId === nonprofitId) {
+          return (0, _campaigns.createContent)(getCampaignId, campaignContent, createContentResults => {
+            if (getCampaignInfoResults.startDate === null) {
+              return (0, _campaigns.updateCampaignInfo)(nonprofitId, campaignInfo, updateCampaignInfoResults => (0, _response2.default)(200, updateCampaignInfoResults, 'The campaign changes were successfully saved.', res), updateCampaignInfoErr => (0, _response2.default)(304, updateCampaignInfoErr, 'The was an error saving the campaign information.', res));
+            }
+            return (0, _response2.default)(200, createContentResults, 'The campaign content was successfully saved.', res);
+          }, createContentError => (0, _response2.default)(304, createContentError, 'The was an error saving the campaign content.', res));
+        }
+        return (0, _response2.default)(401, {
+          nonprofitId,
+          campaignId: getCampaignId
+        }, 'You are not authorized to edit this campaign.', res);
+      }, getCampaignError => (0, _response2.default)(getCampaignError.code, getCampaignError, `The campaign with the id ${getCampaignId} could not be found.`, res));
+    }
+  }, error => (0, _response2.default)(error.statusCode, error.original, 'There was an error getting the user info.', res));
 });
 
 router.post('/upload/photo/:campaignId', upload.single('file'), (req, res) => {
@@ -131,7 +133,7 @@ router.post('/upload/photo/:campaignId', upload.single('file'), (req, res) => {
   const originalName = image.originalname;
   const fileName = `${originalName.substring(0, originalName.lastIndexOf('.'))}-campaignId${id}-${new Date().toISOString()}`;
 
-  (0, _Cloudinary2.default)(image, _extends({
+  (0, _Cloudinary.uploadCampaignImage)(image, _extends({
     public_id: fileName,
     folder: nonprofitId
   }, dimensions, {

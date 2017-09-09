@@ -38,7 +38,7 @@ class Campaign extends React.Component {
         const { campaignInfo, campaignContent } = campaignResults.data.data;
         campaignInfo.timeRemaining = (
           (((new Date(Date.parse(campaignInfo.startDate)) - new Date())
-            / 1000 / 60 / 60 / 24) + campaignInfo.length)
+            / 1000 / 60 / 60 / 24) + campaignInfo.duration)
         );
 
         campaignInfo.donationPercentage = (

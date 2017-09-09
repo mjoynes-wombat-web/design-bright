@@ -25,13 +25,13 @@ class mngCampaigns extends React.Component {
       campaignInfo: {
         name: '',
         fundingNeeded: 100,
-        length: 10,
+        duration: 10,
       },
       contentInfo: {},
       campaignContent: [],
       fetched: false,
       hasCampaign: false,
-      campaignId: '',
+      campaignId: null,
       valid: false,
       editorData: {},
     };
@@ -44,7 +44,7 @@ class mngCampaigns extends React.Component {
 
   componentWillMount() {
     if ('id' in this.props.match.params) {
-      const editCampaignId = this.props.match.params.id;
+      const editCampaignId = parseInt(this.props.match.params.id, 10);
       this.setState({ valid: true });
 
       axios.get(`https://${window.location.hostname}:3000/api/nonprofits/campaigns/${this.props.userAuth.accessToken}`)
@@ -59,7 +59,7 @@ class mngCampaigns extends React.Component {
           ) {
             this.setState({ hasCampaign: true });
 
-            axios.get(`https://${window.location.hostname}:3000/api/campaigns/${editCampaignId}`)
+            axios.get(`https://${window.location.hostname}:3000/api/campaigns/${editCampaignId}?accessToken=${this.props.userAuth.accessToken}`)
               .then((campaignResults) => {
                 const { campaignContent } = campaignResults.data.data;
                 const campaignInfo = campaignResults.data.data.campaignInfo;
@@ -123,10 +123,19 @@ class mngCampaigns extends React.Component {
       axios.patch(
         `https://${window.location.hostname}:3000/api/campaigns/edit/${this.state.campaignInfo.campaignId}`,
         {
-          updatedCampaign: this.state.editorData,
+          campaignInfo: this.state.campaignInfo,
+          campaignContent: this.state.editorData,
           accessToken,
         },
-      );
+      )
+        .then((results) => {
+          window.scrollTo(0, 0);
+          this.props.onNewMessage(results.data.message);
+        })
+        .catch((error) => {
+          window.scrollTo(0, 0);
+          this.props.onNewError(error.response.data.message);
+        });
     } else {
       axios.post(
         `https://${window.location.hostname}:3000/api/campaigns/create`,
@@ -137,7 +146,15 @@ class mngCampaigns extends React.Component {
           },
           accessToken,
         },
-      );
+      )
+        .then((results) => {
+          window.scrollTo(0, 0);
+          this.props.onNewMessage(results.data.message);
+        })
+        .catch((error) => {
+          window.scrollTo(0, 0);
+          this.props.onNewError(error.response.data.message);
+        });
     }
   }
 
@@ -157,8 +174,8 @@ class mngCampaigns extends React.Component {
   validate() {
     if (
       this.state.campaignInfo.name.length > 0
-      && (isNumber(this.state.campaignInfo.length)
-        && numLength(this.state.campaignInfo.length, 2, 2))
+      && (isNumber(this.state.campaignInfo.duration)
+        && numLength(this.state.campaignInfo.duration, 2, 2))
       && (isNumber(this.state.campaignInfo.fundingNeeded)
         && numLength(this.state.campaignInfo.fundingNeeded, 3, 6))
       && this.state.editorData.document.nodes[0].nodes[0].ranges[0].text !== ''
@@ -177,7 +194,7 @@ class mngCampaigns extends React.Component {
               <main id="editCampaigns" className={`small-12 columns${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
                 <section className="row align-center">
                   <form className="small-12 columns" onSubmit={this.onSubmit}>
-                    <div className="row">
+                    <div className="row header">
                       <h1 className="small-12 columns">
                         <span className="underlined">
                           {this.state.campaignContent.length > 0
@@ -187,58 +204,100 @@ class mngCampaigns extends React.Component {
                               : ''} Campaign`}
                         </span>
                       </h1>
+                      {this.state.campaignInfo.startDate
+                        ? (
+                          <p className="message small-12 columns">
+                            {this.state.campaignInfo.endDate
+                              ? 'This campaign has already ended so only it\'s content can be modified.'
+                              : 'This campaign has already started so only it\'s content can be modified.'}
+                          </p>
+                        )
+                        : null}
                     </div>
                     <div className="row">
-                      <div className="small-12 large-5 columns">
-                        <label htmlFor="name">
-                          Campaign Name: <span className="required">*</span>
-                        </label>
-                        <input
-                          value={this.state.campaignInfo.name}
-                          onChange={this.onChange}
-                          type="text"
-                          name="name"
-                          id="campaignName"
-                          required />
-                        <label
-                          htmlFor="length"
-                          className={`row${(isNumber(this.state.campaignInfo.length) && numLength(this.state.campaignInfo.length, 2, 2)) ? '' : ' invalid'}`}>
-                          <div className="small-12 columns">
-                            Campaign Length (Days): <span className="required">*</span>
+                      {this.state.campaignInfo.startDate
+                        ? (
+                          <div className="small-12 large-5 columns">
+                            <p className="title">Campaign Name:</p>
+                            <p className="info">{this.state.campaignInfo.name}</p>
+                            <p className="title">Campaign Duration:</p>
+                            <p className="info">{this.state.campaignInfo.duration} Days</p>
+                            <p className="title">Funding Needed:</p>
+                            <p className="info">{this.state.campaignInfo.fundingNeeded}</p>
+                            <p className="title">Start Date:</p>
+                            <p className="info">
+                              {(new Date(
+                                Date.parse(this.state.campaignInfo.startDate),
+                              ))
+                                .toLocaleDateString()}
+                            </p>
+                            {this.state.campaignInfo.endDate
+                              ? (
+                                <div>
+                                  <p className="title">End Date:</p>
+                                  <p className="info">
+                                    {(new Date(
+                                      Date.parse(this.state.campaignInfo.endDate),
+                                    ))
+                                      .toLocaleDateString()}
+                                  </p>
+                                </div>
+                              )
+                              : null}
                           </div>
-                          <div className="small-12 columns">
-                            <span className="error">
-                              The campaign length must be between 10 and 99 days.
-                            </span>
+                        )
+                        : (
+                          <div className="small-12 large-5 columns">
+                            <label htmlFor="name">
+                              Campaign Name: <span className="required">*</span>
+                            </label>
+                            <input
+                              value={this.state.campaignInfo.name}
+                              onChange={this.onChange}
+                              type="text"
+                              name="name"
+                              id="campaignName"
+                              required />
+                            <label
+                              htmlFor="duration"
+                              className={`row${(isNumber(this.state.campaignInfo.duration) && numLength(this.state.campaignInfo.duration, 2, 2)) ? '' : ' invalid'}`}>
+                              <div className="small-12 columns">
+                                Campaign Duration (Days): <span className="required">*</span>
+                              </div>
+                              <div className="small-12 columns">
+                                <span className="error">
+                                  The campaign duration must be between 10 and 99 days.
+                                </span>
+                              </div>
+                            </label>
+                            <input
+                              value={this.state.campaignInfo.duration}
+                              onChange={this.onChange}
+                              type="number"
+                              name="duration"
+                              id="campaignDuration"
+                              required />
+                            <label
+                              htmlFor="fundingNeeded"
+                              className={`row${(isNumber(this.state.campaignInfo.fundingNeeded) && numLength(this.state.campaignInfo.fundingNeeded, 3, 6)) ? '' : ' invalid'}`}>
+                              <div className="small-12 columns">
+                                Funding Needed: <span className="required">*</span>
+                              </div>
+                              <div className="small-12 columns">
+                                <span className="error">
+                                  Funding must be more than $100 but less than $1,000,000.
+                                </span>
+                              </div>
+                            </label>
+                            <input
+                              value={`$${parseInt(this.state.campaignInfo.fundingNeeded, 10).toLocaleString()}`}
+                              onChange={this.onChange}
+                              type="text"
+                              name="fundingNeeded"
+                              id="campaignFunding"
+                              required />
                           </div>
-                        </label>
-                        <input
-                          value={this.state.campaignInfo.length}
-                          onChange={this.onChange}
-                          type="number"
-                          name="length"
-                          id="campaignLength"
-                          required />
-                        <label
-                          htmlFor="fundingNeeded"
-                          className={`row${(isNumber(this.state.campaignInfo.fundingNeeded) && numLength(this.state.campaignInfo.fundingNeeded, 3, 6)) ? '' : ' invalid'}`}>
-                          <div className="small-12 columns">
-                            Funding Needed: <span className="required">*</span>
-                          </div>
-                          <div className="small-12 columns">
-                            <span className="error">
-                              Funding must be more than $100 but less than $1,000,000.
-                            </span>
-                          </div>
-                        </label>
-                        <input
-                          value={`$${parseInt(this.state.campaignInfo.fundingNeeded, 10).toLocaleString()}`}
-                          onChange={this.onChange}
-                          type="text"
-                          name="fundingNeeded"
-                          id="campaignFunding"
-                          required />
-                      </div>
+                        )}
                       <div className="small-12 large-7 columns">
                         <label htmlFor="campaignEditor">
                           Campaign Content: <span className="required">*</span>

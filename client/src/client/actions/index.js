@@ -146,11 +146,11 @@ export const getUserInfo = callback =>
             passwordDate: new Date(Date.parse(userData.user_metadata.passwordDate)),
             userType: userData.app_metadata.userType,
           };
-
-          if (userData.picture.indexOf('s.gravatar.com/avatar/')) {
-            userInfo.picture = '/assets/img/user.svg';
+          console.log(userData.user_metadata);
+          if ('picture' in userData.user_metadata) {
+            userInfo.picture = userData.user_metadata.picture;
           } else {
-            userInfo.picture = userData.picture;
+            userInfo.picture = '/assets/img/user.svg';
           }
 
           if (userInfo.userType === 'non-profit') {
