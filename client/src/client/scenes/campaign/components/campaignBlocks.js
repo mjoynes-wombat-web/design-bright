@@ -1,7 +1,31 @@
 const CampaignBlocks = ({ buttonAction, content, campaignInfo }) => {
   switch (content.type) {
     case 'paragraph':
-      return <p>{content.nodes[0].ranges[0].text}</p>;
+      return (
+        <p>
+          {content.nodes.reduce((partialContent, node) => {
+            if ('type' in node) {
+              if (node.type === 'link') {
+                return (
+                  <span>
+                    {partialContent}
+                    <a href={node.data.url}>
+                      {node.nodes[0].ranges[0].text}
+                    </a>
+                  </span>
+                );
+              }
+            }
+            return (
+              <span>
+                {partialContent}
+                {node.ranges[0].text}
+              </span>
+            );
+          },
+          '')}
+        </p>
+      );
     case 'header':
       return (
         <h2>

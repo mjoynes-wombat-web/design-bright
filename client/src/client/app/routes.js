@@ -56,6 +56,10 @@ const Routes = () => (
         component={gaTracker(editCampaigns)}/>
       <Route
         exact
+        path='/campaign/preview/:id'
+        component={gaTracker(Campaign)}/>
+      <Route
+        exact
         path='/campaign/:id'
         component={gaTracker(Campaign)}/>
     </Switch>

@@ -80,7 +80,21 @@ router.get('/', (req, res) => {
 // Returns the information for the campaign with the identity param.
 router.get('/:campaignId', (req, res) => {
   const id = req.params.campaignId;
-  (0, _campaigns.getCampaignContent)(id, results => (0, _response2.default)(200, results, `This is the content for the campaign id ${id}`, res), error => {
+  (0, _campaigns.getCampaignContent)(id, results => {
+    if (results.campaignInfo.startDate) {
+      return (0, _response2.default)(200, results, `This is the contents for the campaign id ${id}`, res);
+    } else if ('accessToken' in req.query) {
+      (0, _Auth.getUserInfo)(req.query.accessToken, user => {
+        if (parseInt(user.app_metadata.nonProfitID, 10) === results.campaignInfo.nonprofitId) {
+          return (0, _response2.default)(200, results, `This is the preview contents for the the campaign id ${id}`, res);
+        }
+        return (0, _response2.default)(401, {}, `You aren't authorize to preview the campaign id ${id}`, res);
+      }, error => (0, _response2.default)(error.statusCode, error.original, 'There was an error getting the user info.', res));
+    } else {
+      return (0, _response2.default)(401, {}, 'There was no access token provided.', res);
+    }
+    return null;
+  }, error => {
     if (Object.keys(error).length) {
       return (0, _response2.default)(500, error, 'There was an error on the server.', res);
     }

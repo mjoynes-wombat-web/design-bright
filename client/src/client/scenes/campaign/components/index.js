@@ -27,8 +27,13 @@ class Campaign extends React.Component {
   componentWillMount() {
     const campaignId = this.props.match.params.id;
     this.setState({ campaignId });
+    const campaignPreview = (this.props.match.url.search('preview') !== -1);
 
-    axios.get(`https://${window.location.hostname}:3000/api/campaigns/${campaignId}`)
+    const getUrl = campaignPreview
+      ? `https://${window.location.hostname}:3000/api/campaigns/${campaignId}?accessToken=${this.props.userAuth.accessToken}`
+      : `https://${window.location.hostname}:3000/api/campaigns/${campaignId}`;
+
+    axios.get(getUrl)
       .then((campaignResults) => {
         const { campaignInfo, campaignContent } = campaignResults.data.data;
         campaignInfo.timeRemaining = (
@@ -36,22 +41,28 @@ class Campaign extends React.Component {
             / 1000 / 60 / 60 / 24) + campaignInfo.length)
         );
 
+        campaignInfo.donationPercentage = (
+          (parseFloat(campaignInfo.donationsMade)
+          / parseFloat(campaignInfo.fundingNeeded))
+          * 100
+        );
+        console.log(campaignInfo.donationPercentage);
         this.setState({ campaignInfo });
         this.setState({ campaignContent });
 
-        document.title = `${campaignInfo.name} Campaign - Design Bright`;
+        document.title = (campaignPreview ? `Preview ${campaignInfo.name} Campaign - Design Bright` : `${campaignInfo.name} Campaign - Design Bright`);
 
         this.setState({
           fetched: {
             complete: true,
-            status: campaignResults.data.statusCode,
+            code: campaignResults.data.statusCode,
           },
         });
       })
       .catch(error => this.setState({
         fetched: {
           complete: true,
-          status: error.response.data.statusCode,
+          code: error.response.data.statusCode,
         },
       }));
   }
@@ -59,9 +70,9 @@ class Campaign extends React.Component {
   determineTimeLeft() {
     if (this.state.campaignInfo.endDate) {
       return 'This campaign has ended.';
-    }
-
-    if (this.state.campaignInfo.timeRemaining > 1) {
+    } else if (this.state.campaignInfo.startDate === null) {
+      return 'This campaign hasn\'t started yet.';
+    } else if (this.state.campaignInfo.timeRemaining > 1) {
       return `${Math.round(this.state.campaignInfo.timeRemaining)} Days Left`;
     } else if ((this.state.campaignInfo.timeRemaining * 24) > 1) {
       return `${Math.round(this.state.campaignInfo.timeRemaining * 24)} Hours Left`;
@@ -75,7 +86,7 @@ class Campaign extends React.Component {
 
   render() {
     if (this.state.fetched.complete) {
-      if (this.state.campaignInfo.startDate) {
+      if (this.state.fetched.code === 200) {
         return (
           <main id="campaign" className={`small-12 columns${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
             <section className="row">
@@ -89,7 +100,10 @@ class Campaign extends React.Component {
               <div className="small-12 columns">
                 <div className="progress">
                   <div className="line small-12 columns"></div>
-                  <div className="funded columns" style={{ width: `calc(${(((parseFloat(this.state.campaignInfo.donationsMade) / parseFloat(this.state.campaignInfo.fundingNeeded)) * 100) < 100) ? ((parseFloat(this.state.campaignInfo.donationsMade) / parseFloat(this.state.campaignInfo.fundingNeeded)) * 100) : '100'}% - 0.25rem)` }}></div>
+                  <div className="funded columns" style={{ 
+                    width: `calc(${(this.state.campaignInfo.donationPercentage < 100)
+                      ? this.state.campaignInfo.donationPercentage
+                      : '100'}% - 0.25rem)` }}></div>
                 </div>
               </div>
               <div className="small-12 columns">
@@ -153,13 +167,35 @@ class Campaign extends React.Component {
             </section>
           </main >
         );
+      } else if (this.state.fetched.code === 401) {
+        return (
+          <Redirect to={{
+            pathname: '/campaigns',
+            search: '?error=not-authorized',
+          }} />
+        );
+      } else if (this.state.fetched.code === 404) {
+        return (
+          <Redirect to={{
+            pathname: '/campaigns',
+            search: '?error=invalid-campaign',
+          }} />
+        );
+      } else if (this.state.fetched.code === 500) {
+        return (
+          <Redirect to={{
+            pathname: '/campaigns',
+            search: '?error=server-error',
+          }} />
+        );
       }
-      return (
-        <Redirect to={{
-          pathname: '/campaigns',
-          search: '?origin=invalid-campaign',
-        }} />
-      );
+      console.log(this.state.fetched.code);
+      // return (
+      //   <Redirect to={{
+      //     pathname: '/campaigns',
+      //     search: '?error=unknown',
+      //   }} />
+      // );
     }
     return (
       <h1>Loading</h1>

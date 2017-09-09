@@ -22,7 +22,13 @@ export const getCampaignContent = (campaignId, success, error) => {
     ],
   })
     .then((results) => {
-      const { name, length, fundingNeeded, donationsMade, startDate, endDate } = results;
+      const {
+        nonprofitId,
+        name, length,
+        fundingNeeded,
+        donationsMade,
+        startDate,
+        endDate } = results;
       const {
         contentId,
         contentStatus,
@@ -31,6 +37,7 @@ export const getCampaignContent = (campaignId, success, error) => {
         campaignTexts,
         campaignImages } = results.campaignContents[0];
       const campaignInfo = {
+        nonprofitId,
         campaignId,
         name,
         length,
