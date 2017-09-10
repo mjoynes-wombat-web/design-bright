@@ -77,8 +77,8 @@ class Header extends React.Component {
               </li>
               <li className="user shrink">
                 <a
-                  className={`${this.props.onRequireAuth() ? 'logged-in' : ''}${this.props.userInfo.picture !== '/assets/img/user.svg' ? ' picture' : ''}`}>
-                  {this.props.userInfo.picture !== '/assets/img/user.svg'
+                  className={`${this.props.onRequireAuth() ? 'logged-in' : ''}${this.props.userInfo.picture !== '/assets/img/user.svg' && 'picture' in this.props.userInfo ? ' picture' : ''}`}>
+                  {this.props.userInfo.picture !== '/assets/img/user.svg' && 'picture' in this.props.userInfo
                     ? <img
                       src={this.props.userInfo.picture}
                       alt="User Profile Picture Thumbnail" />
