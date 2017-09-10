@@ -10,7 +10,7 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      profilePhoto: this.props.userInfo.picture,
+      profilePhoto: '',
       newProfilePhoto: {},
       loadingProfilePhoto: false,
       fetched: false,
@@ -25,6 +25,7 @@ class Profile extends React.Component {
       ? `${this.props.userInfo.nonProfitName}'s Profile - Design Bright`
       : `${this.props.userInfo.firstName} ${this.props.userInfo.lastName}'s Profile - Design Bright`;
     this.props.onGetUserInfo(() => this.setState({ fetched: true }));
+    this.setState({ profilePhoto: this.props.userInfo.picture });
   }
 
   componentDidMount() {

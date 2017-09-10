@@ -77,8 +77,12 @@ class Header extends React.Component {
               </li>
               <li className="user shrink">
                 <a
-                  className={this.props.onRequireAuth() ? 'logged-in' : ''}>
-                  
+                  className={`${this.props.onRequireAuth() ? 'logged-in' : ''}${this.props.userInfo.picture !== '/assets/img/user.svg' ? ' picture' : ''}`}>
+                  {this.props.userInfo.picture !== '/assets/img/user.svg'
+                    ? <img
+                      src={this.props.userInfo.picture}
+                      alt="User Profile Picture Thumbnail" />
+                    : '' }
                 </a>
                 <UserMenu
                   requireAuth={this.props.onRequireAuth}
