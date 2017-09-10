@@ -65,7 +65,7 @@ if (STATUS !== undefined) {
   app.use((0, _morgan2.default)(STATUS));
 }
 
-const whitelist = ['https://192.168.86.200:3002', 'https://192.168.1.9:3002', 'https://165.227.7.212', 'https://www.designbright.org'];
+const whitelist = ['https://192.168.86.200:3002', 'https://192.168.1.9:3002', 'https://165.227.7.212', 'https://www.designbright.org', 'https://192.168.33.129:3002'];
 
 const corsOptions = {
   origin: (origin, callback) => {

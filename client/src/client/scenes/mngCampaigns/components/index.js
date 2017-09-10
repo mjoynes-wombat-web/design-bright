@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import './scss/style.scss';
 import CampaignActions from './campaignActions';
+import StopConfModal from './stopConfirmation';
 
 class mngCampaigns extends React.Component {
   constructor(props) {
@@ -13,18 +14,28 @@ class mngCampaigns extends React.Component {
       nonprofitInfo: {},
       campaigns: {},
       fetched: false,
+      stopModalMsg: '',
+      showStopModal: false,
+      currentStopId: null,
     };
 
     this.componentWillMount = this.componentWillMount.bind(this);
     this.launchCampaign = this.launchCampaign.bind(this);
     this.stopCampaign = this.stopCampaign.bind(this);
+    this.stopConfirm = this.stopConfirm.bind(this);
   }
 
   componentWillMount() {
     axios.get(`https://${window.location.hostname}:3000/api/nonprofits/campaigns/${this.props.userAuth.accessToken}`)
       .then((results) => {
         const { nonprofit, campaigns } = results.data.data;
-
+        console.log(campaigns);
+        for (let i = 0; i < campaigns.length; i += 1) {
+          campaigns[i].timeRemaining = (
+            (((new Date(Date.parse(campaigns[i].startDate)) - new Date())
+              / 1000 / 60 / 60 / 24) + campaigns[i].duration)
+          );
+        }
         document.title = `Manage ${nonprofit.name}'s Campaign - Design Bright`;
         this.setState({ campaigns });
         this.setState({ nonprofitInfo: nonprofit });
@@ -45,15 +56,15 @@ class mngCampaigns extends React.Component {
           const campaignPosition = campaigns
             .map(campaign => campaign.campaignId)
             .indexOf(campaignId);
-          const date = new Date();
-          campaigns[campaignPosition].startDate = date.toISOString();
+
+          campaigns[campaignPosition].startDate = (new Date()).toISOString();
           this.setState({ campaigns });
         }
       })
       .catch(error => console.log(error));
   }
 
-  stopCampaign(campaignId) {
+  stopConfirm(campaignId) {
     const accessToken = this.props.userAuth.accessToken;
     axios.patch(
       `https://${window.location.hostname}:3000/api/nonprofits/campaigns/stop/${campaignId}`,
@@ -67,10 +78,44 @@ class mngCampaigns extends React.Component {
             .indexOf(campaignId);
           const date = new Date();
           campaigns[campaignPosition].endDate = date.toISOString();
-          this.setState({ campaigns });
+          this.setState({
+            campaigns,
+            showStopModal: false,
+            stopModalMsg: '',
+            currentStopId: null,
+          });
         }
       })
       .catch(error => console.log(error));
+  }
+
+  stopCampaign(campaignId) {
+    const campaigns = this.state.campaigns;
+    const campaignPosition = campaigns
+      .map(campaign => campaign.campaignId)
+      .indexOf(campaignId);
+    const campaign = this.state.campaigns[campaignPosition];
+    this.setState({ showStopModal: true });
+
+    if ((new Date(Date.parse(campaign.endDate))).getTime() >= (new Date()).getTime()) {
+      const stopMsg = () => {
+        if (campaign.timeRemaining >= 2) {
+          return `There are still ${Math.floor(campaign.timeRemaining)} days left. Are you sure you want to stop this campaign early?`;
+        } else if (campaign.timeRemaining >= 1) {
+          return `There is still ${Math.floor(campaign.timeRemaining)} day left. Are you sure you want to stop this campaign early?`;
+        } else if ((campaign.timeRemaining * 24) >= 2) {
+          return `There are still ${Math.floor(campaign.timeRemaining * 24)} hours left. Are you sure you want to stop this campaign early?`;
+        } else if ((campaign.timeRemaining * 24) >= 1) {
+          return `There is still ${Math.floor(campaign.timeRemaining * 24)} hour left. Are you sure you want to stop this campaign early?`;
+        }
+        return 'There is less than an hour left. Are you sure you want to stop this campaign early?';
+      };
+
+      this.setState({
+        stopModalMsg: stopMsg(),
+        currentStopId: campaignId,
+      });
+    }
   }
 
   render() {
@@ -78,7 +123,18 @@ class mngCampaigns extends React.Component {
       if (this.props.userInfo.userType === 'non-profit') {
         if (this.state.fetched) {
           return (
-            <main id="mngCampaigns" className={`small-12 columns${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
+            <main id="mngCampaigns" className={('ontouchstart' in document.documentElement) ? '' : ' no-touch'}>
+              {this.state.showStopModal
+                ? <StopConfModal
+                  text={this.state.stopModalMsg}
+                  id={this.state.currentStopId}
+                  confirmAction={campaignId => this.stopConfirm(campaignId)}
+                  cancelAction={() => this.setState({
+                    showStopModal: false,
+                    stopModalMsg: '',
+                    currentStopId: null,
+                  })} />
+                : null}
               <section className="row">
                 <div className="small-12 columns">
                   <div className="row align-middle main-heading">
@@ -107,7 +163,7 @@ class mngCampaigns extends React.Component {
                 )}
                 <div className="small-12 columns">
                   <div className="row  align-center">
-                  <div className=" small-11 medium-10 large-8 hide-for-large columns button primary">
+                    <div className=" small-11 medium-10 large-8 hide-for-large columns button primary">
                       <Link to="/campaign/create">
                         <span className="icon"></span>
                         <span className="text">Create Campaign</span>

@@ -12,8 +12,11 @@ Profile:
   ✔ Create profile photo upload. @high @done (2017-9-9 14:17:08)
 
 Manage Campaigns: 
-  ☐ Create stop campaign warning. @high
+  ✔ Create stop campaign warning. @high @done (2017-9-9 17:23:11)
   ✔ Create create campaign button. @high @done (2017-9-9 11:56:32)
 
 Messages:
   ☐ Refactor messages. @high
+
+Menu:
+  ☐ Put profile photo in the user icon. @high

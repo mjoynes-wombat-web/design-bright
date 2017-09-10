@@ -150,18 +150,26 @@ const getNonprofitsCampaigns = exports.getNonprofitsCampaigns = (nonprofitId, su
 };
 
 const launchCampaign = exports.launchCampaign = (campaignId, nonprofitId, success, error) => {
-  db.campaigns.update({ startDate: new Date() }, { where: { campaignId, nonprofitId, startDate: null, endDate: null } }).then(updateResults => success(updateResults)).catch(updateErr => error(updateErr));
+  db.campaigns.find({
+    where: { campaignId }
+  }).then(campaign => {
+    const startDate = new Date();
+    const endDate = new Date(Date.parse(startDate));
+    endDate.setDate(endDate.getDate() + campaign.duration);
+
+    db.campaigns.update({ startDate, endDate }, { where: { campaignId, nonprofitId, startDate: null, endDate: null } }).then(updateResults => success(updateResults)).catch(updateErr => error(updateErr));
+  }).catch(findErr => console.log(findErr));
 };
 
 const stopCampaign = exports.stopCampaign = (campaignId, nonprofitId, success, error) => {
+  console.log(campaignId);
   db.campaigns.update({ endDate: new Date() }, {
     where: {
       campaignId,
       nonprofitId,
       startDate: {
         $ne: null
-      },
-      endDate: null
+      }
     }
   }).then(updateResults => success(updateResults)).catch(updateErr => error(updateErr));
 };

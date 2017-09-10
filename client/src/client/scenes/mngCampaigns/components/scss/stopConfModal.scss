@@ -1,0 +1,75 @@
+$light-graphite: #999999;
+$maui-orange: #ffaa00;
+$graphite: #808080;
+$error-red: #ff5800;
+$blue-hydrangea: #4097ff;
+
+$small-break: 23.125rem;
+$medium-break: 40em;
+$large-break: 64em;
+$xlarge-break: 90em;
+$xxlarge-break: 120em;
+
+#stopConf {
+  position: fixed;
+  top: 0;
+  z-index: 500;
+  margin: 0 auto;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  div.background {
+    width: 100%;
+    position: relative;
+    background-color: white;
+    section {
+      margin: 3rem auto;
+      text-align:center;
+
+      p {
+        font-size: 1.125rem;
+        line-height: 1.5rem;
+
+        @media screen and (min-width: $medium-break){
+          font-size: 1.25rem;
+          line-height: 1.625rem;
+        }
+      }
+
+      button {
+        margin-top: 1.75rem;
+
+        &.cancel {
+          margin: 0;
+          padding: 0.25rem;
+          width: auto;
+          color: $error-red;
+          font-size: 1rem;
+          font-weight: 300;
+
+          &:hover {
+            color: darken(saturate($error-red, 10%), 10%);
+          }
+        }
+      }
+    }
+    div.close {
+      text-align: right;
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      line-height: initial;
+      font-size: 1.625rem;
+      font-family: 'font-awesome-light';
+      color: $error-red;
+      cursor: pointer;
+
+      span:hover {
+        color: darken(saturate($error-red, 10%), 10%);
+      }
+    }
+  }
+}

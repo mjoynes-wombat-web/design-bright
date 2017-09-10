@@ -9,7 +9,7 @@ const CampaignActions = ({ name, id, launch, stop, startDate, endDate }) => (
         </span>
       </h2>
       <div className={`small-12 columns campaign-action${startDate ? ' stop' : ' launch'}`}>
-        <button onClick={startDate ? () => stop(id) : () => launch(id)} disabled={endDate}>
+        <button onClick={startDate ? () => stop(id) : () => launch(id)} disabled={((new Date(Date.parse(endDate))).getTime() <= (new Date()).getTime())}>
           <span className="icon">{startDate ? '' : ''}</span><span className="text">{startDate ? 'Stop' : 'Launch'} Campaign</span>
         </button>
       </div>
@@ -31,7 +31,7 @@ const CampaignActions = ({ name, id, launch, stop, startDate, endDate }) => (
           : null
       }
       {
-        endDate !== null
+        ((new Date(Date.parse(endDate))).getTime() <= (new Date()).getTime())
           ? <p className="small-12 columns">
             Campaign Stopped on {(new Date(Date.parse(endDate))).toLocaleDateString()}.
           </p>
