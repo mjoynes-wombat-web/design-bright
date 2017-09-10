@@ -22,10 +22,12 @@ const runSmartLook = () => {
   }
 };
 
+runSmartLook();
+
 render((
   <Provider store={store}>
     <BrowserRouter>
-      <App onComponentDidMount={() => { runSmartLook(); routeRefresh(); }}/>
+      <App onComponentDidMount={() => { routeRefresh(); }}/>
     </BrowserRouter>
   </Provider>
 ), document.getElementById('root'));
