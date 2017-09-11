@@ -247,7 +247,7 @@ const campaignImages = exports.campaignImages = sequelize.define('campaignImages
     allowNull: false
   },
   src: {
-    type: _sequelize2.default.STRING(99),
+    type: _sequelize2.default.TEXT,
     allowNull: false
   },
   imageType: {

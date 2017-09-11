@@ -101,7 +101,6 @@ router.get('/:campaignId', (req, res) => {
 router.patch('/edit/:campaignId', (req, res) => {
   const getCampaignId = parseInt(req.params.campaignId, 10);
   const { accessToken, campaignInfo, campaignContent } = req.body;
-
   (0, _Auth.getUserInfo)(accessToken, user => {
     const nonprofitId = parseInt(user.app_metadata.nonProfitID, 10);
     if (campaignInfo.nonprofitId === nonprofitId) {
@@ -109,7 +108,14 @@ router.patch('/edit/:campaignId', (req, res) => {
         if (getCampaignInfoResults.nonprofitId === nonprofitId) {
           return (0, _campaigns.createContent)(getCampaignId, campaignContent, createContentResults => {
             if (getCampaignInfoResults.startDate === null) {
-              return (0, _campaigns.updateCampaignInfo)(nonprofitId, campaignInfo, updateCampaignInfoResults => (0, _response2.default)(200, updateCampaignInfoResults, 'The campaign changes were successfully saved.', res), updateCampaignInfoErr => (0, _response2.default)(304, updateCampaignInfoErr, 'The was an error saving the campaign information.', res));
+              console.log(createContentResults);
+              return (0, _campaigns.updateCampaignInfo)(nonprofitId, campaignInfo, updateCampaignInfoResults => {
+                console.log(updateCampaignInfoResults);
+                (0, _response2.default)(200, updateCampaignInfoResults, 'The campaign changes were successfully saved.', res);
+              }, updateCampaignInfoErr => {
+                console.log(updateCampaignInfoErr);
+                (0, _response2.default)(304, updateCampaignInfoErr, 'The was an error saving the campaign information.', res);
+              });
             }
             return (0, _response2.default)(200, createContentResults, 'The campaign content was successfully saved.', res);
           }, createContentError => (0, _response2.default)(304, createContentError, 'The was an error saving the campaign content.', res));

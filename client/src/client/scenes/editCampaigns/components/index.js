@@ -232,7 +232,7 @@ class mngCampaigns extends React.Component {
                             <p className="title">Campaign Duration:</p>
                             <p className="info">{this.state.campaignInfo.duration} Days</p>
                             <p className="title">Funding Needed:</p>
-                            <p className="info">{this.state.campaignInfo.fundingNeeded}</p>
+                            <p className="info">${this.state.campaignInfo.fundingNeeded}</p>
                             <p className="title">Start Date:</p>
                             <p className="info">
                               {(new Date(

@@ -252,7 +252,7 @@ export const campaignImages = sequelize.define(
       allowNull: false,
     },
     src: {
-      type: Sequelize.STRING(99),
+      type: Sequelize.TEXT,
       allowNull: false,
     },
     imageType: {

@@ -251,8 +251,14 @@ export const createContent = (campaignId, content, success, error) => {
               db.campaignImages.bulkCreate(
                 blocks.images,
               )
-                .then(() => success({ message: `The content for the campaign with the id ${campaignId} was saved.`, campaignId }))
-                .catch(createImagesErr => error({ message: 'There was an error creating the image content.', error: createImagesErr }));
+                .then((results) => {
+                  console.log(results);
+                  success({ message: `The content for the campaign with the id ${campaignId} was saved.`, campaignId });
+                })
+                .catch((createImagesErr) => {
+                  console.log(createImagesErr);
+                  error({ message: 'There was an error creating the image content.', error: createImagesErr });
+                });
             })
             .catch(createTextErr => error({ message: 'There was an error creating the text content.', error: createTextErr }));
         })

@@ -116,7 +116,6 @@ router.get('/:campaignId', (req, res) => {
 router.patch('/edit/:campaignId', (req, res) => {
   const getCampaignId = parseInt(req.params.campaignId, 10);
   const { accessToken, campaignInfo, campaignContent } = req.body;
-
   getUserInfo(
     accessToken,
     (user) => {
@@ -131,22 +130,28 @@ router.patch('/edit/:campaignId', (req, res) => {
                 campaignContent,
                 (createContentResults) => {
                   if (getCampaignInfoResults.startDate === null) {
+                    console.log(createContentResults);
                     return updateCampaignInfo(
                       nonprofitId,
                       campaignInfo,
-                      updateCampaignInfoResults => jsonResponse(
-                        200,
-                        updateCampaignInfoResults,
-                        'The campaign changes were successfully saved.',
-                        res,
-                      ),
-                      updateCampaignInfoErr => jsonResponse(
-                        304,
-                        updateCampaignInfoErr,
-                        'The was an error saving the campaign information.',
-                        res,
-                      ),
-                    );
+                      (updateCampaignInfoResults) => {
+                        console.log(updateCampaignInfoResults);
+                        jsonResponse(
+                          200,
+                          updateCampaignInfoResults,
+                          'The campaign changes were successfully saved.',
+                          res,
+                        )
+                      },
+                      (updateCampaignInfoErr) => {
+                        console.log(updateCampaignInfoErr);
+                        jsonResponse(
+                          304,
+                          updateCampaignInfoErr,
+                          'The was an error saving the campaign information.',
+                          res,
+                        );
+                      });
                   }
                   return jsonResponse(
                     200,
