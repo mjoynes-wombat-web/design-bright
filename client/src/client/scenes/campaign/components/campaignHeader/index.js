@@ -1,3 +1,6 @@
+/* eslint-env browser */
+import React from 'react';
+
 const determineTimeLeft = (isEnded, campaignInfo) => {
   if (isEnded()) {
     return 'This campaign has ended.';

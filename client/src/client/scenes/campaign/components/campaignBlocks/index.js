@@ -1,3 +1,6 @@
+/* eslint-env browser */
+import React from 'react';
+
 const CampaignBlocks = ({ buttonAction, content, campaignInfo, isEnded }) => {
   switch (content.type) {
     case 'paragraph':

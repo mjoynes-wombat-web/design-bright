@@ -1,3 +1,5 @@
+/* eslint-env browser */
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const CampaignActions = ({ name, id, launch, stop, startDate, endDate }) => (
@@ -9,7 +11,13 @@ const CampaignActions = ({ name, id, launch, stop, startDate, endDate }) => (
         </span>
       </h2>
       <div className={`small-12 columns campaign-action${startDate ? ' stop' : ' launch'}`}>
-        <button onClick={startDate ? () => stop(id) : () => launch(id)} disabled={((new Date(Date.parse(endDate))).getTime() <= (new Date()).getTime())}>
+        <button
+          onClick={startDate
+            ? () => stop(id)
+            : () => launch(id)}
+          disabled={
+            ((new Date(Date.parse(endDate))).getTime()
+              <= (new Date()).getTime())}>
           <span className="icon">{startDate ? '' : ''}</span><span className="text">{startDate ? 'Stop' : 'Launch'} Campaign</span>
         </button>
       </div>
@@ -20,7 +28,7 @@ const CampaignActions = ({ name, id, launch, stop, startDate, endDate }) => (
       </div>
       <div className="small-12 columns campaign-action edit">
         <Link to={`/campaign${startDate ? '' : '/preview'}/${id}`}>
-          <span className="icon">{startDate? '' : ''}</span><span className="text">{startDate ? 'View' : 'Preview'} Campaign</span>
+          <span className="icon">{startDate ? '' : ''}</span><span className="text">{startDate ? 'View' : 'Preview'} Campaign</span>
         </Link>
       </div>
       {

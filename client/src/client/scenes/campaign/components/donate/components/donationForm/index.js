@@ -1,3 +1,5 @@
+/* eslint-env browser */
+import React from 'react';
 import { CardNumberElement, CardExpiryElement, CardCVCElement, PostalCodeElement } from 'react-stripe-elements';
 import validEmail from '../../../../../../helpers/validEmail';
 

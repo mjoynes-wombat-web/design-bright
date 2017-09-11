@@ -1,3 +1,5 @@
+/* eslint-env browser */
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const UserMenu = ({ requireAuth, userType, onLogout }) => {

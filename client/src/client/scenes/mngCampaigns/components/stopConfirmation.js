@@ -1,5 +1,9 @@
-import './scss/stopConfModal.scss';
+/* eslint-env browser */
+import React from 'react';
+
 import OverlayModal from '../../../partials/overlayModal';
+
+import './scss/stopConfModal.scss';
 
 export const StopConfModal = ({ text, confirmAction, cancelAction, id }) => (
   <OverlayModal closeAction={cancelAction}>
