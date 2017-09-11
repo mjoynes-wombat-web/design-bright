@@ -36,6 +36,7 @@ class mngCampaigns extends React.Component {
       editorData: {},
     };
     this.componentWillMount = this.componentWillMount.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.validate = this.validate.bind(this);
@@ -86,6 +87,10 @@ class mngCampaigns extends React.Component {
         hasCampaign: true,
       });
     }
+  }
+
+  componentDidMount() {
+    this.validate();
   }
 
   onChange(e) {
@@ -172,7 +177,11 @@ class mngCampaigns extends React.Component {
   }
 
   validate() {
-    if (
+    if (this.state.campaignInfo.startDate) {
+      if (this.state.editorData.document.nodes[0].nodes[0].ranges[0].text !== '') {
+        return true;
+      }
+    } else if (
       this.state.campaignInfo.name.length > 0
       && (isNumber(this.state.campaignInfo.duration)
         && numLength(this.state.campaignInfo.duration, 2, 2))
