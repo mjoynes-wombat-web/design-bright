@@ -26,6 +26,7 @@ class Campaign extends React.Component {
     this.componentWillMount = this.componentWillMount.bind(this);
     this.isEnded = this.isEnded.bind(this);
     this.showDonationModal = this.showDonationModal.bind(this);
+    this.updateCampaignDonations = this.updateCampaignDonations.bind(this);
   }
 
   componentWillMount() {
@@ -75,6 +76,18 @@ class Campaign extends React.Component {
       });
   }
 
+  updateCampaignDonations(newAmount) {
+    const campaignInfo = this.state.campaignInfo;
+    campaignInfo.donationsMade = newAmount;
+    campaignInfo.donationPercentage = (
+      (parseFloat(campaignInfo.donationsMade)
+        / parseFloat(campaignInfo.fundingNeeded))
+      * 100
+    );
+
+    this.setState({ campaignInfo });
+  }
+
   isEnded() {
     return ((new Date(Date.parse(this.state.campaignInfo.endDate))).getTime()
       <= (new Date()).getTime());
@@ -107,6 +120,7 @@ class Campaign extends React.Component {
                 campaignId={this.state.campaignId}
                 campaignInfo={this.state.campaignInfo}
                 isEnded={this.isEnded}
+                updateCampaignDonations={this.updateCampaignDonations}
                 onNewMessage={this.props.onNewMessage}
                 onNewError={this.props.onNewError} />
               : null}

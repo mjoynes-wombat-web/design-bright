@@ -1,12 +1,13 @@
 /* eslint-env browser */
 import React from 'react';
 import { injectStripe } from 'react-stripe-elements';
+import axios from 'axios';
+
 import OverlayModal from '../../../../../partials/overlayModal';
 import CampaignHeader from '../../campaignHeader';
 import DonationForm from './donationForm';
 import DonationConfirmation from './donationConfirmation';
 import validEmail from '../../../../../helpers/validEmail';
-import axios from 'axios';
 
 import './scss/style.scss';
 
@@ -159,6 +160,7 @@ class DonateComponent extends React.Component {
     )
       .then((chargeResults) => {
         this.props.onNewMessage(chargeResults.data.message);
+        this.props.updateCampaignDonations(chargeResults.data.data.donationsMade);
         this.cancelConfirmation();
         window.scroll(0, 0);
       })

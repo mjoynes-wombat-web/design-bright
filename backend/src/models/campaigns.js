@@ -320,8 +320,9 @@ export const donateToCampaign = (campaignId, amount, success, error) => {
       if (findCampaignResults.startDate) {
         const donationsMade = (
           parseFloat(findCampaignResults.donationsMade)
-          + (parseFloat(amount) / 10)
+          + (parseFloat(amount) / 100)
         );
+
         return db.campaigns.update(
           { donationsMade },
           { where: { campaignId } },

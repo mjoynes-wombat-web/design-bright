@@ -26,6 +26,7 @@ class Donate extends React.Component {
             campaignInfo={this.props.campaignInfo}
             isEnded={this.props.isEnded}
             onNewMessage={this.props.onNewMessage}
+            updateCampaignDonations={this.props.updateCampaignDonations}
             onNewError={this.props.onNewError} />
         </Elements>
       </StripeProvider>
