@@ -171,10 +171,11 @@ header {
             > a {
               font-family: 'font-awesome-light';
               padding: 0.3125rem;
-              width: 2rem;
+              min-width: 2.625rem;
 
               @media screen and (min-width: $medium-break) {
                 padding: 0.5rem;
+                min-width: 2rem;
               }
 
               &.logged-in {
