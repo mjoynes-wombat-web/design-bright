@@ -80,6 +80,7 @@ const corsOptions = {
 app.use((0, _cors2.default)(corsOptions));
 
 app.use(_bodyParser2.default.json());
+app.use(_bodyParser2.default.urlencoded({ extended: false }));
 
 // Setting up the API routes.
 app.use('/api/users', _users2.default);

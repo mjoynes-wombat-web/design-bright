@@ -10,6 +10,7 @@ $xlarge-break: 90em;
 $xxlarge-break: 120em;
 
 form {
+  margin:0;
   label, legend {
     color: $light-graphite;
     font-size: 1.125rem;
@@ -69,6 +70,14 @@ form {
         top: 0.2rem;
       }
     }
+  }
+
+  select {
+    background-image: url('/assets/img/sort-drk.svg');
+    background-position: right -1rem center;
+    background-repeat: no-repeat;
+    background-size: 0.75rem;
+    cursor: pointer;
   }
 
   input[type=text], input[type=number], input[type=password], input[type=email], select {

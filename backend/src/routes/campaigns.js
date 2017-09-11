@@ -1,15 +1,21 @@
 // Create API Users Router
 import { Router } from 'express';
 import multer from 'multer';
+import Stripe from 'stripe';
+import dotenv from 'dotenv';
 
 import { getUserInfo } from '../models/Auth0';
-import { getCampaignById, getCampaignContent, createCampaign, createContent, updateCampaignInfo } from '../models/campaigns';
+import { getCampaignById, getCampaignContent, createCampaign, createContent, updateCampaignInfo, donateToCampaign } from '../models/campaigns';
 import jsonResponse from '../helpers/response';
 import { uploadCampaignImage } from '../models/Cloudinary';
 import requireAuth from '../helpers/requireAuth';
 
 const upload = multer();
 const router = Router();
+
+const { STRIPE_SECRET } = dotenv.config().parsed;
+
+const stripe = Stripe(STRIPE_SECRET);
 
 /*
 ******CAMPAIGN ROUTES******
@@ -259,6 +265,72 @@ router.post('/create', (req, res) => {
       res,
     );
   }
+});
+
+
+router.post('/donate/:id', (req, res) => {
+  const { id } = req.params;
+  const { email, token, amount, description } = req.body;
+
+  const charge = () => {
+    if (email) {
+      return {
+        receipt_email: email,
+        source: token.id,
+        amount,
+        description,
+        currency: 'usd',
+        metadata: {
+          campaignId: id,
+        },
+      };
+    }
+    return {
+      source: token.id,
+      amount,
+      description,
+      currency: 'usd',
+      metadata: {
+        campaignId: id,
+      },
+    };
+  };
+
+  stripe.charges.create(charge())
+    .then((chargeConf) => {
+      if (chargeConf.paid) {
+        const amountCharged = chargeConf.amount.toString();
+        return donateToCampaign(
+          id,
+          amount,
+          donateResults => jsonResponse(
+            donateResults.code,
+            {
+              ...donateResults.data,
+              databaseMessage: donateResults.message,
+            },
+            `Your donation of $${amountCharged.slice(0, amountCharged.length - 2)}.${amountCharged.slice(-2)} was successfully made.`,
+            res),
+          getCampaignErr => jsonResponse(
+            getCampaignErr.code,
+            { error: getCampaignErr.error },
+            getCampaignErr.message,
+            res),
+        );
+      }
+      return jsonResponse(
+        400,
+        { error: chargeConf },
+        'There was an error processing your payment.',
+        res);
+    })
+    .catch((chargeErr) => {
+      jsonResponse(
+        chargeErr.statusCode,
+        { error: chargeErr },
+        chargeErr.message,
+        res);
+    });
 });
 
 // Exporting router as default.

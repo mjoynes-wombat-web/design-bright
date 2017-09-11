@@ -47,6 +47,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(BodyParser.json());
+app.use(BodyParser.urlencoded({ extended: false }));
 
 // Setting up the API routes.
 app.use('/api/users', users);

@@ -1,4 +1,4 @@
-const CampaignBlocks = ({ buttonAction, content, campaignInfo }) => {
+const CampaignBlocks = ({ buttonAction, content, campaignInfo, isEnded }) => {
   switch (content.type) {
     case 'paragraph':
       return (
@@ -38,7 +38,7 @@ const CampaignBlocks = ({ buttonAction, content, campaignInfo }) => {
           return (
             <div>
               <div className="main-image-wrapper">
-                {campaignInfo.endDate
+                {isEnded()
                   ? null
                   : <div className="overlay"></div>}
                 <div className="main-image">
@@ -47,11 +47,11 @@ const CampaignBlocks = ({ buttonAction, content, campaignInfo }) => {
                     alt={content.data.alt}
                     className={content.data.imageType} />
                 </div>
-                {campaignInfo.endDate
+                {isEnded()
                   ? null
                   : <button className="secondary" onClick={buttonAction}>Make a Donation</button>}
               </div>
-              {campaignInfo.endDate
+              {isEnded()
                 ? null
                 : (
                   <button className="primary mobile" onClick={buttonAction}>

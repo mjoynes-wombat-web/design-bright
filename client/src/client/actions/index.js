@@ -5,7 +5,7 @@ import axios from 'axios';
 import C from '../constants';
 
 export const newError = (errType, errMsg) => (dispatch) => {
-  console.log('newError ran.');
+  // console.log('newError ran.');
   dispatch({
     type: C.ERROR,
     payload: {
@@ -16,7 +16,7 @@ export const newError = (errType, errMsg) => (dispatch) => {
 };
 
 export const clearError = () => (dispatch) => {
-  console.log('clearError ran.');
+  // console.log('clearError ran.');
   dispatch({
     type: C.ERROR,
     payload: {
@@ -27,7 +27,7 @@ export const clearError = () => (dispatch) => {
 };
 
 export const newMessage = (msgType, msg) => (dispatch) => {
-  console.log('newMessage ran.');
+  // console.log('newMessage ran.');
   dispatch({
     type: C.MESSAGE,
     payload: {
@@ -38,7 +38,7 @@ export const newMessage = (msgType, msg) => (dispatch) => {
 };
 
 export const clearMessage = () => (dispatch) => {
-  console.log('clearMessage ran.');
+  // console.log('clearMessage ran.');
   dispatch({
     type: C.MESSAGE,
     payload: {
@@ -49,7 +49,7 @@ export const clearMessage = () => (dispatch) => {
 };
 
 export const clearUserInfo = () => (dispatch) => {
-  console.log('clearUserInfo ran.');
+  // console.log('clearUserInfo ran.');
   dispatch({
     type: C.USER,
     payload: {},
@@ -58,7 +58,7 @@ export const clearUserInfo = () => (dispatch) => {
 
 
 export const logout = () => (dispatch) => {
-  console.log('logout ran.');
+  // console.log('logout ran.');
   dispatch({
     type: C.USER_AUTH,
     payload: {},
@@ -70,7 +70,7 @@ export const logout = () => (dispatch) => {
 };
 
 export const requireAuth = () => (dispatch, getState) => {
-  console.log('requireAuth ran.');
+  // console.log('requireAuth ran.');
   const currentState = getState();
   const auth = currentState.userAuth;
   const authDate = new Date(Date.parse(auth.date));
@@ -94,7 +94,7 @@ export const requireAuth = () => (dispatch, getState) => {
 };
 
 export const login = loginInfo => (dispatch) => {
-  console.log('login ran.');
+  // console.log('login ran.');
   const webAuth = new auth0.WebAuth({
     domain: 'designbright.auth0.com',
     clientID: 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh',
@@ -122,7 +122,7 @@ export const login = loginInfo => (dispatch) => {
 
 export const getUserInfo = callback =>
   (dispatch, getState) => {
-    console.log('getUserInfo ran.');
+    // console.log('getUserInfo ran.');
     const state = getState();
     if (dispatch(requireAuth())) {
       const webAuth = new auth0.WebAuth({
@@ -146,7 +146,6 @@ export const getUserInfo = callback =>
             passwordDate: new Date(Date.parse(userData.user_metadata.passwordDate)),
             userType: userData.app_metadata.userType,
           };
-          console.log(userData.user_metadata);
           if ('picture' in userData.user_metadata) {
             userInfo.picture = userData.user_metadata.picture;
           } else {
@@ -190,7 +189,7 @@ export const getUserInfo = callback =>
   };
 
 export const editUser = (editData, callback) => (dispatch, getState) => {
-  console.log('editUser ran.');
+  // console.log('editUser ran.');
   const state = getState();
   const data = {
     editData,
@@ -202,7 +201,6 @@ export const editUser = (editData, callback) => (dispatch, getState) => {
     data)
     .then((results) => {
       const editUserResults = results.data;
-      console.log(editUserResults);
       dispatch(newMessage(
         'editUser',
         `Congratulations, your changes have been made for ${editUserResults.data.updatedUser.email}`,

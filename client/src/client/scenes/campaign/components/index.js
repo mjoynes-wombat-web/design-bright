@@ -4,6 +4,8 @@ import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import CampaignBlocks from './campaignBlocks';
+import Donate from './donate';
+import CampaignHeader from './campaignHeader';
 
 import './scss/style.scss';
 
@@ -18,10 +20,12 @@ class Campaign extends React.Component {
         complete: false,
         code: null,
       },
+      showDonationModal: false,
     };
 
     this.componentWillMount = this.componentWillMount.bind(this);
-    this.makeDonation = this.makeDonation.bind(this);
+    this.isEnded = this.isEnded.bind(this);
+    this.showDonationModal = this.showDonationModal.bind(this);
   }
 
   componentWillMount() {
@@ -43,10 +47,9 @@ class Campaign extends React.Component {
 
         campaignInfo.donationPercentage = (
           (parseFloat(campaignInfo.donationsMade)
-          / parseFloat(campaignInfo.fundingNeeded))
+            / parseFloat(campaignInfo.fundingNeeded))
           * 100
         );
-        console.log(campaignInfo.donationPercentage);
         this.setState({ campaignInfo });
         this.setState({ campaignContent });
 
@@ -59,29 +62,32 @@ class Campaign extends React.Component {
           },
         });
       })
-      .catch(error => this.setState({
-        fetched: {
-          complete: true,
-          code: error.response.data.statusCode,
-        },
-      }));
+      .catch((error) => {
+        console.log(error);
+        if (error) {
+          this.setState({
+            fetched: {
+              complete: true,
+              code: error.response.data.statusCode,
+            },
+          });
+        }
+      });
   }
 
-  determineTimeLeft() {
-    if (this.state.campaignInfo.endDate) {
-      return 'This campaign has ended.';
-    } else if (this.state.campaignInfo.startDate === null) {
-      return 'This campaign hasn\'t started yet.';
-    } else if (this.state.campaignInfo.timeRemaining > 1) {
-      return `${Math.round(this.state.campaignInfo.timeRemaining)} Days Left`;
-    } else if ((this.state.campaignInfo.timeRemaining * 24) > 1) {
-      return `${Math.round(this.state.campaignInfo.timeRemaining * 24)} Hours Left`;
+  isEnded() {
+    return ((new Date(Date.parse(this.state.campaignInfo.endDate))).getTime()
+      <= (new Date()).getTime());
+  }
+
+  showDonationModal() {
+    if (this.state.campaignInfo.startDate) {
+      document.body.style.overflow = 'hidden';
+      this.setState({ showDonationModal: true });
+    } else {
+      this.props.onNewError('This campaign has not been started yet.');
+      window.scroll(0, 0);
     }
-    return 'Less than an Hour left';
-  }
-
-  makeDonation() {
-    console.log(`Make donation for Campaign ${this.state.campaignInfo.campaignId}`);
   }
 
   render() {
@@ -89,40 +95,25 @@ class Campaign extends React.Component {
       if (this.state.fetched.code === 200) {
         return (
           <main id="campaign" className={`small-12 columns${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
+            {this.state.showDonationModal
+              ? <Donate
+                cancelDonation={
+                  () => {
+                    document.body.style.overflow = '';
+                    this.setState({ showDonationModal: false });
+                    window.onresize = null;
+                  }
+                }
+                campaignId={this.state.campaignId}
+                campaignInfo={this.state.campaignInfo}
+                isEnded={this.isEnded}
+                onNewMessage={this.props.onNewMessage}
+                onNewError={this.props.onNewError} />
+              : null}
             <section className="row">
-              <div className="small-12 columns">
-                <h1>
-                  <span className="underlined">
-                    {this.state.campaignInfo.name}
-                  </span>
-                </h1>
-              </div>
-              <div className="small-12 columns">
-                <div className="progress">
-                  <div className="line small-12 columns"></div>
-                  <div className="funded columns" style={{ 
-                    width: `calc(${(this.state.campaignInfo.donationPercentage < 100)
-                      ? this.state.campaignInfo.donationPercentage
-                      : '100'}% - 0.25rem)` }}></div>
-                </div>
-              </div>
-              <div className="small-12 columns">
-                <div className="row align-justify campaign-details">
-                  <div className="shrink columns">
-                    <p className="details">{`${(((parseFloat(this.state.campaignInfo.donationsMade) / parseFloat(this.state.campaignInfo.fundingNeeded)) * 100) < 100) ? Math.round((parseFloat(this.state.campaignInfo.donationsMade) / parseFloat(this.state.campaignInfo.fundingNeeded)) * 100) : '100'}`}% Funded</p>
-                  </div>
-                  <div className="shrink columns">
-                    <p className="details">
-                      {this.determineTimeLeft()}
-                    </p>
-                  </div>
-                  <div className="shrink columns">
-                    <p className="details">
-                      ${parseInt(this.state.campaignInfo.fundingNeeded, 10).toLocaleString()} Needed
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <CampaignHeader
+                isEnded={this.isEnded}
+                campaignInfo={this.state.campaignInfo} />
               <div className="small-12 columns">
                 <section className="campaign-content row">
                   <div className="small-12 medium-6 columns">
@@ -131,8 +122,9 @@ class Campaign extends React.Component {
                         (i < ((this.state.campaignContent.length / 2) - 1))
                           ? <CampaignBlocks
                             campaignInfo={this.state.campaignInfo}
-                            buttonAction={this.makeDonation}
+                            buttonAction={this.showDonationModal}
                             content={content}
+                            isEnded={this.isEnded}
                             key={i} />
                           : null
                       ),
@@ -143,7 +135,7 @@ class Campaign extends React.Component {
                       (content, i) => ((i > ((this.state.campaignContent.length / 2) - 2))
                         ? <CampaignBlocks
                           campaignInfo={this.state.campaignInfo}
-                          buttonAction={this.makeDonation}
+                          buttonAction={this.showDonationModal}
                           content={content}
                           key={i} />
                         : null
@@ -153,10 +145,12 @@ class Campaign extends React.Component {
                   <div className="small-12 columns">
                     <div className="row align-center">
                       <button
-                        className={`primary small-11 medium-10 large-10 columns${this.state.campaignInfo.endDate ? ' disabled' : ''}`}
-                        onClick={this.makeDonation}
-                        disabled={this.state.campaignInfo.endDate}>
-                        {this.state.campaignInfo.endDate
+                        className={`primary small-11 medium-10 large-10 columns${this.isEnded()
+                          ? ' disabled'
+                          : ''}`}
+                        onClick={this.showDonationModal}
+                        disabled={this.isEnded()}>
+                        {this.isEnded()
                           ? 'This campaign has ended.'
                           : 'Make a Donation'}
                       </button>
@@ -189,13 +183,12 @@ class Campaign extends React.Component {
           }} />
         );
       }
-      console.log(this.state.fetched.code);
-      // return (
-      //   <Redirect to={{
-      //     pathname: '/campaigns',
-      //     search: '?error=unknown',
-      //   }} />
-      // );
+      return (
+        <Redirect to={{
+          pathname: '/campaigns',
+          search: '?error=unknown',
+        }} />
+      );
     }
     return (
       <h1>Loading</h1>

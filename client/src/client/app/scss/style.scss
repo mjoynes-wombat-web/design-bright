@@ -8,6 +8,11 @@
   src: url('/assets/fonts/fontawesome-solid-900.woff');
 }
 
+@font-face {
+  font-family: 'font-awesome-brands';
+  src: url('/assets/fonts/fontawesome-brands-900.woff');
+}
+
 $blue-hydrangea: #4097ff;
 $light-hydrangea: lighten($blue-hydrangea,14.9%);
 $error-red: #ff5800;
@@ -26,7 +31,7 @@ body {
   color: $graphite;
   font-size: 0.875rem;
   position: relative;
-  min-height: 100vh;
+  min-height: 100%;
   padding-bottom:9rem;
 
   @media screen and (min-width: $medium-break) {
@@ -183,6 +188,22 @@ main {
         color: $error-red;
         font-weight: normal;
         text-align:center;
+      }
+    }
+
+    &.cancel {
+      margin: 1.5rem 0 0 0;
+      padding: 0.25rem;
+      width: auto;
+      color: $error-red;
+      font-size: 1rem;
+      font-weight: 300;
+
+      @media screen and (min-width: $medium-break) {
+        margin: 0;
+      }
+      &:hover {
+        color: darken(saturate($error-red, 10%), 10%);
       }
     }
   }

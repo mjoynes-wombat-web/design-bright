@@ -24,13 +24,15 @@ class Profile extends React.Component {
     document.title = this.props.userInfo.userType === 'non-profit'
       ? `${this.props.userInfo.nonProfitName}'s Profile - Design Bright`
       : `${this.props.userInfo.firstName} ${this.props.userInfo.lastName}'s Profile - Design Bright`;
-    this.props.onGetUserInfo(() => this.setState({ fetched: true }));
-    this.setState({ profilePhoto: this.props.userInfo.picture });
+    this.props.onGetUserInfo(
+      () => {
+        this.setState({ fetched: true });
+      },
+    );
   }
 
   componentDidMount() {
     const search = queryString.parse(this.props.location.search);
-
     if ('origin' in search) {
       switch (search.origin) {
         case 'register':
@@ -70,12 +72,10 @@ class Profile extends React.Component {
           .then((postImgResults) => {
             this.setState({
               loadingProfilePhoto: false,
-              profilePhoto: postImgResults.data.data.picture,
             });
             this.props.onGetUserInfo();
           })
           .catch((postImgErr) => {
-            console.log(postImgErr);
             this.props.onNewError(postImgErr.response.data.message);
             this.setState({
               loadingProfilePhoto: false,
@@ -95,7 +95,7 @@ class Profile extends React.Component {
                 <img
                   src={this.state.loadingProfilePhoto
                     ? '/assets/img/spinner.svg'
-                    : this.state.profilePhoto}
+                    : this.props.userInfo.picture}
                   alt={`${
                     this.props.userInfo.userType === 'non-profit'
                       ? this.props.userInfo.nonProfitName

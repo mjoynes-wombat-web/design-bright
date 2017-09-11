@@ -13,6 +13,14 @@ var _multer = require('multer');
 
 var _multer2 = _interopRequireDefault(_multer);
 
+var _stripe = require('stripe');
+
+var _stripe2 = _interopRequireDefault(_stripe);
+
+var _dotenv = require('dotenv');
+
+var _dotenv2 = _interopRequireDefault(_dotenv);
+
 var _Auth = require('../models/Auth0');
 
 var _campaigns = require('../models/campaigns');
@@ -31,6 +39,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const upload = (0, _multer2.default)();
 const router = (0, _express.Router)();
+
+const { STRIPE_SECRET } = _dotenv2.default.config().parsed;
+
+const stripe = (0, _stripe2.default)(STRIPE_SECRET);
 
 /*
 ******CAMPAIGN ROUTES******
@@ -153,6 +165,47 @@ router.post('/create', (req, res) => {
   } else {
     (0, _response2.default)(401, { accessToken }, 'The access token is not a valid access token.', res);
   }
+});
+
+router.post('/donate/:id', (req, res) => {
+  const { id } = req.params;
+  const { email, token, amount, description } = req.body;
+
+  const charge = () => {
+    if (email) {
+      return {
+        receipt_email: email,
+        source: token.id,
+        amount,
+        description,
+        currency: 'usd',
+        metadata: {
+          campaignId: id
+        }
+      };
+    }
+    return {
+      source: token.id,
+      amount,
+      description,
+      currency: 'usd',
+      metadata: {
+        campaignId: id
+      }
+    };
+  };
+
+  stripe.charges.create(charge()).then(chargeConf => {
+    if (chargeConf.paid) {
+      const amountCharged = chargeConf.amount.toString();
+      return (0, _campaigns.donateToCampaign)(id, amount, donateResults => (0, _response2.default)(donateResults.code, _extends({}, donateResults.data, {
+        databaseMessage: donateResults.message
+      }), `Your donation of $${amountCharged.slice(0, amountCharged.length - 2)}.${amountCharged.slice(-2)} was successfully made.`, res), getCampaignErr => (0, _response2.default)(getCampaignErr.code, { error: getCampaignErr.error }, getCampaignErr.message, res));
+    }
+    return (0, _response2.default)(400, { error: chargeConf }, 'There was an error processing your payment.', res);
+  }).catch(chargeErr => {
+    (0, _response2.default)(chargeErr.statusCode, { error: chargeErr }, chargeErr.message, res);
+  });
 });
 
 // Exporting router as default.

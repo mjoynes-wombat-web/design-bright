@@ -1,0 +1,50 @@
+Donation:
+  ✔ Create Donation functionality. @critical @done (2017-9-10 22:26:21)
+Browse:
+  ☐ Create Browse campaigns page. @critical
+
+Search:
+  ☐ Create Search campaigns page. @high
+
+Advisor:
+  ☐ Create Become Advisor page. @high
+
+Message:
+  ☐ Refactor Message Component @high 
+  ☐ Create more robust messaging @high 
+  ☐ Determine which error type should show in redux and be global. @high 
+
+Images:
+  ☐ Optimize images. @high
+
+General:
+  ☐ Optimize page speed with google page speed. @high
+  ☐ Link underline and heading underline aren't different enough. @low
+  ☐ Use Gatsby for prerendering and auth-caching. @low
+
+Edit Campaigns:
+  ☐ Disable save button after save and re-enabled after changes. @low
+  ☐ Add Bold, Italic, Underlined, Lists and Movies to the edit campaign functionality. @low
+
+Login:
+  ☐ Create forgotten password functionality. @low
+  ☐ Require email verification. @low
+
+Register:
+  ☐ Create a delete non-profit fallback. Check creation date. @low
+  ☐ Move form to single column. @low
+  ☐ Add additional content to entice user to register. @low
+  ☐ Limit width of inputs. Possibly based on length of expected input. @low
+  
+Home:
+  ☐ Animate the search box transition.@low
+  ☐ Change the width of the text to 45 to 75 chars. @low
+
+Footer:
+  ✔ Fix vh issue with sticky footer on mobile. @low @done (2017-9-10 11:28:31)
+
+Forms: 
+  ☐ Componetize the forms. @low 
+
+CSS:
+  ☐ Switch CSS loader. Autoprefixer-loader is depreciated.@low

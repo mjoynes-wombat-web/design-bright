@@ -20,7 +20,7 @@ const CampaignActions = ({ name, id, launch, stop, startDate, endDate }) => (
       </div>
       <div className="small-12 columns campaign-action edit">
         <Link to={`/campaign${startDate ? '' : '/preview'}/${id}`}>
-          <span className="icon"></span><span className="text">{startDate ? 'View' : 'Preview'} Campaign</span>
+          <span className="icon">{startDate? '' : ''}</span><span className="text">{startDate ? 'View' : 'Preview'} Campaign</span>
         </Link>
       </div>
       {

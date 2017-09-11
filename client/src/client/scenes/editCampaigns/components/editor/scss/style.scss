@@ -154,19 +154,6 @@ $error-red: #ff5800;
         > div {
           margin-bottom: 0rem;
           text-align: center;
-
-          button.cancel {
-            margin: 0;
-            padding: 0.25rem;
-            width: auto;
-            color: $error-red;
-            font-size: 1rem;
-            font-weight: 300;
-
-            &:hover {
-              color: darken(saturate($error-red, 10%), 10%);
-            }
-          }
         }
       }
     }

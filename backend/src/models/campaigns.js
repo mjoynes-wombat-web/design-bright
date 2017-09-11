@@ -179,7 +179,6 @@ export const launchCampaign = (campaignId, nonprofitId, success, error) => {
 };
 
 export const stopCampaign = (campaignId, nonprofitId, success, error) => {
-  console.log(campaignId);
   db.campaigns.update(
     { endDate: new Date() },
     {
@@ -311,4 +310,52 @@ export const updateCampaignInfo = (
       return success({ message: `The campaign info was saved for campaign id ${campaignId}.`, updatedCampaignInfo });
     })
     .catch(updateCampaignErr => error({ message: 'There was an error saving the campaign information.', error: updateCampaignErr }));
+};
+
+export const donateToCampaign = (campaignId, amount, success, error) => {
+  db.campaigns.find({
+    where: { campaignId },
+  })
+    .then((findCampaignResults) => {
+      if (findCampaignResults.startDate) {
+        const donationsMade = (
+          parseFloat(findCampaignResults.donationsMade)
+          + (parseFloat(amount) / 10)
+        );
+        return db.campaigns.update(
+          { donationsMade },
+          { where: { campaignId } },
+        ).then((updateDonationResults) => {
+          if (updateDonationResults[0] > 0) {
+            return success({
+              code: 200,
+              data: {
+                results: updateDonationResults,
+                donationsMade,
+              },
+              message: `The donations for the campaign with the id ${campaignId} were updated to $${donationsMade}`,
+            });
+          }
+          return error({
+            code: 404,
+            error: updateDonationResults,
+            message: `We could not find the campaign with the id ${campaignId}`,
+          });
+        }).catch(updateDonationErr => error({
+          code: 500,
+          error: updateDonationErr,
+          message: `The donations made for the campaign with the id ${campaignId} were not updated.`,
+        }));
+      }
+      return error({
+        code: 401,
+        error: findCampaignResults,
+        message: `The campaign with the id of ${campaignId} hasn't been started yet.`,
+      });
+    })
+    .catch(findCampaignErr => error({
+      code: 404,
+      error: findCampaignErr,
+      message: `We could not find the campaign with the id ${campaignId}`,
+    }));
 };

@@ -29,7 +29,6 @@ class mngCampaigns extends React.Component {
     axios.get(`https://${window.location.hostname}:3000/api/nonprofits/campaigns/${this.props.userAuth.accessToken}`)
       .then((results) => {
         const { nonprofit, campaigns } = results.data.data;
-        console.log(campaigns);
         for (let i = 0; i < campaigns.length; i += 1) {
           campaigns[i].timeRemaining = (
             (((new Date(Date.parse(campaigns[i].startDate)) - new Date())
@@ -84,12 +83,14 @@ class mngCampaigns extends React.Component {
             stopModalMsg: '',
             currentStopId: null,
           });
+          document.body.style.overflow = '';
         }
       })
       .catch(error => console.log(error));
   }
 
   stopCampaign(campaignId) {
+    document.body.style.overflow = 'hidden';
     const campaigns = this.state.campaigns;
     const campaignPosition = campaigns
       .map(campaign => campaign.campaignId)
@@ -129,11 +130,16 @@ class mngCampaigns extends React.Component {
                   text={this.state.stopModalMsg}
                   id={this.state.currentStopId}
                   confirmAction={campaignId => this.stopConfirm(campaignId)}
-                  cancelAction={() => this.setState({
-                    showStopModal: false,
-                    stopModalMsg: '',
-                    currentStopId: null,
-                  })} />
+                  cancelAction={
+                    () => {
+                      document.body.style.overflow = '';
+                      this.setState({
+                        showStopModal: false,
+                        stopModalMsg: '',
+                        currentStopId: null,
+                      });
+                    }
+                  } />
                 : null}
               <section className="row">
                 <div className="small-12 columns">

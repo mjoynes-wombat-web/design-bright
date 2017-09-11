@@ -93,7 +93,6 @@ class CampaignEditor extends React.Component {
     let initialState;
     if (props.content.length > 0) {
       initialState = { nodes: props.content };
-      console.log(initialState);
     } else {
       initialState = {
         nodes: [

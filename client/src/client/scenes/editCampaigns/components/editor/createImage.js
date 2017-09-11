@@ -1,5 +1,4 @@
 const CreateImage = (props) => {
-  console.log(props);
   return (
     <section id="createImage" >
       <div className="row align-middle img-src">
