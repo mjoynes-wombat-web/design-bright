@@ -1,3 +1,6 @@
+/* eslint-env browser */
+import React from 'react';
+
 const Toolbar = (props) => {
   let selectValue;
   if ('type' in props.selectValue) {

@@ -1,3 +1,6 @@
+/* eslint-env browser */
+import React from 'react';
+
 const CreateLink = props => (
   <section id="createLink" >
     {props.editorState.isExpanded
