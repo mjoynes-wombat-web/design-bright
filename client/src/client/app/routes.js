@@ -12,6 +12,7 @@ import Campaign from '../scenes/campaign';
 import mngCampaigns from '../scenes/mngCampaigns';
 import editCampaigns from '../scenes/editCampaigns';
 import gaTracker from '../helpers/gaTracker';
+import CampaignList from '../scenes/campaignList';
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -24,7 +25,7 @@ const Routes = () => (
     <Switch>
       <Route
         exact path='/'
-        component={gaTracker(Home)}/>
+        component={gaTracker(Home)} />
       <Route
         exact
         path='/register'
@@ -33,35 +34,41 @@ const Routes = () => (
       <Route
         exact
         path='/login'
-        component={gaTracker(Login)}/>
+        component={gaTracker(Login)} />
       <Route
         exact
         path='/user/profile'
-        component={gaTracker(Profile)}/>
+        component={gaTracker(Profile)} />
       <Route
         exact
         path='/user/profile/edit'
-        component={gaTracker(editProfile)}/>
+        component={gaTracker(editProfile)} />
       <Route
         exact
         path='/user/manage-campaigns'
-        component={gaTracker(mngCampaigns)}/>
+        component={gaTracker(mngCampaigns)} />
       <Route
         exact
         path='/campaign/create'
-        component={gaTracker(editCampaigns)}/>
+        component={gaTracker(editCampaigns)} />
       <Route
         exact
         path='/campaign/edit/:id'
-        component={gaTracker(editCampaigns)}/>
+        component={gaTracker(editCampaigns)} />
       <Route
         exact
         path='/campaign/preview/:id'
-        component={gaTracker(Campaign)}/>
+        component={gaTracker(Campaign)} />
       <Route
         exact
         path='/campaign/:id'
-        component={gaTracker(Campaign)}/>
+        component={gaTracker(Campaign)} />
+      <Route
+        path='/campaigns/:view/:page'
+        component={gaTracker(CampaignList)} />
+      <Route
+        path='/campaigns/:view'
+        component={gaTracker(CampaignList)} />
     </Switch>
   </div>
 );

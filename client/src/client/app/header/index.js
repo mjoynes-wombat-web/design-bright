@@ -14,9 +14,6 @@ const mapDispatchToProps = dispatch => ({
       logout(),
     );
   },
-  onSearch(search) {
-    console.log(`A search attempt was made for ${search}`);
-  },
   onRequireAuth() {
     return dispatch(
       requireAuth(),

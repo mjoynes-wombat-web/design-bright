@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import './scss/style.scss';
 import UserMenu from './userMenu';
@@ -10,12 +10,20 @@ class Header extends React.Component {
     super(props);
     this.state = {
       search: 'Search',
+      searchSubmit: false,
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onBlur = this.onBlur.bind(this);
+    this.componentDidUpdate = this.componentDidUpdate.bind(this);
+  }
+
+  componentDidUpdate() {
+    if (this.state.searchSubmit) {
+      this.setState({ search: 'Search', searchSubmit: false });
+    }
   }
 
   onChange(e) {
@@ -38,20 +46,25 @@ class Header extends React.Component {
 
   onBlur(e) {
     const target = e.target;
-    const value = target.value;
     const name = target.name;
 
-    if (value === '') {
-      this.setState({ [name]: 'Search' });
-    }
+    this.setState({ [name]: 'Search' });
   }
 
   onSubmit(e) {
     e.preventDefault();
-    this.props.onSearch(this.state.search);
+    this.setState({
+      searchSubmit: true,
+    });
   }
 
   render() {
+    if (this.state.searchSubmit) {
+      return <Redirect to={{
+        pathname: '/campaigns/search',
+        search: `?search=${this.state.search}`,
+      }} />;
+    }
     return (
       <header className={('ontouchstart' in document.documentElement) ? '' : 'no-touch'}>
         <div className="row align-bottom align-center">
@@ -62,14 +75,15 @@ class Header extends React.Component {
           </div>
           <nav className="columns small-9 medium-6 large-5">
             <ul className="row align-justify">
-              <li className="shrink columns"><Link to="browser">Explore</Link></li>
+              <li className="shrink columns"><Link to="/campaigns/browse">Explore</Link></li>
               <li className="columns search expand">
                 <form onSubmit={this.onSubmit}>
                   <input
                     type="search"
                     name="search"
                     id="search"
-                    value={this.state.search} onChange={this.onChange}
+                    value={this.state.search}
+                    onChange={this.onChange}
                     onClick={this.onClick}
                     onBlur={this.onBlur} />
                   <button type="submit"></button>
@@ -82,7 +96,7 @@ class Header extends React.Component {
                     ? <img
                       src={this.props.userInfo.picture}
                       alt="User Profile Picture Thumbnail" />
-                    : '' }
+                    : ''}
                 </a>
                 <UserMenu
                   requireAuth={this.props.onRequireAuth}

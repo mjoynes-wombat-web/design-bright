@@ -51,3 +51,6 @@ Forms:
 
 CSS:
   ☐ Switch CSS loader. Autoprefixer-loader is depreciated.@low
+
+Campaign Page:
+  ☐ Look into implementing symantic urls. @low

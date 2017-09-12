@@ -1,0 +1,85 @@
+$light-graphite: #999999;
+$maui-orange: #ffaa00;
+$graphite: #808080;
+$error-red: #ff5800;
+$blue-hydrangea: #4097ff;
+$light-hydrangea: lighten($blue-hydrangea,14.9%);
+
+$medium-break: 40em;
+$large-break: 64em;
+$xlarge-break: 90em;
+$xxlarge-break: 120em;
+
+#campaignList {
+  h1, h2 {
+    line-height: initial;
+    span {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: initial;
+
+      &.sortWrapper {
+        cursor: pointer;
+
+        &:hover {
+          span.sort, span.icon {
+            color: darken($light-hydrangea, 10);
+            border-color: darken($light-hydrangea, 10);
+          }
+        }
+      }
+
+      &.sort {
+        color: $light-hydrangea;
+        border-bottom: 0.0625rem solid $light-hydrangea;
+        margin-top: 0.0625rem;
+      }
+      &.icon {
+        color: $light-hydrangea;
+        font-family: 'font-awesome-light';
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 1.1875rem;
+        padding-left: 0.3125rem;
+        padding-top: 0.125rem;
+
+        @media screen and (min-width: $medium-break) {
+          font-size: 1.25rem;
+        }
+      }
+    }
+  }
+
+  hr {
+    margin: 1rem 0;
+  }
+
+  .sortOptions {
+    position: relative;
+    overflow: visible;
+
+    div {
+      background-color: white;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      font-size: 1.25rem;
+      color: $light-hydrangea;
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin:0;
+        li {
+          a:link {
+            border-bottom: none;
+          }
+        }
+      }
+
+      hr {
+        margin-top: 0.75rem;
+      }
+    }
+  }
+}
