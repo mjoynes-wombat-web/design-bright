@@ -548,6 +548,16 @@ export const getCampaigns = ({ page, search, sort }, success, error) => {
           pages,
           message,
         });
+      } else if (pages) {
+        return error({
+          statusCode: 404,
+          campaigns: paginatedCampaigns,
+          search,
+          sort,
+          page,
+          pages,
+          message: `The are no campaigns for "${search}"`,
+        });
       } else if (page > pages) {
         return error({
           statusCode: 404,
