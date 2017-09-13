@@ -5,7 +5,7 @@ import Stripe from 'stripe';
 import dotenv from 'dotenv';
 
 import { getUserInfo } from '../models/Auth0';
-import { getCampaignById, getCampaignContent, createCampaign, createContent, updateCampaignInfo, donateToCampaign } from '../models/campaigns';
+import { getCampaignById, getCampaignContent, createCampaign, createContent, updateCampaignInfo, donateToCampaign, getCampaigns } from '../models/campaigns';
 import jsonResponse from '../helpers/response';
 import { uploadCampaignImage } from '../models/Cloudinary';
 import requireAuth from '../helpers/requireAuth';
@@ -24,24 +24,41 @@ const stripe = Stripe(STRIPE_SECRET);
 // Returns the list of campaigns based on the search as sort queries.
 router.get('/', (req, res) => {
   if (Object.keys(req.query).length > 0) {
-    const search = req.query.search;
-    const sort = req.query.sort;
-    if (sort && search) {
-      res.send(`
-        Returns campaigns filtered by ${search} and sorted by ${sort}.
-      `);
-    } else if (sort) {
-      res.send(`
-        Returns all campaigns sorted by ${sort}.
-      `);
-    } else if (search) {
-      res.send(`
-        Returns campaigns filtered by ${req.query.search}
-      `);
+    const { search, sort, page } = req.query;
+    if (search && sort && page) {
+      return getCampaigns(
+        {
+          page,
+          search,
+          sort,
+        },
+        getCampaignsResults => jsonResponse(
+          getCampaignsResults.statusCode,
+          getCampaignsResults,
+          getCampaignsResults.message,
+          res),
+        getCampaignsErr => jsonResponse(
+          getCampaignsErr.statusCode,
+          getCampaignsErr,
+          getCampaignsErr.message,
+          res),
+      );
     }
-  } else {
-    res.send('Returns all campaigns paginated.');
+    return jsonResponse(
+      400,
+      {
+        search,
+        sort,
+        page,
+      },
+      'You are missing one of the query params.',
+      res);
   }
+  return jsonResponse(
+    400,
+    {},
+    'There were no queries provided.',
+    res);
 });
 
 // Returns the information for the campaign with the identity param.

@@ -1,3 +1,27 @@
-#browseCampaigns {
+$light-graphite: #999999;
+$maui-orange: #ffaa00;
+$graphite: #808080;
+$error-red: #ff5800;
+$blue-hydrangea: #4097ff;
+$light-hydrangea: lighten($blue-hydrangea,14.9%);
+
+$medium-break: 40em;
+$large-break: 64em;
+$xlarge-break: 90em;
+$xxlarge-break: 120em;
+
+#campaignList {
+  #browseCampaigns {
+    h1 {
+      margin-bottom: 0.25rem;
+    }
   
+    .sortOptions div {
+      font-size: 1.3125rem;
+  
+      @media screen and (min-width: $medium-break) {
+        font-size: 1.4375rem;
+      }
+    }
+  }
 }

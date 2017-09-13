@@ -9,20 +9,33 @@ $medium-break: 40em;
 $large-break: 64em;
 $xlarge-break: 90em;
 $xxlarge-break: 120em;
-#searchCampaigns {
-  h1 {
-    margin-bottom: 0.5rem;
-  }
-  h2.sort-method {
-    color: $blue-hydrangea;
-    margin-top: 0;
-    margin-bottom: 0.125rem;
 
-    span.icon {
-      font-size: 1rem;
-
-      @media screen and (min-width: $medium-break) {
-        font-size: 1.125rem;
+#campaignList {
+  #searchCampaigns {
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+    h2.sort-method {
+      color: $blue-hydrangea;
+      margin: 0;
+  
+      span.icon {
+        font-size: 1rem;
+  
+        @media screen and (min-width: $medium-break) {
+          font-size: 1.125rem;
+        }
+      }
+    }
+  
+    .sortOptions {
+      ul {
+        li {
+          margin: 0.125rem 0;
+          a:link, button {
+            padding: 0.0625rem 0.375rem;
+          }
+        }
       }
     }
   }

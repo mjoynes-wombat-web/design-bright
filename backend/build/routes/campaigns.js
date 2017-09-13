@@ -51,24 +51,21 @@ const stripe = (0, _stripe2.default)(STRIPE_SECRET);
 // Returns the list of campaigns based on the search as sort queries.
 router.get('/', (req, res) => {
   if (Object.keys(req.query).length > 0) {
-    const search = req.query.search;
-    const sort = req.query.sort;
-    if (sort && search) {
-      res.send(`
-        Returns campaigns filtered by ${search} and sorted by ${sort}.
-      `);
-    } else if (sort) {
-      res.send(`
-        Returns all campaigns sorted by ${sort}.
-      `);
-    } else if (search) {
-      res.send(`
-        Returns campaigns filtered by ${req.query.search}
-      `);
+    const { search, sort, page } = req.query;
+    if (search && sort && page) {
+      return (0, _campaigns.getCampaigns)({
+        page,
+        search,
+        sort
+      }, getCampaignsResults => (0, _response2.default)(getCampaignsResults.statusCode, getCampaignsResults, getCampaignsResults.message, res), getCampaignsErr => (0, _response2.default)(getCampaignsErr.statusCode, getCampaignsErr, getCampaignsErr.message, res));
     }
-  } else {
-    res.send('Returns all campaigns paginated.');
+    return (0, _response2.default)(400, {
+      search,
+      sort,
+      page
+    }, 'You are missing one of the query params.', res);
   }
+  return (0, _response2.default)(400, {}, 'There were no queries provided.', res);
 });
 
 // Returns the information for the campaign with the identity param.

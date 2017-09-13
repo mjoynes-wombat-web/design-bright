@@ -366,3 +366,215 @@ export const donateToCampaign = (campaignId, amount, success, error) => {
       message: `We could not find the campaign with the id ${campaignId}`,
     }));
 };
+
+export const getCampaigns = ({ page, search, sort }, success, error) => {
+  db.campaigns.findAll(
+    {
+      where: {
+        startDate: {
+          $ne: null,
+        },
+        endDate: {
+          $gt: new Date(),
+        },
+      },
+      include: [
+        {
+          model: db.campaignContent,
+          where: {
+            contentStatus: 'current',
+          },
+          include: [
+            {
+              model: db.campaignText,
+            },
+            {
+              model: db.campaignImages,
+            },
+          ],
+        },
+      ],
+    },
+  )
+    .then((findCampaignsResults) => {
+      const allCampaigns = findCampaignsResults.reduce(
+        (cleanedCampaigns, campaign) => {
+          const {
+            campaignId,
+            name,
+            duration,
+            fundingNeeded,
+            donationsMade,
+            startDate,
+            endDate,
+            campaignContents,
+          } = campaign;
+          const cleanedCampaign = {
+            campaignId,
+            name,
+            duration,
+            fundingNeeded,
+            donationsMade,
+            startDate,
+            endDate,
+          };
+
+          const campaignParagraphs = campaignContents[0].campaignTexts.reduce(
+            (paragraphs, block) => {
+              const reducedBlock = block;
+              if (reducedBlock.type === 'paragraph') {
+                reducedBlock.nodes = JSON.parse(block.nodes);
+                paragraphs.push(reducedBlock);
+              }
+              return paragraphs;
+            },
+            [],
+          );
+          const firstParagraph = campaignParagraphs[0].nodes.reduce(
+            (text, node) => {
+              if (node.type === 'link') {
+                const newText = text + node.nodes[0].ranges[0].text;
+                return newText;
+              }
+              const newText = text + node.ranges[0].text;
+              return newText;
+            },
+            '',
+          );
+          cleanedCampaign.description = firstParagraph;
+
+          const campaignMainImgs = campaignContents[0].campaignImages.reduce(
+            (images, img) => {
+              if (img.imageType === 'main') {
+                const { alt, src } = img;
+                images.push(
+                  {
+                    alt,
+                    src,
+                  },
+                );
+                return images;
+              }
+              return images;
+            },
+            [],
+          );
+          cleanedCampaign.images = campaignMainImgs[0];
+
+          cleanedCampaigns.push(cleanedCampaign);
+          return cleanedCampaigns;
+        },
+        [],
+      );
+
+      const searchedCampaigns = allCampaigns.reduce(
+        (campaigns, campaign) => {
+          if (search) {
+            const searchTerms = search.split(' ');
+
+            const termsInName = () => {
+              let termInName = true;
+              for (let i = 0; i < searchTerms.length; i += 1) {
+                const name = campaign.name.toLowerCase();
+                if (name.indexOf(searchTerms[0].toLowerCase()) === -1) {
+                  termInName = false;
+                }
+              }
+              return termInName;
+            };
+
+            const termsInDescription = () => {
+              let termInDescription = true;
+              for (let i = 0; i < searchTerms.length; i += 1) {
+                const description = campaign.description.toLowerCase();
+                if (description.indexOf(searchTerms[0].toLowerCase()) === -1) {
+                  termInDescription = false;
+                }
+              }
+              return termInDescription;
+            };
+
+            if (termsInName() || termsInDescription()) {
+              campaigns.push(campaign);
+              return campaigns;
+            }
+            return campaigns;
+          }
+          campaigns.push(campaign);
+          return campaigns;
+        },
+        [],
+      );
+
+      const sortCampaigns = () => {
+        switch (sort) {
+          case 'Percent Funded':
+            return searchedCampaigns.sort(
+              (a, b) => (b.donationsMade / b.fundingNeeded) - (a.donationsMade / a.fundingNeeded));
+          case 'Days Remaining':
+            return searchedCampaigns.sort(
+              (a, b) => (Date.parse(a.endDate)) - Date.parse(b.endDate));
+          case 'Funding Needed':
+            return searchedCampaigns.sort(
+              (a, b) => (a.fundingNeeded - a.donationsMade)
+                - (b.fundingNeeded - b.donationsMade));
+          case 'Newest':
+          default:
+            return searchedCampaigns.sort(
+              (a, b) => Date.parse(b.startDate)
+                - Date.parse(a.startDate));
+        }
+      };
+
+      const sortedCampaigns = sortCampaigns();
+
+      const paginatedCampaigns = (page
+        ? sortedCampaigns.slice(((page - 1) * 12), (page * 12))
+        : sortedCampaigns.slice(0, 12));
+
+      const pages = Math.ceil(sortedCampaigns.length / 12);
+
+      if (paginatedCampaigns.length) {
+        const message = (search
+          ? `Page ${page} of ${pages} for the campaign results filtered by "${search}", sorted by ${sort}`
+          : `Page ${page} of ${pages} for the campaign results sorted by ${sort}`);
+        console.log(message);
+        return success({
+          statusCode: 200,
+          campaigns: paginatedCampaigns,
+          search,
+          sort,
+          page,
+          pages,
+          message,
+        });
+      } else if (page > pages) {
+        return error({
+          statusCode: 404,
+          campaigns: paginatedCampaigns,
+          search,
+          sort,
+          page,
+          pages,
+          message: `There are only ${pages} pages of results.`,
+        });
+      }
+      return error({
+        statusCode: 404,
+        campaigns: paginatedCampaigns,
+        search,
+        sort,
+        page,
+        pages,
+        message: `The are no campaigns for "${search}"`,
+      });
+    })
+    .catch(findCampaignsErr => error({
+      statusCode: 500,
+      error: findCampaignsErr,
+      search,
+      sort,
+      page,
+      message: 'The are was an error retrieving the campaigns.',
+    }));
+};

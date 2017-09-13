@@ -6,8 +6,9 @@ import SortOptions from '../sortOptions';
 
 import './scss/style.scss';
 
-const Search = ({ state, showSortOpt }) => {
-  const sortUrl = `/campaigns/${state.view}/${state.page}?search=${state.search}&sort=`;
+const Search = ({ state, showSortOpt, cancelSort }) => {
+  const pageUrl = `/campaigns/${state.view}`;
+  const query = `?search=${state.search}&sort=`;
   if (state.search) {
     return (
       <section className="row" id="searchCampaigns">
@@ -17,7 +18,7 @@ const Search = ({ state, showSortOpt }) => {
               Campaigns for
             </span>&nbsp;
             <span className="search">
-              <Link rel="nofollow" to={`${sortUrl}${state.sort}`}>
+              <Link rel="nofollow" to={`${pageUrl}${query}${state.sort}`}>
                 {state.search}
               </Link>
             </span>
@@ -39,7 +40,9 @@ const Search = ({ state, showSortOpt }) => {
             }
           </h2>
           {state.showSort
-            ? <SortOptions state={state} />
+            ? <SortOptions
+              state={state}
+              cancelSort={cancelSort} />
             : null}
           <hr />
           <div className="spacer" style={{ height: '300px' }}></div>
@@ -49,7 +52,7 @@ const Search = ({ state, showSortOpt }) => {
   }
   return <Redirect to={{
     pathname: '/campaigns/browse',
-    search: `?sort=${sort}`,
+    search: `?sort=${state.sort}`,
   }} />;
 };
 

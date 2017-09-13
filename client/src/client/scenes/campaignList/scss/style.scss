@@ -58,13 +58,17 @@ $xxlarge-break: 120em;
     position: relative;
     overflow: visible;
 
-    div {
+    > div {
       background-color: white;
       position: absolute;
       top: 0;
       width: 100%;
-      font-size: 1.25rem;
+      font-size: 1.0625rem;
       color: $light-hydrangea;
+
+      @media screen and (min-width: $medium-break) {
+        font-size: 1.25rem;
+      }
 
       ul {
         list-style: none;
@@ -73,7 +77,27 @@ $xxlarge-break: 120em;
         li {
           a:link {
             border-bottom: none;
+            width: 100%;
+            display: inline-block;
+            padding: 0 0.375rem;
+
+            &:hover {
+              background-color: #F7F7F7;
+            }
           }
+        }
+      }
+      button {
+        padding: 0 0.375rem;
+        margin-top: 0.5rem;
+        width: 100%;
+        text-align: left;
+        font-size: inherit;
+        line-height: 1.5;
+
+        &:hover {
+          background-color: #F7F7F7;
+          color: $error-red;
         }
       }
 
