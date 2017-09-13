@@ -51,8 +51,19 @@ const stripe = (0, _stripe2.default)(STRIPE_SECRET);
 // Returns the list of campaigns based on the search as sort queries.
 router.get('/', (req, res) => {
   if (Object.keys(req.query).length > 0) {
-    const { search, sort, page } = req.query;
-    if (search && sort && page) {
+    let search;
+    let sort;
+    let page;
+    if (req.query.page) {
+      search = req.query.search;
+      sort = req.query.sort;
+      page = req.query.page;
+    } else {
+      search = req.query.search;
+      sort = req.query.sort;
+      page = 1;
+    }
+    if (sort) {
       return (0, _campaigns.getCampaigns)({
         page,
         search,
@@ -63,7 +74,7 @@ router.get('/', (req, res) => {
       search,
       sort,
       page
-    }, 'You are missing one of the query params.', res);
+    }, 'You are missing the sort method.', res);
   }
   return (0, _response2.default)(400, {}, 'There were no queries provided.', res);
 });

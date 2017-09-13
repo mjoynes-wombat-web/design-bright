@@ -18,9 +18,7 @@ const Search = ({ state, showSortOpt, cancelSort }) => {
               Campaigns for
             </span>&nbsp;
             <span className="search">
-              <Link rel="nofollow" to={`${pageUrl}${query}${state.sort}`}>
-                {state.search}
-              </Link>
+              {state.search}
             </span>
           </h1>
           <h2 className="sort-method">

@@ -14,6 +14,10 @@ $xxlarge-break: 120em;
   #searchCampaigns {
     h1 {
       margin-bottom: 0.5rem;
+
+      span.search {
+        color: $light-hydrangea;
+      }
     }
     h2.sort-method {
       color: $blue-hydrangea;
