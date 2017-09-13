@@ -445,7 +445,7 @@ const getCampaigns = exports.getCampaigns = ({ page, search, sort }, success, er
         pages,
         message
       });
-    } else if (pages) {
+    } else if (pages === 0) {
       return error({
         statusCode: 404,
         campaigns: paginatedCampaigns,
