@@ -15,6 +15,15 @@ const SortOptions = ({ state, cancelSort }) => {
     <div className="sortOptions">
       <div>
         <ul>
+          {state.search
+            ? (
+              <li>
+                <Link rel="nofollow" to={`${pageUrl}${query()}Relevance`}>
+                  Relevance
+                </Link>
+              </li>
+            )
+            : null}
           <li>
             <Link rel="nofollow" to={`${pageUrl}${query()}Newest`}>
               Newest

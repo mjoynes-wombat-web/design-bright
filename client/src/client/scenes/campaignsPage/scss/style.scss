@@ -10,7 +10,10 @@ $large-break: 64em;
 $xlarge-break: 90em;
 $xxlarge-break: 120em;
 
-#campaignList {
+#campaignsPage {
+  > section {
+    margin: 0 auto;
+  }
   h1, h2 {
     line-height: initial;
     span {

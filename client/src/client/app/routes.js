@@ -12,7 +12,7 @@ import Campaign from '../scenes/campaign';
 import mngCampaigns from '../scenes/mngCampaigns';
 import editCampaigns from '../scenes/editCampaigns';
 import gaTracker from '../helpers/gaTracker';
-import CampaignList from '../scenes/campaignList';
+import CampaignsPage from '../scenes/campaignsPage';
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -65,10 +65,10 @@ const Routes = () => (
         component={gaTracker(Campaign)} />
       <Route
         path='/campaigns/:view/:page'
-        component={gaTracker(CampaignList)} />
+        component={gaTracker(CampaignsPage)} />
       <Route
         path='/campaigns/:view'
-        component={gaTracker(CampaignList)} />
+        component={gaTracker(CampaignsPage)} />
     </Switch>
   </div>
 );

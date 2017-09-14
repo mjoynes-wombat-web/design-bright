@@ -5,11 +5,17 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getCampaigns = exports.donateToCampaign = exports.updateCampaignInfo = exports.createCampaign = exports.createContent = exports.stopCampaign = exports.launchCampaign = exports.getNonprofitsCampaigns = exports.getCampaignContent = exports.getCampaignById = undefined;
 
+var _fuse = require('fuse.js');
+
+var _fuse2 = _interopRequireDefault(_fuse);
+
 var _db = require('./db');
 
 var db = _interopRequireWildcard(_db);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const getCampaignById = exports.getCampaignById = (getCampaignId, success, error) => {
   db.campaigns.find({
@@ -371,47 +377,22 @@ const getCampaigns = exports.getCampaigns = ({ page, search, sort }, success, er
         }
         return images;
       }, []);
-      cleanedCampaign.images = campaignMainImgs[0];
+      cleanedCampaign.image = campaignMainImgs[0];
 
       cleanedCampaigns.push(cleanedCampaign);
       return cleanedCampaigns;
     }, []);
 
-    const searchedCampaigns = allCampaigns.reduce((campaigns, campaign) => {
-      if (search) {
-        const searchTerms = search.split(' ');
+    const options = {
+      shouldSort: sort === 'Relevance',
+      threshold: 0.5,
+      maxPatternLength: 48,
+      minMatchCharLength: 2,
+      keys: ['name', 'description']
+    };
 
-        const termsInName = () => {
-          let termInName = true;
-          for (let i = 0; i < searchTerms.length; i += 1) {
-            const name = campaign.name.toLowerCase();
-            if (name.indexOf(searchTerms[0].toLowerCase()) === -1) {
-              termInName = false;
-            }
-          }
-          return termInName;
-        };
-
-        const termsInDescription = () => {
-          let termInDescription = true;
-          for (let i = 0; i < searchTerms.length; i += 1) {
-            const description = campaign.description.toLowerCase();
-            if (description.indexOf(searchTerms[0].toLowerCase()) === -1) {
-              termInDescription = false;
-            }
-          }
-          return termInDescription;
-        };
-
-        if (termsInName() || termsInDescription()) {
-          campaigns.push(campaign);
-          return campaigns;
-        }
-        return campaigns;
-      }
-      campaigns.push(campaign);
-      return campaigns;
-    }, []);
+    const fuse = new _fuse2.default(allCampaigns, options);
+    const searchedCampaigns = search ? fuse.search(search) : allCampaigns;
 
     const sortCampaigns = () => {
       switch (sort) {
@@ -422,16 +403,18 @@ const getCampaigns = exports.getCampaigns = ({ page, search, sort }, success, er
         case 'Funding Needed':
           return searchedCampaigns.sort((a, b) => a.fundingNeeded - a.donationsMade - (b.fundingNeeded - b.donationsMade));
         case 'Newest':
-        default:
           return searchedCampaigns.sort((a, b) => Date.parse(b.startDate) - Date.parse(a.startDate));
+        case 'Relevance':
+        default:
+          return searchedCampaigns;
       }
     };
 
     const sortedCampaigns = sortCampaigns();
 
-    const paginatedCampaigns = page ? sortedCampaigns.slice((page - 1) * 12, page * 12) : sortedCampaigns.slice(0, 12);
+    const paginatedCampaigns = page ? sortedCampaigns.slice((page - 1) * 6, page * 6) : sortedCampaigns.slice(0, 6);
 
-    const pages = Math.ceil(sortedCampaigns.length / 12);
+    const pages = Math.ceil(sortedCampaigns.length / 6);
 
     if (paginatedCampaigns.length) {
       const message = search ? `Page ${page} of ${pages} for the campaign results filtered by "${search}", sorted by ${sort}` : `Page ${page} of ${pages} for the campaign results sorted by ${sort}`;

@@ -1,3 +1,5 @@
+import Fuse from 'fuse.js';
+
 import * as db from './db';
 
 export const getCampaignById = (getCampaignId, success, error) => {
@@ -459,7 +461,7 @@ export const getCampaigns = ({ page, search, sort }, success, error) => {
             },
             [],
           );
-          cleanedCampaign.images = campaignMainImgs[0];
+          cleanedCampaign.image = campaignMainImgs[0];
 
           cleanedCampaigns.push(cleanedCampaign);
           return cleanedCampaigns;
@@ -467,44 +469,19 @@ export const getCampaigns = ({ page, search, sort }, success, error) => {
         [],
       );
 
-      const searchedCampaigns = allCampaigns.reduce(
-        (campaigns, campaign) => {
-          if (search) {
-            const searchTerms = search.split(' ');
+      const options = {
+        shouldSort: (sort === 'Relevance'),
+        threshold: 0.5,
+        maxPatternLength: 48,
+        minMatchCharLength: 2,
+        keys: [
+          'name',
+          'description',
+        ],
+      };
 
-            const termsInName = () => {
-              let termInName = true;
-              for (let i = 0; i < searchTerms.length; i += 1) {
-                const name = campaign.name.toLowerCase();
-                if (name.indexOf(searchTerms[0].toLowerCase()) === -1) {
-                  termInName = false;
-                }
-              }
-              return termInName;
-            };
-
-            const termsInDescription = () => {
-              let termInDescription = true;
-              for (let i = 0; i < searchTerms.length; i += 1) {
-                const description = campaign.description.toLowerCase();
-                if (description.indexOf(searchTerms[0].toLowerCase()) === -1) {
-                  termInDescription = false;
-                }
-              }
-              return termInDescription;
-            };
-
-            if (termsInName() || termsInDescription()) {
-              campaigns.push(campaign);
-              return campaigns;
-            }
-            return campaigns;
-          }
-          campaigns.push(campaign);
-          return campaigns;
-        },
-        [],
-      );
+      const fuse = new Fuse(allCampaigns, options);
+      const searchedCampaigns = search ? fuse.search(search) : allCampaigns;
 
       const sortCampaigns = () => {
         switch (sort) {
@@ -519,20 +496,22 @@ export const getCampaigns = ({ page, search, sort }, success, error) => {
               (a, b) => (a.fundingNeeded - a.donationsMade)
                 - (b.fundingNeeded - b.donationsMade));
           case 'Newest':
-          default:
             return searchedCampaigns.sort(
               (a, b) => Date.parse(b.startDate)
                 - Date.parse(a.startDate));
+          case 'Relevance':
+          default:
+            return searchedCampaigns;
         }
       };
 
       const sortedCampaigns = sortCampaigns();
 
       const paginatedCampaigns = (page
-        ? sortedCampaigns.slice(((page - 1) * 12), (page * 12))
-        : sortedCampaigns.slice(0, 12));
+        ? sortedCampaigns.slice(((page - 1) * 6), (page * 6))
+        : sortedCampaigns.slice(0, 6));
 
-      const pages = Math.ceil(sortedCampaigns.length / 12);
+      const pages = Math.ceil(sortedCampaigns.length / 6);
 
       if (paginatedCampaigns.length) {
         const message = (search

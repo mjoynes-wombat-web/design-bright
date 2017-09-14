@@ -43,7 +43,6 @@ const Search = ({ state, showSortOpt, cancelSort }) => {
               cancelSort={cancelSort} />
             : null}
           <hr />
-          <div className="spacer" style={{ height: '300px' }}></div>
         </div>
       </section>
     );
