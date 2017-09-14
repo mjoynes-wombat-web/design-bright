@@ -30,7 +30,7 @@ const percentFunded = (fundingNeeded, donationsMade) =>
 
 const CampaignItem = ({ campaign }) => {
   return (
-    <article className="small-12 medium-6 large-4 columns campaign-item">
+    <article className="small-12 medium-6 columns campaign-item">
       <Link to={`/campaign/${campaign.campaignId}`}>
         <div className="row align-justify align-middle">
           <h2 className="shrink columns">
