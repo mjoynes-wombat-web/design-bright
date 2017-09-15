@@ -12,7 +12,6 @@ const router = Router();
 
 // Accepts a new advisor request. Returns a confirmation message.
 router.post('/create', (req, res) => {
-  console.log(req.body);
   createAdvisor(
     req.body,
     createAdvisorResults => jsonResponse(
