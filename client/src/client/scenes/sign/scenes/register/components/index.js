@@ -146,7 +146,7 @@ class Register extends React.Component {
 
       axios.post(
         `https://${window.location.hostname}:3000/api/users/create`,
-        User(this.state))
+        User(this.state.inputs))
         .then((results) => {
           const createUserResults = results.data;
 

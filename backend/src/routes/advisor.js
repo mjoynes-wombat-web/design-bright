@@ -1,6 +1,9 @@
 // Create API Users Router
 import { Router } from 'express';
 
+import jsonResponse from '../helpers/response';
+import createAdvisor from '../models/advisor';
+
 const router = Router();
 
 /*
@@ -8,13 +11,21 @@ const router = Router();
 */
 
 // Accepts a new advisor request. Returns a confirmation message.
-router.post('/', (req, res) => {
-  res.json({
-    status: 200,
-    message: `
-    Accepts a new advisor request. Returns a confirmation message.
-    `,
-  });
+router.post('/create', (req, res) => {
+  console.log(req.body);
+  createAdvisor(
+    req.body,
+    createAdvisorResults => jsonResponse(
+      createAdvisorResults.statusCode,
+      createAdvisorResults,
+      createAdvisorResults.message,
+      res),
+    createAdvisorErr => jsonResponse(
+      createAdvisorErr.statusCode,
+      createAdvisorErr,
+      createAdvisorErr.message,
+      res),
+  );
 });
 
 // Exporting router as default.
