@@ -28,16 +28,14 @@ const CampaignHeader = ({ campaignInfo, isEnded }) => (
         <div className="progress">
           <div className="line small-12 columns"></div>
           <div className="funded columns" style={{
-            width: `calc(${(campaignInfo.donationPercentage < 100)
-              ? campaignInfo.donationPercentage
-              : '100'}% - 0.25rem)`,
+            width: `${campaignInfo.donationPercentage < 100 ? campaignInfo.donationPercentage : 100}%`,
           }}></div>
         </div>
       </div>
       <div className="small-12 columns">
         <div className="row align-justify campaign-details">
           <div className="shrink columns">
-            <p className="details">{`${(((parseFloat(campaignInfo.donationsMade) / parseFloat(campaignInfo.fundingNeeded)) * 100) < 100) ? Math.round((parseFloat(campaignInfo.donationsMade) / parseFloat(campaignInfo.fundingNeeded)) * 100) : '100'}`}% Funded</p>
+            <p className="details">{campaignInfo.donationPercentage}% Funded</p>
           </div>
           <div className="shrink columns">
             <p className="details">

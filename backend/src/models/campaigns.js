@@ -470,13 +470,21 @@ export const getCampaigns = ({ page, search, sort }, success, error) => {
       );
 
       const options = {
-        shouldSort: (sort === 'Relevance'),
-        threshold: 0.5,
+        shouldSort: true,
         maxPatternLength: 48,
         minMatchCharLength: 2,
+        tokenize: true,
+        matchAllTokens: true,
+        threshold: 0.3,
         keys: [
-          'name',
-          'description',
+          {
+            name: 'name',
+            weight: 0.7,
+          },
+          {
+            name: 'description',
+            weight: 0.4,
+          },
         ],
       };
 

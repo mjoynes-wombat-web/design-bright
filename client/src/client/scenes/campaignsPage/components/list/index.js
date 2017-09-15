@@ -1,8 +1,12 @@
 /* eslint-env browser */
 import React from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import CampaignItem from '../campaignItem';
+import Pagination from '../pagination';
+
+import './scss/style.scss';
 
 class List extends React.Component {
   constructor(props) {
@@ -17,22 +21,75 @@ class List extends React.Component {
 
   componentWillMount() {
     axios.get(`https://${window.location.hostname}:3000/api/campaigns/${this.props.getUrl}`)
-      .then(getCampaignsResults => this.setState({
-        campaigns: getCampaignsResults.data.data.campaigns,
-        fetched: true,
-      }))
+      .then((getCampaignsResults) => {
+        const { page, pages, campaigns } = getCampaignsResults.data.data;
+
+        const pageLinks = () => {
+          const links = [];
+          if (page > 1) {
+            links.push(
+              {
+                link: `/campaigns/${this.props.view}/${parseInt(page, 10) - 1}${window.location.search}`,
+                type: 'prev',
+              },
+            );
+          } else {
+            links.push(
+              {
+                link: '',
+                type: 'prev',
+              },
+            );
+          }
+
+          for (let i = 0; i < pages; i += 1) {
+            links.push(
+              {
+                link: `/campaigns/${this.props.view}/${i + 1}${window.location.search}`,
+                type: 'page',
+                page: i + 1,
+              },
+            );
+          }
+
+          if (page < pages) {
+            links.push(
+              {
+                link: `/campaigns/${this.props.view}/${parseInt(page, 10) + 1}${window.location.search}`,
+                type: 'next',
+              },
+            );
+          } else {
+            links.push(
+              {
+                link: '',
+                type: 'next',
+              },
+            );
+          }
+          return links;
+        };
+        return this.setState({
+          campaigns,
+          pages: pageLinks(),
+          page,
+          fetched: true,
+        });
+      })
       .catch(getCampaignsErr => console.log(getCampaignsErr));
   }
 
   render() {
     if (this.state.fetched) {
-      console.log(this.state.campaigns);
       return (
         <section className="row" id="campaignsList">
           {this.state.campaigns.map(
             (campaign, i) => <CampaignItem
               campaign={campaign} key={i} />,
           )}
+          <Pagination
+            pages={this.state.pages}
+            page={this.state.page} />
         </section>
       );
     }

@@ -384,11 +384,19 @@ const getCampaigns = exports.getCampaigns = ({ page, search, sort }, success, er
     }, []);
 
     const options = {
-      shouldSort: sort === 'Relevance',
-      threshold: 0.5,
+      shouldSort: true,
       maxPatternLength: 48,
       minMatchCharLength: 2,
-      keys: ['name', 'description']
+      tokenize: true,
+      matchAllTokens: true,
+      threshold: 0.3,
+      keys: [{
+        name: 'name',
+        weight: 0.7
+      }, {
+        name: 'description',
+        weight: 0.4
+      }]
     };
 
     const fuse = new _fuse2.default(allCampaigns, options);

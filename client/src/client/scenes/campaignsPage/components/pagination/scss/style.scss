@@ -1,0 +1,37 @@
+$light-graphite: #999999;
+$maui-orange: #ffaa00;
+$graphite: #808080;
+$error-red: #ff5800;
+$blue-hydrangea: #4097ff;
+
+$medium-break: 40em;
+$large-break: 64em;
+$xlarge-break: 90em;
+$xxlarge-break: 120em;
+
+#campaignsList {
+  #campaignsPgs {
+    font-size: 1.25rem;
+    font-weight: normal;
+    line-height: initial;
+
+    a {
+      padding: 0.125rem 0.0625rem 0 0.0625rem;
+      margin: 0 0.25rem;
+      display: inline-block;
+      vertical-align: middle;
+      min-width: 0.75rem;
+      &.step {
+        margin: 0 1rem;
+        font-family: 'font-awesome-light';
+        border-bottom: none;
+        margin-top: 0.125rem;
+      }
+      
+      &.current {
+        color: $blue-hydrangea;
+        border-color: $blue-hydrangea;
+      }
+    }
+  }
+}

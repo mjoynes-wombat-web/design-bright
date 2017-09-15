@@ -101,7 +101,8 @@ class CampaignsPage extends React.Component {
             cancelSort={() => this.setState({ showSort: false })} />
           : null}
         <List
-          getUrl={this.state.getUrl} />
+          getUrl={this.state.getUrl}
+          view={this.state.view} />
       </main>
     );
   }

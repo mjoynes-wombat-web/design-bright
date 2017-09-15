@@ -32,42 +32,51 @@ const CampaignItem = ({ campaign }) => {
   return (
     <article className="small-12 medium-6 columns campaign-item">
       <Link to={`/campaign/${campaign.campaignId}`}>
-        <div className="row align-justify align-middle">
-          <h2 className="shrink columns">
-            <span className="underlined">
-              {campaign.name}
-            </span>
-          </h2>
-          <p className="days shrink columns">
-            <span className="details">
-              {determineTimeLeft(campaign)}
-            </span>
-          </p>
-        </div>
         <div className="row">
-          <p className="small-12 columns">
-            {campaign.description}
-          </p>
-          <div className="main-image small-12 columns">
-            <img src={campaign.image.src} alt={campaign.image.alt} />
+          <div className="small-12 columns  align-self-top">
+            <div className="row align-justify align-middle">
+              <h2 className="columns">
+                <span className="underlined">
+                  {campaign.name}
+                </span>
+              </h2>
+              <p className="days shrink columns">
+                <span className="details">
+                  {determineTimeLeft(campaign)}
+                </span>
+              </p>
+              <p className="small-12 columns">
+                {campaign.description}
+              </p>
+            </div>
           </div>
-          <div className="small-12-columns">
-            <span className="timeline">
-              <span className="funded" ></span>
-            </span>
+          <div className="small-12 columns align-self-bottom">
+            <div className="row align-justify">
+              <div className="main-image small-12 columns">
+                <img src={campaign.image.src} alt={campaign.image.alt} />
+              </div>
+              <div className="small-12 columns">
+                <div className="progress">
+                  <div className="line small-12 columns"></div>
+                  <div className="funded columns" style={{
+                    width: `${percentFunded(campaign.fundingNeeded, campaign.donationsMade) < 100
+                      ? percentFunded(campaign.fundingNeeded, campaign.donationsMade)
+                      : 100}%`,
+                  }}></div>
+                </div>
+              </div>
+              <p className="funded shrink columns">
+                <span className="details">
+                  {percentFunded(campaign.fundingNeeded, campaign.donationsMade)}% Funded
+                </span>
+              </p>
+              <p className="funding shrink columns">
+                <span className="details">
+                  ${campaign.fundingNeeded} Needed
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="row align-justify">
-          <p className="funded shrink columns">
-            <span className="details">
-              {percentFunded(campaign.fundingNeeded, campaign.donationsMade)}% Funded
-            </span>
-          </p>
-          <p className="funding shrink columns">
-            <span className="details">
-              ${campaign.fundingNeeded}
-            </span>
-          </p>
         </div>
       </Link>
     </article>
