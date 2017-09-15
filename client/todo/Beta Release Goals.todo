@@ -7,7 +7,7 @@ Search:
   ✔ Create Search campaigns page. @high @done (2017-9-15 11:31:54)
 
 Advisor:
-  ☐ Create Become Advisor page. @high
+  ✔ Create Become Advisor page. @high @done (2017-9-15 13:26:31)
 
 Help:
   ☐ Create Help page. @high
@@ -28,7 +28,7 @@ General:
 Edit Campaigns:
   ✔ Fix campaign image edit issue. @critical @done (2017-9-10 23:56:08)
   ☐ Fix image select radial issue. @critical 
-  ☐ FIx campaign edit page display nothing issue when not logged in. @critical
+  ✔ FIx campaign edit page display nothing issue when not logged in. @critical @done (2017-9-15 14:33:16)
   ☐ Disable save button after save and re-enabled after changes. @low
   ☐ Add Bold, Italic, Underlined, Lists and Movies to the edit campaign functionality. @low
 
@@ -45,6 +45,7 @@ Register:
 Home:
   ☐ Animate the search box transition.@low
   ☐ Change the width of the text to 45 to 75 chars. @low
+  ☐ Create slide show for campaigns.
 
 Footer:
   ✔ Fix vh issue with sticky footer on mobile. @low @done (2017-9-10 11:28:31)
