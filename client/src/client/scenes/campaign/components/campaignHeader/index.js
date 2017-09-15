@@ -35,7 +35,7 @@ const CampaignHeader = ({ campaignInfo, isEnded }) => (
       <div className="small-12 columns">
         <div className="row align-justify campaign-details">
           <div className="shrink columns">
-            <p className="details">{campaignInfo.donationPercentage}% Funded</p>
+            <p className="details">{Math.round(campaignInfo.donationPercentage)}% Funded</p>
           </div>
           <div className="shrink columns">
             <p className="details">
