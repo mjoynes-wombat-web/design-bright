@@ -169,11 +169,14 @@ $error-red: #ff5800;
         text-align: right;
       }
     }
-    .img-type label:not(:last-child) {
-      margin: 0 0 0.5rem 0;
-
+    .img-type label {
       span {
         top: 0.25rem;
+      }
+      @media screen and (max-width: $medium-break){
+        &:not(:last-child) {
+          margin: 0 0 0.5rem 0;
+        }
       }
 
       @media screen and (min-width: $medium-break){

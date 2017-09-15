@@ -27,7 +27,7 @@ General:
 
 Edit Campaigns:
   ✔ Fix campaign image edit issue. @critical @done (2017-9-10 23:56:08)
-  ☐ Fix image select radial issue. @critical 
+  ✔ Fix image select radial issue. @critical @done (2017-9-15 14:42:36)
   ✔ FIx campaign edit page display nothing issue when not logged in. @critical @done (2017-9-15 14:33:16)
   ☐ Disable save button after save and re-enabled after changes. @low
   ☐ Add Bold, Italic, Underlined, Lists and Movies to the edit campaign functionality. @low
