@@ -1,14 +1,17 @@
 /* eslint-env browser */
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import './scss/style.scss';
 
 const FAQ = () => (
-  <section className="main-image small-12 medium-4 large-6 columns">
+  <section className="main-image small-12 columns" id="FAQ">
     <div className="row">
       <div className="small-12 columns">
-        <h1>Frequently Asked Questions</h1>
+        <h1>
+          <span className="underlined">
+            Frequently Asked Questions
+          </span>
+        </h1>
         <ul>
           <li>
             <a href="#FAQ1">
@@ -35,7 +38,11 @@ const FAQ = () => (
     </div>
     <article className="row" id="FAQ1">
       <div className="small-12 columns">
-        <h2>FAQ Question #1</h2>
+        <h2>
+          <span className="underlined">
+            FAQ Question #1
+          </span>
+        </h2>
         <p>
           The mother was sitting on a chair by the side of her daughter’s invalid carriage, and two
           paces from her stood an old monk, not one of our monastery, but a visitor from an
@@ -45,7 +52,11 @@ const FAQ = () => (
     </article>
     <article className="row" id="FAQ2">
       <div className="small-12 columns">
-        <h2>FAQ Question #2</h2>
+        <h2>
+          <span className="underlined">
+            FAQ Question #2
+          </span>
+        </h2>
         <p>
           But Father Zossima, on entering the portico, went first straight to the peasants who were
           crowded at the foot of the three steps that led up into the portico. Father Zossima stood
@@ -58,7 +69,11 @@ const FAQ = () => (
     </article>
     <article className="row" id="FAQ3">
       <div className="small-12 columns">
-        <h2>FAQ Question #3</h2>
+        <h2>
+          <span className="underlined">
+            FAQ Question #3
+          </span>
+        </h2>
         <p>
           He blessed them all and talked with some of them. The “possessed” woman he knew
           already. She came from a village only six versts from the monastery, and had been
@@ -68,7 +83,11 @@ const FAQ = () => (
     </article>
     <article className="row" id="FAQ4">
       <div className="small-12 columns">
-        <h2>FAQ Question #4</h2>
+        <h2>
+          <span className="underlined">
+            FAQ Question #4
+          </span>
+        </h2>
         <p>
           “Townfolk we are, Father, townfolk. Yet we are peasants though we live in the town.
           I have come to see you, O Father! We heard of you, Father, we heard of you. I have

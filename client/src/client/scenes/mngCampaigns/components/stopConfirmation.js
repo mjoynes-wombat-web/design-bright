@@ -5,7 +5,7 @@ import OverlayModal from '../../../partials/overlayModal';
 
 import './scss/stopConfModal.scss';
 
-export const StopConfModal = ({ text, confirmAction, cancelAction, id }) => (
+const StopConfModal = ({ text, confirmAction, cancelAction, id }) => (
   <OverlayModal closeAction={cancelAction}>
     <section className="row align-middle align-center" id="stopConf">
       <p className="columns small-10">{text}</p>

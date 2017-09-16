@@ -14,6 +14,7 @@ class List extends React.Component {
     this.state = {
       campaigns: {},
       fetched: false,
+      resultsErr: null,
     };
 
     this.componentWillMount = this.componentWillMount.bind(this);
@@ -76,11 +77,21 @@ class List extends React.Component {
           fetched: true,
         });
       })
-      .catch(getCampaignsErr => console.log(getCampaignsErr));
+      .catch(getCampaignsErr => this.setState({
+        fetched: true,
+        resultsErr: getCampaignsErr.response.data.message,
+      }));
   }
 
   render() {
     if (this.state.fetched) {
+      if (this.state.resultsErr) {
+        return (
+          <section className="row" id="campaignsList">
+            <h2 className="small-12 columns" id="List">{this.state.resultsErr}</h2>
+          </section>
+        );
+      }
       return (
         <section className="row" id="campaignsList">
           {this.state.campaigns.map(

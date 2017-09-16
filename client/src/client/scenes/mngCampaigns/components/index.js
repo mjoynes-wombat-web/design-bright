@@ -3,9 +3,11 @@ import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
-import './scss/style.scss';
 import CampaignActions from './campaignActions';
 import StopConfModal from './stopConfirmation';
+import Message from '../../../partials/message';
+
+import './scss/style.scss';
 
 class mngCampaigns extends React.Component {
   constructor(props) {
@@ -17,6 +19,14 @@ class mngCampaigns extends React.Component {
       stopModalMsg: '',
       showStopModal: false,
       currentStopId: null,
+      message: {
+        type: '',
+        message: '',
+      },
+      error: {
+        type: '',
+        message: '',
+      },
     };
 
     this.componentWillMount = this.componentWillMount.bind(this);
@@ -49,8 +59,19 @@ class mngCampaigns extends React.Component {
       `https://${window.location.hostname}:3000/api/nonprofits/campaigns/launch/${campaignId}`,
       { accessToken },
     )
-      .then((results) => {
-        if (results.status === 200) {
+      .then((startCampaignResults) => {
+        window.scrollTo(0, 0);
+        this.setState({
+          message: {
+            type: 'start campaign',
+            message: startCampaignResults.data.message,
+          },
+          error: {
+            type: '',
+            message: '',
+          },
+        });
+        if (startCampaignResults.status === 200) {
           const campaigns = this.state.campaigns;
           const campaignPosition = campaigns
             .map(campaign => campaign.campaignId)
@@ -60,7 +81,19 @@ class mngCampaigns extends React.Component {
           this.setState({ campaigns });
         }
       })
-      .catch(error => console.log(error));
+      .catch((startCampaignErr) => {
+        window.scrollTo(0, 0);
+        this.setState({
+          error: {
+            type: 'start campaign',
+            message: startCampaignErr.response.data.message,
+          },
+          message: {
+            type: '',
+            message: '',
+          },
+        });
+      });
   }
 
   stopConfirm(campaignId) {
@@ -69,8 +102,19 @@ class mngCampaigns extends React.Component {
       `https://${window.location.hostname}:3000/api/nonprofits/campaigns/stop/${campaignId}`,
       { accessToken },
     )
-      .then((results) => {
-        if (results.status === 200) {
+      .then((stopCampaignResults) => {
+        window.scrollTo(0, 0);
+        this.setState({
+          message: {
+            type: 'start campaign',
+            message: stopCampaignResults.data.message,
+          },
+          error: {
+            type: '',
+            message: '',
+          },
+        });
+        if (stopCampaignResults.status === 200) {
           const campaigns = this.state.campaigns;
           const campaignPosition = campaigns
             .map(campaign => campaign.campaignId)
@@ -86,7 +130,19 @@ class mngCampaigns extends React.Component {
           document.body.style.overflow = '';
         }
       })
-      .catch(error => console.log(error));
+      .catch((stopCampaignErr) => {
+        window.scrollTo(0, 0);
+        this.setState({
+          error: {
+            type: 'start campaign',
+            message: stopCampaignErr.response.data.message,
+          },
+          message: {
+            type: '',
+            message: '',
+          },
+        });
+      });
   }
 
   stopCampaign(campaignId) {
@@ -125,6 +181,11 @@ class mngCampaigns extends React.Component {
         if (this.state.fetched) {
           return (
             <main id="mngCampaigns" className={('ontouchstart' in document.documentElement) ? '' : ' no-touch'}>
+              <Message
+                error={this.state.error}
+                onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
+                message={this.state.message}
+                onClearError={() => this.setState({ error: { type: '', message: '' } })} />
               {this.state.showStopModal
                 ? <StopConfModal
                   text={this.state.stopModalMsg}

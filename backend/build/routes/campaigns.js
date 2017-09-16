@@ -116,14 +116,7 @@ router.patch('/edit/:campaignId', (req, res) => {
         if (getCampaignInfoResults.nonprofitId === nonprofitId) {
           return (0, _campaigns.createContent)(getCampaignId, campaignContent, createContentResults => {
             if (getCampaignInfoResults.startDate === null) {
-              console.log(createContentResults);
-              return (0, _campaigns.updateCampaignInfo)(nonprofitId, campaignInfo, updateCampaignInfoResults => {
-                console.log(updateCampaignInfoResults);
-                (0, _response2.default)(200, updateCampaignInfoResults, 'The campaign changes were successfully saved.', res);
-              }, updateCampaignInfoErr => {
-                console.log(updateCampaignInfoErr);
-                (0, _response2.default)(304, updateCampaignInfoErr, 'The was an error saving the campaign information.', res);
-              });
+              return (0, _campaigns.updateCampaignInfo)(nonprofitId, campaignInfo, updateCampaignInfoResults => (0, _response2.default)(updateCampaignInfoResults.statusCode, updateCampaignInfoResults, 'The campaign changes were successfully saved.', res), updateCampaignInfoErr => (0, _response2.default)(updateCampaignInfoErr.statusCode, updateCampaignInfoErr, updateCampaignInfoErr.message, res));
             }
             return (0, _response2.default)(200, createContentResults, 'The campaign content was successfully saved.', res);
           }, createContentError => (0, _response2.default)(304, createContentError, 'The was an error saving the campaign content.', res));
@@ -174,8 +167,8 @@ router.post('/create', (req, res) => {
     (0, _Auth.getUserInfo)(accessToken, user => {
       const nonprofitId = user.app_metadata.nonProfitID;
 
-      (0, _campaigns.createCampaign)(nonprofitId, newCampaign, success => console.log(success), error => console.log(error));
-    }, error => (0, _response2.default)(error.statusCode, error.original, 'There was an error getting the user info.', res));
+      (0, _campaigns.createCampaign)(nonprofitId, newCampaign, createCamapignResults => (0, _response2.default)(createCamapignResults.statusCode, createCamapignResults, 'Your campaign was successfully created.', res), createCampaignErr => (0, _response2.default)(createCampaignErr.statusCode, createCampaignErr.error, createCampaignErr.message, res));
+    }, getUserInfoErr => (0, _response2.default)(getUserInfoErr.statusCode, getUserInfoErr.original, 'There was an error getting the user info.', res));
   } else {
     (0, _response2.default)(401, { accessToken }, 'The access token is not a valid access token.', res);
   }

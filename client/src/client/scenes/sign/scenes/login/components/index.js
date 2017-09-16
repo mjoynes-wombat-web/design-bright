@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';
 
 import validEmail from '../../../../../helpers/validEmail';
+import Message from '../../../../../partials/message';
 
 class Login extends React.Component {
   constructor(props) {
@@ -11,8 +12,15 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      loginError: '',
       loginAttempted: false,
+      message: {
+        type: '',
+        message: '',
+      },
+      error: {
+        type: '',
+        message: '',
+      },
     };
 
     this.onChange = this.onChange.bind(this);
@@ -40,6 +48,7 @@ class Login extends React.Component {
 
     this.setState({ loginAttempted: true });
     this.setState({ password: '' });
+    this.setState({ error: this.props.error });
     window.scroll(0, 0);
   }
 
@@ -57,7 +66,16 @@ class Login extends React.Component {
     if ('origin' in search) {
       switch (search.origin) {
         case 'secure':
-          return this.props.onNewMessage('You must be logged in to access this page.');
+          return this.setState({
+            message: {
+              type: 'login required',
+              message: 'You must be logged in to access this page.',
+            },
+            error: {
+              type: '',
+              message: '',
+            },
+          });
         default:
           return null;
       }
@@ -77,12 +95,17 @@ class Login extends React.Component {
       return (
         <Redirect to={{
           pathname: '/user/profile',
-          search: '?origin=profile',
+          search: '?origin=login',
         }} />
       );
     }
     return (
       <main id="login">
+        <Message
+          error={this.state.error}
+          onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
+          message={this.state.message}
+          onClearError={() => this.setState({ error: { type: '', message: '' } })} />
         <section className="row align-center">
           <form className="small-12 large-6 columns" onSubmit={this.onLogin}>
             <div className="row">
@@ -91,12 +114,12 @@ class Login extends React.Component {
             <div className="row align-center">
               <div className="small-12 columns">
                 <label htmlFor="email"
-                  className={`row${this.props.error.type === 'login' ? ' invalid' : ''}${(validEmail(this.state.email) || this.state.email.length === 0) ? '' : ' invalid'}`}>
+                  className={`row${this.state.error.type === 'login' ? ' invalid' : ''}${(validEmail(this.state.email) || this.state.email.length === 0) ? '' : ' invalid'}`}>
                   <div className="small-12 columns">
                     Email: <span className="required">*</span>
                   </div>
                   <div className="small-12 columns">
-                    <span className="error">{this.props.error.type === 'login' ? this.props.error.message : 'Please enter a valid email address.'}</span>
+                    <span className="error">{this.state.error.type === 'login' ? this.state.error.message : 'Please enter a valid email address.'}</span>
                   </div>
                 </label>
                 <input

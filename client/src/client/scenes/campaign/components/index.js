@@ -6,6 +6,7 @@ import axios from 'axios';
 import CampaignBlocks from './campaignBlocks';
 import Donate from './donate';
 import CampaignHeader from './campaignHeader';
+import Message from '../../../partials/message';
 
 import './scss/style.scss';
 
@@ -19,6 +20,14 @@ class Campaign extends React.Component {
       fetched: {
         complete: false,
         code: null,
+      },
+      message: {
+        type: '',
+        message: '',
+      },
+      error: {
+        type: '',
+        message: '',
       },
       showDonationModal: false,
     };
@@ -98,7 +107,12 @@ class Campaign extends React.Component {
       document.body.style.overflow = 'hidden';
       this.setState({ showDonationModal: true });
     } else {
-      this.props.onNewError('This campaign has not been started yet.');
+      this.setState({
+        error: {
+          type: 'campaign start',
+          message: 'This campaign has not been started yet.'
+        },
+      });
       window.scroll(0, 0);
     }
   }
@@ -108,6 +122,11 @@ class Campaign extends React.Component {
       if (this.state.fetched.code === 200) {
         return (
           <main id="campaign" className={`small-12 columns${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
+            <Message
+              error={this.state.error}
+              onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
+              message={this.state.message}
+              onClearError={() => this.setState({ error: { type: '', message: '' } })} />
             {this.state.showDonationModal
               ? <Donate
                 cancelDonation={
@@ -121,8 +140,18 @@ class Campaign extends React.Component {
                 campaignInfo={this.state.campaignInfo}
                 isEnded={this.isEnded}
                 updateCampaignDonations={this.updateCampaignDonations}
-                onNewMessage={this.props.onNewMessage}
-                onNewError={this.props.onNewError} />
+                onNewMessage={message => this.setState({
+                  message: {
+                    type: 'campaign start',
+                    message,
+                  },
+                })}
+                onNewError={message => this.setState({
+                  error: {
+                    type: 'campaign start',
+                    message,
+                  },
+                })} />
               : null}
             <section className="row">
               <CampaignHeader

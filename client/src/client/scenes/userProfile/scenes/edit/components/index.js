@@ -2,9 +2,11 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import './scss/style.scss';
 import states from '../../../../../helpers/states';
 import validEmail from '../../../../../helpers/validEmail';
+import Message from '../../../../../partials/message';
+
+import './scss/style.scss';
 
 const doPasswordsMatch = (pass, confPass) => pass === confPass;
 const isNumber = (num) => {
@@ -32,6 +34,14 @@ class editProfile extends React.Component {
       zip: String(this.props.userInfo.zip),
       valid: true,
       userPostResults: {},
+      message: {
+        type: '',
+        message: '',
+      },
+      error: {
+        type: '',
+        message: '',
+      },
     };
 
     this.onChange = this.onChange.bind(this);
@@ -97,7 +107,6 @@ class editProfile extends React.Component {
           password,
           firstName,
           lastName,
-          userType,
           address,
           city,
           state,
@@ -126,7 +135,16 @@ class editProfile extends React.Component {
         userPostResults => this.setState({ userPostResults }),
       );
     } else {
-      this.props.onNewError('You have an invalid or empty field. Please make sure everything is filled out.');
+      this.setState({
+        error: {
+          type: 'empty field',
+          message: 'You have an invalid or empty field. Please make sure everything is filled out.',
+        },
+        message: {
+          type: '',
+          message: '',
+        },
+      });
 
       window.scroll(0, 0);
     }
@@ -136,10 +154,19 @@ class editProfile extends React.Component {
     if (this.props.onRequireAuth()) {
       return (
         <main id="editProfile">
+          <Message
+            error={this.state.error}
+            onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
+            message={this.state.message}
+            onClearError={() => this.setState({ error: { type: '', message: '' } })} />
           <section className="row align-center">
             <form className="small-12 columns" onSubmit={this.onSubmit}>
               <div className="row">
-                <h1 className="small-12 columns"><span className="underlined">Edit Profile</span></h1>
+                <h1 className="small-12 columns">
+                  <span className="underlined">
+                    Edit Profile
+                  </span>
+                </h1>
               </div>
               <div className="row align-center">
                 <div className="small-12 large-4 columns">
@@ -277,7 +304,9 @@ class editProfile extends React.Component {
                   type="submit">
                   Submit Request
                 </button>
-                <span className='error small-12'>Please make sure you've entered all your information.</span>
+                <span className='error small-12'>
+                  Please make sure you've entered all your information.
+                </span>
               </div>
             </form>
           </section>

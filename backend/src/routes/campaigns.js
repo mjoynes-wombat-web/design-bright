@@ -158,28 +158,20 @@ router.patch('/edit/:campaignId', (req, res) => {
                 campaignContent,
                 (createContentResults) => {
                   if (getCampaignInfoResults.startDate === null) {
-                    console.log(createContentResults);
                     return updateCampaignInfo(
                       nonprofitId,
                       campaignInfo,
-                      (updateCampaignInfoResults) => {
-                        console.log(updateCampaignInfoResults);
-                        jsonResponse(
-                          200,
-                          updateCampaignInfoResults,
-                          'The campaign changes were successfully saved.',
-                          res,
-                        )
-                      },
-                      (updateCampaignInfoErr) => {
-                        console.log(updateCampaignInfoErr);
-                        jsonResponse(
-                          304,
-                          updateCampaignInfoErr,
-                          'The was an error saving the campaign information.',
-                          res,
-                        );
-                      });
+                      updateCampaignInfoResults => jsonResponse(
+                        updateCampaignInfoResults.statusCode,
+                        updateCampaignInfoResults,
+                        'The campaign changes were successfully saved.',
+                        res),
+                      updateCampaignInfoErr => jsonResponse(
+                        updateCampaignInfoErr.statusCode,
+                        updateCampaignInfoErr,
+                        updateCampaignInfoErr.message,
+                        res),
+                    );
                   }
                   return jsonResponse(
                     200,
@@ -280,13 +272,21 @@ router.post('/create', (req, res) => {
         createCampaign(
           nonprofitId,
           newCampaign,
-          success => console.log(success),
-          error => console.log(error),
+          createCamapignResults => jsonResponse(
+            createCamapignResults.statusCode,
+            createCamapignResults,
+            'Your campaign was successfully created.',
+            res),
+          createCampaignErr => jsonResponse(
+            createCampaignErr.statusCode,
+            createCampaignErr.error,
+            createCampaignErr.message,
+            res),
         );
       },
-      error => jsonResponse(
-        error.statusCode,
-        error.original,
+      getUserInfoErr => jsonResponse(
+        getUserInfoErr.statusCode,
+        getUserInfoErr.original,
         'There was an error getting the user info.',
         res),
     );

@@ -3,9 +3,11 @@ import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
-import './scss/style.scss';
 import states from '../../../../../helpers/states';
 import validEmail from '../../../../../helpers/validEmail';
+import Message from '../../../../../partials/message';
+
+import './scss/style.scss';
 
 const doPasswordsMatch = (pass, confPass) => pass === confPass;
 const isNumber = (num) => {
@@ -39,6 +41,14 @@ class Register extends React.Component {
       },
       valid: false,
       userPostResults: {},
+      message: {
+        type: '',
+        message: '',
+      },
+      error: {
+        type: '',
+        message: '',
+      },
     };
 
     this.onChange = this.onChange.bind(this);
@@ -55,7 +65,14 @@ class Register extends React.Component {
     inputs[name] = value;
 
     this.setState(
-      { inputs, valid: this.validate() },
+      {
+        inputs,
+        error: {
+          type: '',
+          message: '',
+        },
+        valid: this.validate(),
+      },
     );
   }
 
@@ -149,23 +166,53 @@ class Register extends React.Component {
         User(this.state.inputs))
         .then((results) => {
           const createUserResults = results.data;
-
-          this.props.onNewMessage(`Congratulations, your have created an account for ${createUserResults.data.email}`);
+          this.setState({
+            message: {
+              type: 'register',
+              message: `Congratulations, your have created an account for ${createUserResults.data.email}.`,
+            },
+            error: {
+              type: '',
+              message: '',
+            },
+          });
           this.setState({ userPostResults: createUserResults });
 
           window.scroll(0, 0);
         })
         .catch((error) => {
           const createUserError = error.response.data;
-          createUserError.message = `${createUserError.data.email.charAt(0).toUpperCase()}${createUserError.data.email.slice(1)} is already in use.`;
-
-          this.props.onNewError(createUserError.message);
+          if (createUserError.message === 'The user already exists.') {
+            createUserError.message = `${createUserError.data.email.charAt(0).toUpperCase()}${createUserError.data.email.slice(1)} is already in use.`;
+          }
+          const inputs = this.state.inputs;
+          inputs.email = '';
+          this.setState({
+            inputs,
+            error: {
+              type: 'register',
+              message: createUserError.message,
+            },
+            message: {
+              type: '',
+              message: '',
+            },
+          });
           this.setState({ userPostResults: createUserError });
 
           window.scroll(0, 0);
         });
     } else {
-      this.props.onNewError('You have an invalid or empty field. Please make sure everything is filled out.');
+      this.setState({
+        error: {
+          type: 'register',
+          message: 'You have an invalid or empty field. Please make sure everything is filled out.',
+        },
+        message: {
+          type: '',
+          message: '',
+        },
+      });
 
       window.scroll(0, 0);
     }
@@ -183,6 +230,11 @@ class Register extends React.Component {
     }
     return (
       <main id="register">
+        <Message
+          error={this.state.error}
+          onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
+          message={this.state.message}
+          onClearError={() => this.setState({ error: { type: '', message: '' } })} />
         <section className="row align-center">
           <form className="small-12 columns" onSubmit={this.onSubmit}>
             <div className="row">
@@ -211,12 +263,12 @@ class Register extends React.Component {
                     name="lastName"
                     id="lastName"
                     required />
-                  <label htmlFor="email" className={`row${this.props.error.type === 'register' ? ' invalid' : ''}${(this.currentInputValid('email') || this.state.inputs.email.length === 0) ? '' : ' invalid'}`}>
+                  <label htmlFor="email" className={`row${this.state.error.type === 'register' ? ' invalid' : ''}${(this.currentInputValid('email') || this.state.inputs.email.length === 0) ? '' : ' invalid'}`}>
                     <div className="small-12 columns">
                       Email: <span className="required">*</span>
                     </div>
                     <div className=" small-12 columns">
-                      <span className='error'>{this.props.error.type === 'register' ? this.props.error.message : 'Please enter a valid email address.'}</span>
+                      <span className='error'>{this.state.error.type === 'register' ? this.state.error.message : 'Please enter a valid email address.'}</span>
                     </div>
                   </label>
                   <input

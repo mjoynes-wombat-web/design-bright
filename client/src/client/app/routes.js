@@ -7,7 +7,6 @@ import Register from '../scenes/sign/scenes/register';
 import Login from '../scenes/sign/scenes/login';
 import Profile from '../scenes/userProfile';
 import editProfile from '../scenes/userProfile/scenes/edit';
-import Message from '../partials/messages';
 import Campaign from '../scenes/campaign';
 import mngCampaigns from '../scenes/mngCampaigns';
 import editCampaigns from '../scenes/editCampaigns';
@@ -23,7 +22,6 @@ import Help from '../scenes/help';
 // when the pathname is exactly the string "/"
 const Routes = () => (
   <div className={('ontouchstart' in document.documentElement) ? '' : 'no-touch'}>
-    <Message />
     <Switch>
       <Route
         exact path='/'

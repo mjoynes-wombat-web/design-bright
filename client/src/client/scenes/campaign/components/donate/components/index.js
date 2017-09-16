@@ -108,7 +108,7 @@ class DonateComponent extends React.Component {
       const inputs = this.state.inputs;
       inputs[name] = value;
 
-      this.setState({ inputs })
+      this.setState({ inputs });
 
       setTimeout(() => {
         if (this.validate()) {
@@ -211,7 +211,7 @@ class DonateComponent extends React.Component {
         billingZip: '',
       },
     },
-      this.props.cancelDonation());
+    this.props.cancelDonation());
   }
 
   render() {

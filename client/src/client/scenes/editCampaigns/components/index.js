@@ -2,7 +2,10 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import queryString from 'query-string';
+
 import CampaignEditor from './editor';
+import Message from '../../../partials/message';
 
 import './scss/style.scss';
 
@@ -32,8 +35,19 @@ class mngCampaigns extends React.Component {
       fetched: false,
       hasCampaign: false,
       campaignId: null,
+      campaignCreated: false,
+      campaignCreatedId: null,
       valid: false,
       editorData: {},
+      message: {
+        type: '',
+        message: '',
+      },
+      error: {
+        type: '',
+        message: '',
+      },
+      campaignSaved: false,
     };
     this.componentWillMount = this.componentWillMount.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -47,6 +61,17 @@ class mngCampaigns extends React.Component {
     if ('id' in this.props.match.params) {
       const editCampaignId = parseInt(this.props.match.params.id, 10);
       this.setState({ valid: true });
+      const { origin } = queryString.parse(this.props.location.search);
+      console.log(origin);
+
+      if (origin === 'create-campaign') {
+        this.setState({
+          message: {
+            type: 'campaign created',
+            message: 'Your campaign was successfully created.',
+          },
+        });
+      }
 
       axios.get(`https://${window.location.hostname}:3000/api/nonprofits/campaigns/${this.props.userAuth.accessToken}`)
         .then((results) => {
@@ -64,12 +89,14 @@ class mngCampaigns extends React.Component {
               .then((campaignResults) => {
                 const { campaignContent } = campaignResults.data.data;
                 const campaignInfo = campaignResults.data.data.campaignInfo;
+                campaignInfo.fundingNeeded = parseFloat(campaignInfo.fundingNeeded);
 
                 document.title = `Edit ${campaignInfo.name} Campaign - Design Bright`;
 
                 this.setState({ campaignInfo });
                 this.setState({
                   contentInfo: results.data.data.contentInfo,
+                  campaignSaved: true,
                 });
                 this.setState({ campaignContent });
                 this.setState({ fetched: true });
@@ -110,7 +137,10 @@ class mngCampaigns extends React.Component {
     const campaignInfo = this.state.campaignInfo;
     campaignInfo[name] = value;
     this.setState(
-      { campaignInfo },
+      {
+        campaignInfo,
+        campaignSaved: false,
+      },
       () => {
         if (this.validate()) {
           this.setState({ valid: true });
@@ -133,13 +163,24 @@ class mngCampaigns extends React.Component {
           accessToken,
         },
       )
-        .then((results) => {
+        .then((editCampaignResults) => {
           window.scrollTo(0, 0);
-          this.props.onNewMessage(results.data.message);
+          this.setState({
+            message: {
+              type: 'edit campaign',
+              message: editCampaignResults.data.message,
+            },
+            campaignSaved: true,
+          });
         })
-        .catch((error) => {
+        .catch((editCampaignErr) => {
           window.scrollTo(0, 0);
-          this.props.onNewError(error.response.data.message);
+          this.setState({
+            error: {
+              type: 'edit campaign',
+              message: editCampaignErr.response.data.message,
+            },
+          });
         });
     } else {
       axios.post(
@@ -152,13 +193,34 @@ class mngCampaigns extends React.Component {
           accessToken,
         },
       )
-        .then((results) => {
+        .then((createCampaignResults) => {
           window.scrollTo(0, 0);
-          this.props.onNewMessage(results.data.message);
+          this.setState({
+            campaignCreated: true,
+            campaignCreatedId: createCampaignResults.data.data.campaignId,
+          });
+          this.setState({
+            message: {
+              type: 'edit campaign',
+              message: createCampaignResults.data.message,
+            },
+          });
         })
-        .catch((error) => {
+        .catch((createCampaignErr) => {
           window.scrollTo(0, 0);
-          this.props.onNewError(error.response.data.message);
+          if (createCampaignErr.response.data.statusCode === 409) {
+            const campaignInfo = this.state.campaignInfo;
+            campaignInfo.name = '';
+            this.setState({
+              campaignInfo,
+            });
+          }
+          this.setState({
+            error: {
+              type: 'edit campaign',
+              message: createCampaignErr.response.data.message,
+            },
+          });
         });
     }
   }
@@ -195,12 +257,25 @@ class mngCampaigns extends React.Component {
   }
 
   render() {
-    if (this.props.onRequireAuth()) {
+    if (this.state.campaignCreated) {
+      return (
+        <Redirect
+          to={{
+            pathname: `/campaign/edit/${this.state.campaignCreatedId}`,
+            search: '?origin=create-campaign',
+          }} />
+      );
+    } else if (this.props.onRequireAuth()) {
       if (this.props.userInfo.userType === 'non-profit') {
         if (this.state.fetched) {
           if (this.state.hasCampaign) {
             return (
               <main id="editCampaigns" className={`small-12 columns${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
+                <Message
+                  error={this.state.error}
+                  onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
+                  message={this.state.message}
+                  onClearError={() => this.setState({ error: { type: '', message: '' } })} />
                 <section className="row align-center">
                   <form className="small-12 columns" onSubmit={this.onSubmit}>
                     <div className="row header">
@@ -321,17 +396,26 @@ class mngCampaigns extends React.Component {
                     </div>
                     <div className="row align-center">
                       <button
-                        className={`primary small-11 medium-10 large-8 columns${this.state.valid ? '' : ' disabled'}`}
-                        disabled={!this.state.valid}
+                        className={`primary small-11 medium-10 large-8 columns${
+                          this.state.campaignContent.length > 0
+                            ? `${this.state.valid && !this.state.campaignSaved ? '' : ' disabled'}`
+                            : `${this.state.valid ? '' : ' disabled'}`}`}
+                        disabled={this.state.campaignContent.length > 0
+                          ? (!this.state.valid && this.state.campaignSaved)
+                          : !this.state.valid}
                         type="submit"
                         onClick={this.onSubmit}>
                         {this.state.campaignContent.length > 0
-                          ? 'Save Changes'
+                          ? `${this.state.campaignSaved ? 'No Changes Made' : 'Save Changes'}`
                           : 'Create Campaign'}
                       </button>
-                      <span className='error small-12'>
-                        Please make sure you've entered all your information.
-                      </span>
+                      {!this.state.valid
+                        ? (
+                          <span className='error small-12'>
+                            Please make sure you've entered all your information.
+                          </span>
+                        )
+                        : null}
                     </div>
                   </form>
                 </section>

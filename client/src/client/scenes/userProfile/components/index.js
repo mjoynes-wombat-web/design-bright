@@ -4,6 +4,8 @@ import { Redirect, Link } from 'react-router-dom';
 import queryString from 'query-string';
 import axios from 'axios';
 
+import Message from '../../../partials/message';
+
 import './scss/style.scss';
 
 class Profile extends React.Component {
@@ -14,6 +16,14 @@ class Profile extends React.Component {
       newProfilePhoto: {},
       loadingProfilePhoto: false,
       fetched: false,
+      message: {
+        type: '',
+        message: '',
+      },
+      error: {
+        type: '',
+        message: '',
+      },
     };
 
     this.componentWillMount = this.componentWillMount.bind(this);
@@ -36,11 +46,38 @@ class Profile extends React.Component {
     if ('origin' in search) {
       switch (search.origin) {
         case 'register':
-          return this.props.onNewMessage('You can\'t create a new user while logged in.');
+          return this.setState({
+            message: {
+              type: 'origin register',
+              message: 'You can\'t create a new user while logged in.',
+            },
+            error: {
+              type: '',
+              message: '',
+            },
+          });
         case 'login':
-          return this.props.onNewMessage('You are already logged in.');
+          return this.setState({
+            message: {
+              type: 'origin login',
+              message: 'You are already logged in.',
+            },
+            error: {
+              type: '',
+              message: '',
+            },
+          });
         case 'nonprofit-page':
-          return this.props.onNewMessage('You aren\'t authorized to access that page.');
+          return this.setState({
+            message: {
+              type: 'origin nonprofit-page',
+              message: 'You aren\'t authorized to access that page.',
+            },
+            error: {
+              type: '',
+              message: '',
+            },
+          });
         default:
           return null;
       }
@@ -69,18 +106,31 @@ class Profile extends React.Component {
             { 'Content-Type': 'multipart/form-data' },
           },
         )
-          .then((postImgResults) => {
+          .then(() => {
             this.setState({
+              error: {
+                type: 'profile image',
+                message: 'There was an error uploading your profile photo.',
+              },
+              message: {
+                type: '',
+                message: '',
+              },
               loadingProfilePhoto: false,
             });
             this.props.onGetUserInfo();
           })
-          .catch((postImgErr) => {
-            this.props.onNewError(postImgErr.response.data.message);
-            this.setState({
-              loadingProfilePhoto: false,
-            });
-          });
+          .catch(postImgErr => this.setState({
+            error: {
+              type: 'profile image',
+              message: postImgErr.response.data.message,
+            },
+            message: {
+              type: '',
+              message: '',
+            },
+            loadingProfilePhoto: false,
+          }));
       },
     );
   }
@@ -90,6 +140,11 @@ class Profile extends React.Component {
       if (this.state.fetched) {
         return (
           <main id="profile" className="small-12 columns">
+            <Message
+              error={this.state.error}
+              onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
+              message={this.state.message}
+              onClearError={() => this.setState({ error: { type: '', message: '' } })} />
             <section className="row align-center">
               <div className="profile-img-wrapper small-3 columns">
                 <img
@@ -99,8 +154,7 @@ class Profile extends React.Component {
                   alt={`${
                     this.props.userInfo.userType === 'non-profit'
                       ? this.props.userInfo.nonProfitName
-                      : `${this.props.userInfo.firstName} ${this.props.userInfo.lastName}`
-                  }'s Profile Photo`}
+                      : `${this.props.userInfo.firstName} ${this.props.userInfo.lastName}`}'s Profile Photo`}
                   className="profile-img" />
                 <button type="button" className="edit" onClick={(e) => {
                   e.preventDefault(e);

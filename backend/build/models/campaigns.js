@@ -219,16 +219,32 @@ const createContent = exports.createContent = (campaignId, content, success, err
         images: []
       });
       db.campaignText.bulkCreate(blocks.text).then(() => {
-        db.campaignImages.bulkCreate(blocks.images).then(results => {
-          console.log(results);
-          success({ message: `The content for the campaign with the id ${campaignId} was saved.`, campaignId });
-        }).catch(createImagesErr => {
-          console.log(createImagesErr);
-          error({ message: 'There was an error creating the image content.', error: createImagesErr });
-        });
-      }).catch(createTextErr => error({ message: 'There was an error creating the text content.', error: createTextErr }));
-    }).catch(createContentErr => error({ message: 'There was an error creating the content information.', error: createContentErr }));
-  }).catch(updateStatusErr => error({ message: 'There was an error changing the previous content\'s status.', error: updateStatusErr }));
+        db.campaignImages.bulkCreate(blocks.images).then(() => {
+          success({
+            statusCode: 200,
+            message: `The content for the campaign with the id ${campaignId} was saved.`,
+            campaignId
+          });
+        }).catch(createImagesErr => error({
+          statusCode: 500,
+          message: 'There was an error creating the image content.',
+          error: createImagesErr
+        }));
+      }).catch(createTextErr => error({
+        statusCode: 500,
+        message: 'There was an error creating the text content.',
+        error: createTextErr
+      }));
+    }).catch(createContentErr => error({
+      statusCode: 500,
+      message: 'There was an error creating the content information.',
+      error: createContentErr
+    }));
+  }).catch(updateStatusErr => error({
+    statusCode: 500,
+    message: 'There was an error changing the previous content\'s status.',
+    error: updateStatusErr
+  }));
 };
 
 const createCampaign = exports.createCampaign = (nonprofitId, { name, fundingNeeded, duration, content }, success, error) => {
@@ -240,7 +256,20 @@ const createCampaign = exports.createCampaign = (nonprofitId, { name, fundingNee
   }).then(newCampaign => {
     const { campaignId } = newCampaign;
     createContent(campaignId, content, success, error);
-  }).catch(createCampaignErr => error({ message: 'There was an error creating the campaign information.', error: createCampaignErr }));
+  }).catch(createCampaignErr => {
+    if (createCampaignErr.errors[0].type === 'unique violation') {
+      return error({
+        statusCode: 409,
+        error: createCampaignErr,
+        message: 'That campaign name has already been taken. Please try another name.'
+      });
+    }
+    return error({
+      statusCode: 500,
+      message: 'There was an error creating the campaign information.',
+      error: createCampaignErr
+    });
+  });
 };
 
 const updateCampaignInfo = exports.updateCampaignInfo = (nonprofitId, { campaignId, name, fundingNeeded, duration }, success, error) => {
@@ -256,12 +285,31 @@ const updateCampaignInfo = exports.updateCampaignInfo = (nonprofitId, { campaign
   }).then(updatedCampaignInfo => {
     if (updatedCampaignInfo[0] === 0) {
       return error({
+        statusCode: 404,
         message: `The nonprofit with the id ${nonprofitId} doesn't exists or the campaign with the id ${campaignId} doesn't exists or belong to that nonprofit.`,
         error: updatedCampaignInfo
       });
     }
-    return success({ message: `The campaign info was saved for campaign id ${campaignId}.`, updatedCampaignInfo });
-  }).catch(updateCampaignErr => error({ message: 'There was an error saving the campaign information.', error: updateCampaignErr }));
+    return success({
+      statusCode: 200,
+      message: `The campaign info was saved for campaign id ${campaignId}.`,
+      updatedCampaignInfo
+    });
+  }).catch(updateCampaignErr => {
+    console.log(updateCampaignErr);
+    if (updateCampaignErr.errors[0].type === 'unique violation') {
+      return error({
+        statusCode: 409,
+        error: updateCampaignErr,
+        message: 'That campaign name has already been taken. Please try another name.'
+      });
+    }
+    return error({
+      statusCode: 500,
+      message: 'There was an error saving the campaign information.',
+      error: updateCampaignErr
+    });
+  });
 };
 
 const donateToCampaign = exports.donateToCampaign = (campaignId, amount, success, error) => {
@@ -454,7 +502,7 @@ const getCampaigns = exports.getCampaigns = ({ page, search, sort }, success, er
         sort,
         page,
         pages,
-        message: `There are only ${pages} pages of results.`
+        message: `There are only ${pages} pages of results. You are trying to access page ${page}.`
       });
     }
     return error({
@@ -464,7 +512,7 @@ const getCampaigns = exports.getCampaigns = ({ page, search, sort }, success, er
       sort,
       page,
       pages,
-      message: `The are no campaigns for "${search}"`
+      message: `The are no campaigns for "${search}".`
     });
   }).catch(findCampaignsErr => error({
     statusCode: 500,
@@ -472,7 +520,7 @@ const getCampaigns = exports.getCampaigns = ({ page, search, sort }, success, er
     search,
     sort,
     page,
-    message: 'The are was an error retrieving the campaigns.'
+    message: 'The are was an error retrieving the campaigns. Please try refreshing. If this doesn\'t fix the problem got to Need Help? at the bottom of this page.'
   }));
 };
 //# sourceMappingURL=campaigns.js.map
