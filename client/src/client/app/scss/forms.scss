@@ -80,14 +80,18 @@ form {
     cursor: pointer;
   }
 
-  input[type=text], input[type=number], input[type=password], input[type=email], select {
+  textarea {
+    min-height: 10rem;
+  }
+
+  input[type=text], input[type=number], input[type=password], input[type=email], select, textarea {
     color: $graphite;
     font-family: 'Lato', sans-serif;
     font-size: 1.125rem;
     height: 2.5rem;
     line-height: normal;
     box-shadow: none;
-        border: 0.0625rem solid #999999;
+    border: 0.0625rem solid #999999;
 
         @media screen and (min-width: $medium-break) {
           height: 2.75rem;

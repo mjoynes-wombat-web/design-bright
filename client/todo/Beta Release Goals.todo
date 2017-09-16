@@ -10,7 +10,8 @@ Advisor:
   ✔ Create Become Advisor page. @high @done (2017-9-15 13:26:31)
 
 Help:
-  ☐ Create Help page. @high
+  ✔ Create Help page. @high @done (2017-9-15 17:11:34)
+  ☐ Put support request into database once site scales. @low
 
 Message:
   ☐ Refactor Message Component @high 

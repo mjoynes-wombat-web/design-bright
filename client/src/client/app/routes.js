@@ -14,6 +14,7 @@ import editCampaigns from '../scenes/editCampaigns';
 import gaTracker from '../helpers/gaTracker';
 import CampaignsPage from '../scenes/campaignsPage';
 import Advisor from '../scenes/advisor';
+import Help from '../scenes/help';
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -73,6 +74,9 @@ const Routes = () => (
       <Route
         path='/advisor'
         component={gaTracker(Advisor)} />
+      <Route
+        path='/help'
+        component={gaTracker(Help)} />
     </Switch>
   </div>
 );
