@@ -81,51 +81,12 @@ router.patch('/upload/photo', upload.single('file'), (req, res) => {
       folder: `profile/${user.email}`,
       tags: [user.email, 'profile-image']
     }, uploadSuccess => {
-      (0, _Auth.editUserInfo)(user.user_id, { user_metadata: {
+      (0, _Auth.editUserInfo)(user.user_id, {
+        user_metadata: {
           picture: uploadSuccess.secure_url
-        } }, editUserRes => (0, _response2.default)(editUserRes.status, { picture: editUserRes.data.user_metadata.picture }, 'You have successfully uploaded the picture.', res), editUserErr => (0, _response2.default)(500, editUserErr, 'There was an error uploading the user picture.', res));
+        }
+      }, editUserRes => (0, _response2.default)(editUserRes.status, { picture: editUserRes.data.user_metadata.picture }, 'You have successfully uploaded the picture.', res), editUserErr => (0, _response2.default)(500, editUserErr, 'There was an error uploading the user picture.', res));
     }, uploadErr => (0, _response2.default)(500, uploadErr, 'There was an error uploading the user picture.', res));
-    // editUserInfo(
-    //   user.user_id,
-    //   updatedUserInfo,
-    //   (editUserResponse) => {
-    //     const updatedUser = editUserResponse.data;
-    //     if (updatedUser.app_metadata.userType === 'non-profit') {
-    //       const nonprofitId = updatedUser.app_metadata.nonProfitID;
-    //       const updatedNonProfitInfo = editData.nonProfitInfo;
-
-    //       editNonProfit(
-    //         nonprofitId,
-    //         updatedNonProfitInfo,
-    //         updatedNonProfit => jsonResponse(
-    //           200,
-    //           {
-    //             updatedUser,
-    //             updatedNonProfit,
-    //           },
-    //           `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
-    //           res),
-    //         editNonProfitError => jsonResponse(
-    //           500,
-    //           { editNonProfitError },
-    //           'There was an error editing the nonprofit. Please contact support.',
-    //           res,
-    //         ),
-    //       );
-    //     }
-    //     return jsonResponse(
-    //       200,
-    //       { updatedUser },
-    //       `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
-    //       res);
-    //   },
-    //   editUserError => jsonResponse(
-    //     editUserError.response.status,
-    //     { userId: user.user_id },
-    //     editUserError.response.data.message,
-    //     res,
-    //   ),
-    // );
   }, findUserError => (0, _response2.default)(findUserError.statusCode, findUserError.original, 'This access token is not authorized.', res));
 });
 
@@ -134,22 +95,31 @@ router.patch('/upload/photo', upload.single('file'), (req, res) => {
 router.patch('/edit', (req, res) => {
   const { accessToken, editData } = req.body;
   const updatedUserInfo = editData.userInfo;
-
   (0, _Auth.getUserInfo)(accessToken, user => {
     (0, _Auth.editUserInfo)(user.user_id, updatedUserInfo, editUserResponse => {
       const updatedUser = editUserResponse.data;
       if (updatedUser.app_metadata.userType === 'non-profit') {
         const nonprofitId = updatedUser.app_metadata.nonProfitID;
         const updatedNonProfitInfo = editData.nonProfitInfo;
-
         (0, _nonprofits.editNonProfit)(nonprofitId, updatedNonProfitInfo, updatedNonProfit => (0, _response2.default)(200, {
           updatedUser,
           updatedNonProfit
         }, `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`, res), editNonProfitError => (0, _response2.default)(500, { editNonProfitError }, 'There was an error editing the nonprofit. Please contact support.', res));
       }
-      return (0, _response2.default)(200, { updatedUser }, `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`, res);
-    }, editUserError => (0, _response2.default)(editUserError.response.status, { userId: user.user_id }, editUserError.response.data.message, res));
-  }, findUserError => (0, _response2.default)(findUserError.statusCode, findUserError.original, 'This access token is not authorized.', res));
+      return (0, _response2.default)(200, { updatedUser }, `${updatedUserInfo.email.charAt(0).toUpperCase()}${updatedUserInfo.email.slice(1)} has been updated`, res);
+    }, editUserError => {
+      if (editUserError.response.data.message === 'The specified new email already exists') {
+        return (0, _response2.default)(409, { userId: user.user_id }, `${updatedUserInfo.email.charAt(0).toUpperCase()}${updatedUserInfo.email.slice(1)} is already in use.`, res);
+      }
+      return (0, _response2.default)(editUserError.response.status, { userId: user.user_id }, editUserError.response.data.message, res);
+    });
+  }, findUserError => {
+    console.log(findUserError.original);
+    if (findUserError.status === 401) {
+      return (0, _response2.default)(findUserError.status, findUserError.Error, 'This access token is not authorized.', res);
+    }
+    return (0, _response2.default)(findUserError.status, findUserError.Error, 'Unknown error. Please contact support.', res);
+  });
 });
 
 // Exporting router as default.

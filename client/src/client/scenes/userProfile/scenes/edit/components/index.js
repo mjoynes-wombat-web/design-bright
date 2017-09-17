@@ -1,6 +1,7 @@
 /* eslint-env browser */
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 import states from '../../../../../helpers/states';
 import validEmail from '../../../../../helpers/validEmail';
@@ -130,10 +131,49 @@ class editProfile extends React.Component {
         }
         );
 
-      this.props.onEditUser(
-        User(this.state),
-        userPostResults => this.setState({ userPostResults }),
-      );
+      // console.log('editUser ran.');
+      const data = {
+        editData: User(this.state),
+        accessToken: this.props.userAuth.accessToken,
+      };
+
+      axios.patch(
+        `https://${window.location.hostname}:3000/api/users/edit`,
+        data)
+        .then((editUserResults) => {
+          this.setState({
+            password: '',
+            confirmPassword: '',
+            message: {
+              type: 'edit user',
+              message: editUserResults.data.message,
+            },
+            error: {
+              type: '',
+              message: '',
+            },
+          });
+          this.props.onGetUserInfo();
+          window.scroll(0, 0);
+        })
+        .catch((editUserErr) => {
+          if (editUserErr.response.data.statusCode === 409) {
+            this.setState({ email: this.props.userInfo.email });
+          }
+          this.setState({
+            password: '',
+            confirmPassword: '',
+            error: {
+              type: 'edit user',
+              message: editUserErr.response.data.message,
+            },
+            message: {
+              type: '',
+              message: '',
+            },
+          });
+          window.scroll(0, 0);
+        });
     } else {
       this.setState({
         error: {
@@ -152,166 +192,168 @@ class editProfile extends React.Component {
 
   render() {
     if (this.props.onRequireAuth()) {
-      return (
-        <main id="editProfile">
-          <Message
-            error={this.state.error}
-            onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
-            message={this.state.message}
-            onClearError={() => this.setState({ error: { type: '', message: '' } })} />
-          <section className="row align-center">
-            <form className="small-12 columns" onSubmit={this.onSubmit}>
-              <div className="row">
-                <h1 className="small-12 columns">
-                  <span className="underlined">
-                    Edit Profile
-                  </span>
-                </h1>
-              </div>
-              <div className="row align-center">
-                <div className="small-12 large-4 columns">
-                  <fieldset>
-                    <label htmlFor="first-name">
-                      First Name: <span className="required">*</span>
+      if (Object.keys(this.props.userInfo).length > 0) {
+        return (
+          <main id="editProfile">
+            <Message
+              error={this.state.error}
+              onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
+              message={this.state.message}
+              onClearError={() => this.setState({ error: { type: '', message: '' } })} />
+            <section className="row align-center">
+              <form className="small-12 columns" onSubmit={this.onSubmit}>
+                <div className="row">
+                  <h1 className="small-12 columns">
+                    <span className="underlined">
+                      Edit Profile
+                    </span>
+                  </h1>
+                </div>
+                <div className="row align-center">
+                  <div className="small-12 large-4 columns">
+                    <fieldset>
+                      <label htmlFor="first-name">
+                        First Name: <span className="required">*</span>
+                      </label>
+                      <input
+                        value={this.state.firstName}
+                        onChange={this.onChange}
+                        type="text"
+                        name="firstName"
+                        id="first-name"
+                        required />
+                      <label htmlFor="last-name">
+                        Last Name: <span className="required">*</span>
+                      </label>
+                      <input
+                        value={this.state.lastName}
+                        onChange={this.onChange}
+                        type="text"
+                        name="lastName"
+                        id="last-name"
+                        required />
+                      <label htmlFor="email" className={`row${(validEmail(this.state.email) || this.state.email.length === 0) ? '' : ' invalid'}`}>
+                        <div className="small-12 columns">
+                          Email: <span className="required">*</span>
+                        </div>
+                        <div className=" small-12 columns">
+                          <span className='error'>Please enter a valid email address.</span>
+                        </div>
+                      </label>
+                      <input
+                        value={this.state.email}
+                        onChange={this.onChange}
+                        type="email"
+                        name="email"
+                        required
+                        id="email" />
+                    </fieldset>
+                  </div>
+                  <div className="small-12 large-4 columns">
+                    <hr className="hide-for-large" />
+                    <div className="small-12 columns"></div>
+                    <label htmlFor="password" className="row align-bottom align-justify">
+                      <div className="small-4 columns">
+                        Password:
+                      </div>
+                      <div className="columns shrink">
+                        <span className="detail">Leave blank to keep your current password.</span>
+                      </div>
                     </label>
                     <input
-                      value={this.state.firstName}
+                      value={this.state.password}
                       onChange={this.onChange}
-                      type="text"
-                      name="firstName"
-                      id="first-name"
-                      required />
-                    <label htmlFor="last-name">
-                      Last Name: <span className="required">*</span>
-                    </label>
-                    <input
-                      value={this.state.lastName}
-                      onChange={this.onChange}
-                      type="text"
-                      name="lastName"
-                      id="last-name"
-                      required />
-                    <label htmlFor="email" className={`row${(validEmail(this.state.email) || this.state.email.length === 0) ? '' : ' invalid'}`}>
+                      type="password"
+                      name="password"
+                      id="password" />
+                    <label htmlFor="confirm-password" className={`row${doPasswordsMatch(this.state.password, this.state.confirmPassword) ? '' : ' invalid'}`}>
                       <div className="small-12 columns">
-                        Email: <span className="required">*</span>
+                        Confirm Password:
                       </div>
                       <div className=" small-12 columns">
-                        <span className='error'>Please enter a valid email address.</span>
+                        <span className='error'>Your passwords don't match.</span>
                       </div>
                     </label>
                     <input
-                      value={this.state.email}
+                      value={this.state.confirmPassword}
                       onChange={this.onChange}
-                      type="email"
-                      name="email"
-                      required
-                      id="email" />
-                  </fieldset>
-                </div>
-                <div className="small-12 large-4 columns">
-                  <hr className="hide-for-large" />
-                  <div className="small-12 columns"></div>
-                  <label htmlFor="password" className="row align-bottom align-justify">
-                    <div className="small-4 columns">
-                      Password:
+                      type="password"
+                      name="confirmPassword"
+                      id="confirm-password" />
+                  </div>
+                  <div className='small-12 large-4 columns'>
+                    <div className={this.state.userType === 'non-profit' ? '' : 'hide'}>
+                      <hr className="hide-for-large" />
+                      <label htmlFor="address">
+                        Address: <span className="required">*</span>
+                      </label>
+                      <input
+                        value={this.state.address}
+                        onChange={this.onChange}
+                        type="text"
+                        name="address"
+                        id="address"
+                        required={this.state.userType === 'non-profit'} />
+                      <label htmlFor="city">
+                        City: <span className="required">*</span>
+                      </label>
+                      <input
+                        value={this.state.city}
+                        onChange={this.onChange}
+                        type="text"
+                        name="city"
+                        id="city"
+                        required={this.state.userType === 'non-profit'} />
+                      <label htmlFor="state">
+                        State: <span className="required">*</span>
+                      </label>
+                      <select
+                        value={this.state.state}
+                        onChange={this.onChange}
+                        name="state"
+                        id="state"
+                        required={this.state.userType === 'non-profit'} >
+                        <option value="" disabled>Choose Your State</option>
+                        {states.map(
+                          (state, i) =>
+                            <option value={state.abbreviation} key={i}>
+                              {state.name}
+                            </option>)}
+                      </select>
+                      <label htmlFor="zip" className={`row ${(isNumber(this.state.zip) && numLength(this.state.zip, 5)) ? '' : 'invalid'}${numLength(this.state.zip, 0) ? ' empty' : ''}`}>
+                        <div className="small-12 columns">
+                          Zip: <span className="required">*</span>
+                        </div>
+                        <div className="small-12 columns">
+                          <span className='error'>You entered an invalid Zip Code.</span>
+                        </div>
+                      </label>
+                      <input
+                        value={this.state.zip}
+                        onChange={this.onChange}
+                        type="text"
+                        name="zip"
+                        id="zip"
+                        required={this.state.userType === 'non-profit'} />
                     </div>
-                    <div className="columns shrink">
-                      <span className="detail">Leave blank to keep your current password.</span>
-                    </div>
-                  </label>
-                  <input
-                    value={this.state.password}
-                    onChange={this.onChange}
-                    type="password"
-                    name="password"
-                    id="password" />
-                  <label htmlFor="confirm-password" className={`row${doPasswordsMatch(this.state.password, this.state.confirmPassword) ? '' : ' invalid'}`}>
-                    <div className="small-12 columns">
-                      Confirm Password:
-                    </div>
-                    <div className=" small-12 columns">
-                      <span className='error'>Your passwords don't match.</span>
-                    </div>
-                  </label>
-                  <input
-                    value={this.state.confirmPassword}
-                    onChange={this.onChange}
-                    type="password"
-                    name="confirmPassword"
-                    id="confirm-password" />
-                </div>
-                <div className='small-12 large-4 columns'>
-                  <div className={this.state.userType === 'non-profit' ? '' : 'hide'}>
-                    <hr className="hide-for-large" />
-                    <label htmlFor="address">
-                      Address: <span className="required">*</span>
-                    </label>
-                    <input
-                      value={this.state.address}
-                      onChange={this.onChange}
-                      type="text"
-                      name="address"
-                      id="address"
-                      required={this.state.userType === 'non-profit'} />
-                    <label htmlFor="city">
-                      City: <span className="required">*</span>
-                    </label>
-                    <input
-                      value={this.state.city}
-                      onChange={this.onChange}
-                      type="text"
-                      name="city"
-                      id="city"
-                      required={this.state.userType === 'non-profit'} />
-                    <label htmlFor="state">
-                      State: <span className="required">*</span>
-                    </label>
-                    <select
-                      value={this.state.state}
-                      onChange={this.onChange}
-                      name="state"
-                      id="state"
-                      required={this.state.userType === 'non-profit'} >
-                      <option value="" disabled>Choose Your State</option>
-                      {states.map(
-                        (state, i) =>
-                          <option value={state.abbreviation} key={i}>
-                            {state.name}
-                          </option>)}
-                    </select>
-                    <label htmlFor="zip" className={`row ${(isNumber(this.state.zip) && numLength(this.state.zip, 5)) ? '' : 'invalid'}${numLength(this.state.zip, 0) ? ' empty' : ''}`}>
-                      <div className="small-12 columns">
-                        Zip: <span className="required">*</span>
-                      </div>
-                      <div className="small-12 columns">
-                        <span className='error'>You entered an invalid Zip Code.</span>
-                      </div>
-                    </label>
-                    <input
-                      value={this.state.zip}
-                      onChange={this.onChange}
-                      type="text"
-                      name="zip"
-                      id="zip"
-                      required={this.state.userType === 'non-profit'} />
                   </div>
                 </div>
-              </div>
-              <div className="row align-center">
-                <button
-                  className={`primary small-11 medium-10 large-8 columns${this.state.valid ? '' : ' disabled'}`}
-                  disabled={!this.state.valid}
-                  type="submit">
-                  Submit Request
-                </button>
-                <span className='error small-12'>
-                  Please make sure you've entered all your information.
-                </span>
-              </div>
-            </form>
-          </section>
-        </main>
-      );
+                <div className="row align-center">
+                  <button
+                    className={`primary small-11 medium-10 large-8 columns${this.state.valid ? '' : ' disabled'}`}
+                    disabled={!this.state.valid}
+                    type="submit">
+                    Submit Request
+                  </button>
+                  <span className='error small-12'>
+                    Please make sure you've entered all your information.
+                  </span>
+                </div>
+              </form>
+            </section>
+          </main>
+        );
+      }
     }
     return (
       <Redirect to={{

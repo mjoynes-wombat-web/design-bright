@@ -84,9 +84,11 @@ router.patch('/upload/photo', upload.single('file'), (req, res) => {
         (uploadSuccess) => {
           editUserInfo(
             user.user_id,
-            { user_metadata: {
-              picture: uploadSuccess.secure_url,
-            } },
+            {
+              user_metadata: {
+                picture: uploadSuccess.secure_url,
+              }
+            },
             editUserRes => jsonResponse(
               editUserRes.status,
               { picture: editUserRes.data.user_metadata.picture },
@@ -105,47 +107,6 @@ router.patch('/upload/photo', upload.single('file'), (req, res) => {
           'There was an error uploading the user picture.',
           res),
       );
-      // editUserInfo(
-      //   user.user_id,
-      //   updatedUserInfo,
-      //   (editUserResponse) => {
-      //     const updatedUser = editUserResponse.data;
-      //     if (updatedUser.app_metadata.userType === 'non-profit') {
-      //       const nonprofitId = updatedUser.app_metadata.nonProfitID;
-      //       const updatedNonProfitInfo = editData.nonProfitInfo;
-
-      //       editNonProfit(
-      //         nonprofitId,
-      //         updatedNonProfitInfo,
-      //         updatedNonProfit => jsonResponse(
-      //           200,
-      //           {
-      //             updatedUser,
-      //             updatedNonProfit,
-      //           },
-      //           `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
-      //           res),
-      //         editNonProfitError => jsonResponse(
-      //           500,
-      //           { editNonProfitError },
-      //           'There was an error editing the nonprofit. Please contact support.',
-      //           res,
-      //         ),
-      //       );
-      //     }
-      //     return jsonResponse(
-      //       200,
-      //       { updatedUser },
-      //       `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
-      //       res);
-      //   },
-      //   editUserError => jsonResponse(
-      //     editUserError.response.status,
-      //     { userId: user.user_id },
-      //     editUserError.response.data.message,
-      //     res,
-      //   ),
-      // );
     },
     findUserError => jsonResponse(
       findUserError.statusCode,
@@ -160,7 +121,6 @@ router.patch('/upload/photo', upload.single('file'), (req, res) => {
 router.patch('/edit', (req, res) => {
   const { accessToken, editData } = req.body;
   const updatedUserInfo = editData.userInfo;
-
   getUserInfo(
     accessToken,
     (user) => {
@@ -172,7 +132,6 @@ router.patch('/edit', (req, res) => {
           if (updatedUser.app_metadata.userType === 'non-profit') {
             const nonprofitId = updatedUser.app_metadata.nonProfitID;
             const updatedNonProfitInfo = editData.nonProfitInfo;
-
             editNonProfit(
               nonprofitId,
               updatedNonProfitInfo,
@@ -188,29 +147,46 @@ router.patch('/edit', (req, res) => {
                 500,
                 { editNonProfitError },
                 'There was an error editing the nonprofit. Please contact support.',
-                res,
-              ),
+                res),
             );
           }
           return jsonResponse(
             200,
             { updatedUser },
-            `${updatedUser.email.charAt(0).toUpperCase()}${updatedUser.email.slice(1)} has been updated.`,
+            `${updatedUserInfo.email.charAt(0).toUpperCase()}${updatedUserInfo.email.slice(1)} has been updated`,
             res);
         },
-        editUserError => jsonResponse(
-          editUserError.response.status,
-          { userId: user.user_id },
-          editUserError.response.data.message,
-          res,
-        ),
+        (editUserError) => {
+          if (editUserError.response.data.message === 'The specified new email already exists') {
+            return jsonResponse(
+              409,
+              { userId: user.user_id },
+              `${updatedUserInfo.email.charAt(0).toUpperCase()}${updatedUserInfo.email.slice(1)} is already in use.`,
+              res);
+          }
+          return jsonResponse(
+            editUserError.response.status,
+            { userId: user.user_id },
+            editUserError.response.data.message,
+            res);
+        },
       );
     },
-    findUserError => jsonResponse(
-      findUserError.statusCode,
-      findUserError.original,
-      'This access token is not authorized.',
-      res),
+    (findUserError) => {
+      console.log(findUserError.original);
+      if (findUserError.status === 401) {
+        return jsonResponse(
+          findUserError.status,
+          findUserError.Error,
+          'This access token is not authorized.',
+          res);
+      }
+      return jsonResponse(
+        findUserError.status,
+        findUserError.Error,
+        'Unknown error. Please contact support.',
+        res);
+    },
   );
 });
 

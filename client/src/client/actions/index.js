@@ -48,15 +48,6 @@ export const clearMessage = () => (dispatch) => {
   });
 };
 
-export const clearUserInfo = () => (dispatch) => {
-  // console.log('clearUserInfo ran.');
-  dispatch({
-    type: C.USER,
-    payload: {},
-  });
-};
-
-
 export const logout = () => (dispatch) => {
   // console.log('logout ran.');
   dispatch({
@@ -82,12 +73,10 @@ export const requireAuth = () => (dispatch, getState) => {
         return true;
       }
       dispatch(logout());
-      dispatch(clearUserInfo());
 
       return false;
     }
     dispatch(logout());
-    dispatch(clearUserInfo());
     return false;
   }
   return false;
@@ -120,7 +109,7 @@ export const login = loginInfo => (dispatch) => {
   });
 };
 
-export const getUserInfo = callback =>
+export const getUserInfo = () =>
   (dispatch, getState) => {
     // console.log('getUserInfo ran.');
     const state = getState();
@@ -167,7 +156,6 @@ export const getUserInfo = callback =>
                   type: C.USER,
                   payload: userInfo,
                 });
-                callback();
               })
               .catch(
                 error => (
@@ -181,45 +169,8 @@ export const getUserInfo = callback =>
               type: C.USER,
               payload: userInfo,
             });
-            callback();
           }
         },
       );
     }
   };
-
-export const editUser = (editData, callback) => (dispatch, getState) => {
-  // console.log('editUser ran.');
-  const state = getState();
-  const data = {
-    editData,
-    accessToken: state.userAuth.accessToken,
-  };
-
-  axios.patch(
-    `https://${window.location.hostname}:3000/api/users/edit`,
-    data)
-    .then((results) => {
-      const editUserResults = results.data;
-      dispatch(newMessage(
-        'editUser',
-        `Congratulations, your changes have been made for ${editUserResults.data.updatedUser.email}`,
-      ));
-
-      dispatch(getUserInfo());
-
-      callback(results);
-
-      window.scroll(0, 0);
-    })
-    .catch((error) => {
-      const createUserError = error.response.data;
-      createUserError.message = `${createUserError.data.email.charAt(0).toUpperCase()}${createUserError.data.email.slice(1)} is already in use.`;
-
-      dispatch(newError(createUserError.message));
-
-      callback(error);
-
-      window.scroll(0, 0);
-    });
-};

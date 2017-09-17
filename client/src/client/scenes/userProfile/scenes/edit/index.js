@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { getUserInfo, editUser, requireAuth } from '../../../../actions';
+import { getUserInfo, requireAuth } from '../../../../actions';
 import editProfile from './components';
 
 const mapStateToProps = state => ({
@@ -12,11 +12,6 @@ const mapDispatchToProps = dispatch => ({
   onGetUserInfo(callback) {
     dispatch(
       getUserInfo(callback),
-    );
-  },
-  onEditUser(editData, callback) {
-    dispatch(
-      editUser(editData, callback),
     );
   },
   onRequireAuth() {

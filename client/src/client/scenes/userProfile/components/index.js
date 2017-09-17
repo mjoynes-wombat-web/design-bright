@@ -137,7 +137,7 @@ class Profile extends React.Component {
 
   render() {
     if (this.props.onRequireAuth()) {
-      if (this.state.fetched) {
+      if (Object.keys(this.props.userInfo).length > 0) {
         return (
           <main id="profile" className="small-12 columns">
             <Message

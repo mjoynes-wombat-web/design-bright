@@ -53,7 +53,7 @@ Register:
 
 Profile:
   Edit:
-    ☐ Create more robust error handling for the edit functionality. @high
+    ✔ Create more robust error handling for the edit functionality. @high @done (2017-9-17 15:27:24)
   
 Home:
   ☐ Change the width of the text to 45 to 75 chars. @low
