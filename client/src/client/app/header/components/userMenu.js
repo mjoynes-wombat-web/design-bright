@@ -16,7 +16,7 @@ const UserMenu = ({ requireAuth, userType, onLogout }) => {
     return (
       <ul className="user-menu">
         <li><Link to="/user/profile">Profile</Link></li>
-        <li><Link to="/" onClick={onLogout}>Logout</Link></li>
+        <li><a onClick={onLogout}>Logout</a></li>
       </ul>
     );
   }

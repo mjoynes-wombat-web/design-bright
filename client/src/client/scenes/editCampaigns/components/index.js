@@ -62,8 +62,6 @@ class mngCampaigns extends React.Component {
       const editCampaignId = parseInt(this.props.match.params.id, 10);
       this.setState({ valid: true });
       const { origin } = queryString.parse(this.props.location.search);
-      console.log(origin);
-
       if (origin === 'create-campaign') {
         this.setState({
           message: {

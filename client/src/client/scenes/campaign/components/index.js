@@ -7,6 +7,7 @@ import CampaignBlocks from './campaignBlocks';
 import Donate from './donate';
 import CampaignHeader from './campaignHeader';
 import Message from '../../../partials/message';
+import LoginModal from '../../../partials/loginForm/modal';
 
 import './scss/style.scss';
 
@@ -73,7 +74,6 @@ class Campaign extends React.Component {
         });
       })
       .catch((error) => {
-        console.log(error);
         if (error) {
           this.setState({
             fetched: {
@@ -110,7 +110,7 @@ class Campaign extends React.Component {
       this.setState({
         error: {
           type: 'campaign start',
-          message: 'This campaign has not been started yet.'
+          message: 'This campaign has not been started yet.',
         },
       });
       window.scroll(0, 0);
@@ -127,7 +127,7 @@ class Campaign extends React.Component {
               onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
               message={this.state.message}
               onClearError={() => this.setState({ error: { type: '', message: '' } })} />
-            {this.state.showDonationModal
+            {this.state.showDonationModal && this.props.onRequireAuth()
               ? <Donate
                 cancelDonation={
                   () => {
@@ -136,6 +136,7 @@ class Campaign extends React.Component {
                     window.onresize = null;
                   }
                 }
+                userInfo={this.props.userInfo}
                 campaignId={this.state.campaignId}
                 campaignInfo={this.state.campaignInfo}
                 isEnded={this.isEnded}
@@ -152,6 +153,14 @@ class Campaign extends React.Component {
                     message,
                   },
                 })} />
+              : null}
+            {this.state.showDonationModal && !this.props.onRequireAuth()
+              ? <LoginModal
+                actionName={'Please Login to Donate'}
+                closeAction={() => {
+                  document.body.style.overflow = '';
+                  this.setState({ showDonationModal: false });
+                }} />
               : null}
             <section className="row">
               <CampaignHeader

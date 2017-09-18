@@ -177,7 +177,7 @@ export const launchCampaign = (campaignId, nonprofitId, success, error) => {
         .then(updateResults => success(updateResults))
         .catch(updateErr => error(updateErr));
     })
-    .catch(findErr => console.log(findErr));
+    .catch(findErr => error(findErr));
 };
 
 export const stopCampaign = (campaignId, nonprofitId, success, error) => {
@@ -366,7 +366,6 @@ export const updateCampaignInfo = (
       });
     })
     .catch((updateCampaignErr) => {
-      console.log(updateCampaignErr);
       if (updateCampaignErr.errors[0].type === 'unique violation') {
         return error(
           {
@@ -589,7 +588,6 @@ export const getCampaigns = ({ page, search, sort }, success, error) => {
         const message = (search
           ? `Page ${page} of ${pages} for the campaign results filtered by "${search}", sorted by ${sort}`
           : `Page ${page} of ${pages} for the campaign results sorted by ${sort}`);
-        console.log(message);
         return success({
           statusCode: 200,
           campaigns: paginatedCampaigns,

@@ -103,7 +103,6 @@ class Advisor extends React.Component {
         `https://${window.location.hostname}:3000/api/advisor/create`,
         newAdvisor(this.state.inputs))
         .then((results) => {
-          console.log(results);
           this.setState({
             message: {
               type: 'create advisor',

@@ -135,14 +135,13 @@ class DonateComponent extends React.Component {
 
   makeDonation(e) {
     e.preventDefault();
+    console.log('Handle messages here.');
     this.props.stripe.createToken({ name: this.state.inputs.cardHolder })
       .then((results) => {
-        console.log(results.token);
         if ('token' in results) {
           this.setState({ token: results.token });
         } else if ('error' in results) {
           const { error } = results;
-          console.log(error);
         }
       });
   }
@@ -156,6 +155,7 @@ class DonateComponent extends React.Component {
         amount: inputs.donation,
         description: `Donation to the ${this.props.campaignInfo.name} campaign.`,
         email: inputs.email,
+        userInfo: this.props.userInfo,
       },
     )
       .then((chargeResults) => {
@@ -182,7 +182,6 @@ class DonateComponent extends React.Component {
       const label = stripeElements[i].previousSibling;
       if (stripeElements[i].classList.contains('StripeElement--invalid')) {
         label.classList.add('invalid');
-        console.log(label);
         stripeValid = false;
       } else if (!stripeElements[i].classList.contains('StripeElement--complete')) {
         stripeValid = false;

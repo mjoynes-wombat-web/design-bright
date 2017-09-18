@@ -114,7 +114,6 @@ router.patch('/edit', (req, res) => {
       return (0, _response2.default)(editUserError.response.status, { userId: user.user_id }, editUserError.response.data.message, res);
     });
   }, findUserError => {
-    console.log(findUserError.original);
     if (findUserError.status === 401) {
       return (0, _response2.default)(findUserError.status, findUserError.Error, 'This access token is not authorized.', res);
     }

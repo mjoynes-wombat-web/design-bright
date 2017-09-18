@@ -173,7 +173,6 @@ router.patch('/edit', (req, res) => {
       );
     },
     (findUserError) => {
-      console.log(findUserError.original);
       if (findUserError.status === 401) {
         return jsonResponse(
           findUserError.status,

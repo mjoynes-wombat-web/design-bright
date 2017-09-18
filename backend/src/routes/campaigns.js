@@ -303,7 +303,7 @@ router.post('/create', (req, res) => {
 
 router.post('/donate/:id', (req, res) => {
   const { id } = req.params;
-  const { email, token, amount, description } = req.body;
+  const { email, token, amount, description, userInfo } = req.body;
 
   const charge = () => {
     if (email) {
@@ -315,6 +315,10 @@ router.post('/donate/:id', (req, res) => {
         currency: 'usd',
         metadata: {
           campaignId: id,
+          firstName: userInfo.firstName,
+          lastName: userInfo.lastName,
+          email: userInfo.email,
+          userType: userInfo.userType,
         },
       };
     }
@@ -325,6 +329,10 @@ router.post('/donate/:id', (req, res) => {
       currency: 'usd',
       metadata: {
         campaignId: id,
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        email: userInfo.email,
+        userType: userInfo.userType,
       },
     };
   };

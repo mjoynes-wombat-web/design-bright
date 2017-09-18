@@ -4,7 +4,6 @@ import React from 'react';
 import './scss/style.scss';
 
 const cardIcon = (cardType) => {
-  console.log(cardType);
   switch (cardType) {
     case 'Visa':
       return '';
@@ -23,7 +22,13 @@ const cardIcon = (cardType) => {
   }
 };
 
-const DonationConfirmation = ({ inputs, token, confirmDonation, editDonation, cancelConfirmation }) => (
+const DonationConfirmation = ({
+  inputs,
+  token,
+  confirmDonation,
+  editDonation,
+  cancelConfirmation,
+}) => (
   <div className="small-12 medium-10 large-8 columns" id="donationConfirmation" >
     <h2>
       <span className="underlined">

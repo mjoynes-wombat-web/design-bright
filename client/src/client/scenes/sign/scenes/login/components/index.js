@@ -3,15 +3,13 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';
 
-import validEmail from '../../../../../helpers/validEmail';
+import LoginForm from '../../../../../partials/loginForm';
 import Message from '../../../../../partials/message';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
       loginAttempted: false,
       message: {
         type: '',
@@ -23,39 +21,7 @@ class Login extends React.Component {
       },
     };
 
-    this.onChange = this.onChange.bind(this);
-    this.onLogin = this.onLogin.bind(this);
-    this.onLogout = this.onLogout.bind(this);
-  }
-
-  onChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({ [name]: value });
-  }
-
-  onLogin(event) {
-    event.preventDefault();
-
-    this.props.onLogin(
-      {
-        email: this.state.email,
-        password: this.state.password,
-      },
-    );
-
-    this.setState({ loginAttempted: true });
-    this.setState({ password: '' });
-    this.setState({ error: this.props.error });
-    window.scroll(0, 0);
-  }
-
-  onLogout(e) {
-    e.preventDefault();
-
-    this.props.onLogout();
+    this.componentWillMount = this.componentWillMount.bind(this);
   }
 
   componentWillMount() {
@@ -85,17 +51,17 @@ class Login extends React.Component {
 
   render() {
     if (this.props.onRequireAuth()) {
-      if (this.state.loginAttempted) {
+      if (Object.keys(this.props.userInfo).length > 0) {
         return (
           <Redirect to={{
             pathname: '/user/profile',
+            search: '?origin=login',
           }} />
         );
       }
       return (
         <Redirect to={{
           pathname: '/user/profile',
-          search: '?origin=login',
         }} />
       );
     }
@@ -106,48 +72,8 @@ class Login extends React.Component {
           onClearMessage={() => this.setState({ message: { type: '', message: '' } })}
           message={this.state.message}
           onClearError={() => this.setState({ error: { type: '', message: '' } })} />
-        <section className="row align-center">
-          <form className="small-12 large-6 columns" onSubmit={this.onLogin}>
-            <div className="row">
-              <h1 className="small-12 columns"><span className="underlined">Login</span></h1>
-            </div>
-            <div className="row align-center">
-              <div className="small-12 columns">
-                <label htmlFor="email"
-                  className={`row${this.state.error.type === 'login' ? ' invalid' : ''}${(validEmail(this.state.email) || this.state.email.length === 0) ? '' : ' invalid'}`}>
-                  <div className="small-12 columns">
-                    Email: <span className="required">*</span>
-                  </div>
-                  <div className="small-12 columns">
-                    <span className="error">{this.state.error.type === 'login' ? this.state.error.message : 'Please enter a valid email address.'}</span>
-                  </div>
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={this.state.email}
-                  onChange={this.onChange}
-                  required />
-                <label htmlFor="password" className={this.props.userAuth.error ? 'invalid' : ''}>Password: <span className="required">*</span></label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  value={this.state.password}
-                  onChange={this.onChange}
-                  required />
-              </div>
-            </div>
-            <div className="row align-center">
-              <button
-                className="primary small-11 medium-10 large-10 columns"
-                type="submit">
-                Login
-              </button>
-            </div>
-          </form>
-        </section>
+        <LoginForm
+          actionName={'Login'} />
       </main>
     );
   }

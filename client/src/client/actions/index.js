@@ -5,7 +5,6 @@ import axios from 'axios';
 import C from '../constants';
 
 export const newError = (errType, errMsg) => (dispatch) => {
-  // console.log('newError ran.');
   dispatch({
     type: C.ERROR,
     payload: {
@@ -16,7 +15,6 @@ export const newError = (errType, errMsg) => (dispatch) => {
 };
 
 export const clearError = () => (dispatch) => {
-  // console.log('clearError ran.');
   dispatch({
     type: C.ERROR,
     payload: {
@@ -27,7 +25,6 @@ export const clearError = () => (dispatch) => {
 };
 
 export const newMessage = (msgType, msg) => (dispatch) => {
-  // console.log('newMessage ran.');
   dispatch({
     type: C.MESSAGE,
     payload: {
@@ -38,7 +35,6 @@ export const newMessage = (msgType, msg) => (dispatch) => {
 };
 
 export const clearMessage = () => (dispatch) => {
-  // console.log('clearMessage ran.');
   dispatch({
     type: C.MESSAGE,
     payload: {
@@ -49,7 +45,6 @@ export const clearMessage = () => (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
-  // console.log('logout ran.');
   dispatch({
     type: C.USER_AUTH,
     payload: {},
@@ -61,7 +56,6 @@ export const logout = () => (dispatch) => {
 };
 
 export const requireAuth = () => (dispatch, getState) => {
-  // console.log('requireAuth ran.');
   const currentState = getState();
   const auth = currentState.userAuth;
   const authDate = new Date(Date.parse(auth.date));
@@ -82,36 +76,8 @@ export const requireAuth = () => (dispatch, getState) => {
   return false;
 };
 
-export const login = loginInfo => (dispatch) => {
-  // console.log('login ran.');
-  const webAuth = new auth0.WebAuth({
-    domain: 'designbright.auth0.com',
-    clientID: 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh',
-  });
-
-  webAuth.client.login({
-    realm: 'Username-Password-Authentication',
-    username: loginInfo.email,
-    password: loginInfo.password,
-    scope: 'user_metadata',
-  }, (errMsg, authResults) => {
-    if (errMsg) {
-      return dispatch(newError('login', errMsg.description));
-    }
-
-    const authorization = authResults;
-    authorization.date = new Date();
-
-    return dispatch({
-      type: C.USER_AUTH,
-      payload: authorization,
-    });
-  });
-};
-
 export const getUserInfo = () =>
   (dispatch, getState) => {
-    // console.log('getUserInfo ran.');
     const state = getState();
     if (dispatch(requireAuth())) {
       const webAuth = new auth0.WebAuth({
@@ -157,13 +123,11 @@ export const getUserInfo = () =>
                   payload: userInfo,
                 });
               })
-              .catch(
-                error => (
-                  error.response.data.statusCode === 401
-                    ? dispatch(logout())
-                    : dispatch(newError(error.response.data.message))
-                ),
-              );
+              .catch(error => (
+                error.response.data.statusCode === 401
+                  ? dispatch(logout())
+                  : dispatch(newError(error.response.data.message))
+              ));
           } else {
             dispatch({
               type: C.USER,
@@ -174,3 +138,32 @@ export const getUserInfo = () =>
       );
     }
   };
+
+export const login = (loginInfo, callback) => (dispatch) => {
+  const webAuth = new auth0.WebAuth({
+    domain: 'designbright.auth0.com',
+    clientID: 'bBvDRGSmgiYZk2GRZ3Va5hGeuNKwQ3Rh',
+  });
+
+  webAuth.client.login({
+    realm: 'Username-Password-Authentication',
+    username: loginInfo.email,
+    password: loginInfo.password,
+    scope: 'user_metadata',
+  }, (errMsg, authResults) => {
+    if (errMsg) {
+      return dispatch(newError('login', errMsg.description), callback());
+    }
+
+    const authorization = authResults;
+    authorization.date = new Date();
+    dispatch(
+      {
+        type: C.USER_AUTH,
+        payload: authorization,
+      },
+      callback(),
+    );
+    return dispatch(getUserInfo());
+  });
+};

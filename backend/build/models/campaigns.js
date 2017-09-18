@@ -164,7 +164,7 @@ const launchCampaign = exports.launchCampaign = (campaignId, nonprofitId, succes
     endDate.setDate(endDate.getDate() + campaign.duration);
 
     db.campaigns.update({ startDate, endDate }, { where: { campaignId, nonprofitId, startDate: null, endDate: null } }).then(updateResults => success(updateResults)).catch(updateErr => error(updateErr));
-  }).catch(findErr => console.log(findErr));
+  }).catch(findErr => error(findErr));
 };
 
 const stopCampaign = exports.stopCampaign = (campaignId, nonprofitId, success, error) => {
@@ -296,7 +296,6 @@ const updateCampaignInfo = exports.updateCampaignInfo = (nonprofitId, { campaign
       updatedCampaignInfo
     });
   }).catch(updateCampaignErr => {
-    console.log(updateCampaignErr);
     if (updateCampaignErr.errors[0].type === 'unique violation') {
       return error({
         statusCode: 409,
@@ -474,7 +473,6 @@ const getCampaigns = exports.getCampaigns = ({ page, search, sort }, success, er
 
     if (paginatedCampaigns.length) {
       const message = search ? `Page ${page} of ${pages} for the campaign results filtered by "${search}", sorted by ${sort}` : `Page ${page} of ${pages} for the campaign results sorted by ${sort}`;
-      console.log(message);
       return success({
         statusCode: 200,
         campaigns: paginatedCampaigns,

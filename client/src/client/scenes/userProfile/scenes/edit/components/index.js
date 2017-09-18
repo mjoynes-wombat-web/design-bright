@@ -131,7 +131,6 @@ class editProfile extends React.Component {
         }
         );
 
-      // console.log('editUser ran.');
       const data = {
         editData: User(this.state),
         accessToken: this.props.userAuth.accessToken,

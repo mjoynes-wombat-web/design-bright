@@ -4,34 +4,29 @@ import { StripeProvider, Elements } from 'react-stripe-elements';
 
 import DonateComponent from './components';
 
-class Donate extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.charge = this.charge.bind(this);
-  }
-
-  charge(token) {
-    console.log(this.state);
-    console.log(token);
-  }
-
-  render() {
-    return (
-      <StripeProvider apiKey='pk_test_KXQVwU6Pgt4ITIYPqFZTj6Oe'>
-        <Elements>
-          <DonateComponent
-            cancelDonation={this.props.cancelDonation}
-            campaignId={this.props.campaignId}
-            campaignInfo={this.props.campaignInfo}
-            isEnded={this.props.isEnded}
-            onNewMessage={this.props.onNewMessage}
-            updateCampaignDonations={this.props.updateCampaignDonations}
-            onNewError={this.props.onNewError} />
-        </Elements>
-      </StripeProvider>
-    );
-  }
-}
+const Donate = ({
+  userInfo,
+  cancelDonation,
+  campaignId,
+  campaignInfo,
+  isEnded,
+  onNewMessage,
+  updateCampaignDonations,
+  onNewError,
+}) => (
+  <StripeProvider apiKey='pk_test_KXQVwU6Pgt4ITIYPqFZTj6Oe'>
+    <Elements>
+      <DonateComponent
+        userInfo={userInfo}
+        cancelDonation={cancelDonation}
+        campaignId={campaignId}
+        campaignInfo={campaignInfo}
+        isEnded={isEnded}
+        onNewMessage={onNewMessage}
+        updateCampaignDonations={updateCampaignDonations}
+        onNewError={onNewError} />
+    </Elements>
+  </StripeProvider>
+);
 
 export default Donate;

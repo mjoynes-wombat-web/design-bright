@@ -90,7 +90,6 @@ class ContactForm extends React.Component {
         `https://${window.location.hostname}:3000/api/help`,
         Message(this.state.inputs))
         .then((results) => {
-          console.log(results);
           this.props.onNewMessage(results.data.message);
           const inputs = {
             firstName: '',
@@ -117,7 +116,6 @@ class ContactForm extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     document.title = 'Help - Design Bright';
     return (
       <section className="main-image small-12 large-6 columns" id="contact">

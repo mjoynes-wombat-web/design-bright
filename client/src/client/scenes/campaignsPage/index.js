@@ -43,7 +43,7 @@ class CampaignsPage extends React.Component {
 
     const setPage = () => (Number.isInteger(parseInt(page, 10)) ? parseInt(page, 10) : 1);
 
-    document.title = `${view.slice(0, 1).toUpperCase()}${view.slice(1, view.length)} Campaigns - Design Bright - Pg. ${page || 1}`;
+    document.title = `${view.slice(0, 1).toUpperCase()}${view.slice(1, view.length)} Campaigns - Pg. ${page || 1} - Design Bright`;
 
     const getUrl = () => {
       if (view === 'search') {

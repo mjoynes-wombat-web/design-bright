@@ -1,19 +1,14 @@
 import { connect } from 'react-redux';
 
-import { login, requireAuth } from '../../../../actions';
+import { requireAuth } from '../../../../actions';
 import Login from './components';
 
 const mapStateToProps = state => ({
+  userInfo: state.userInfo,
   userAuth: state.userAuth,
-  error: state.error,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLogin(loginInfo) {
-    dispatch(
-      login(loginInfo),
-    );
-  },
   onRequireAuth() {
     return dispatch(
       requireAuth(),
