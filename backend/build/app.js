@@ -28,6 +28,10 @@ var _https = require('https');
 
 var _https2 = _interopRequireDefault(_https);
 
+var _compression = require('compression');
+
+var _compression2 = _interopRequireDefault(_compression);
+
 var _users = require('./routes/users');
 
 var _users2 = _interopRequireDefault(_users);
@@ -51,19 +55,20 @@ var _help2 = _interopRequireDefault(_help);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Grabbing Environment Variables
-// Import Dependencies
 const { API_PORT = 3000, STATUS, HOST = '0.0.0.0', PRIVATE_KEY_FILE, CERTIFICATE_FILE } = _dotenv2.default.config().parsed;
 
 // Setting up the express application.
 
 
 // Import Routes
+// Import Dependencies
 const app = (0, _express2.default)();
 
 // Setting the morgan logger to the development status if it exists
 if (STATUS !== undefined) {
   app.use((0, _morgan2.default)(STATUS));
 }
+app.use((0, _compression2.default)());
 
 const whitelist = ['https://192.168.86.200:3002', 'https://192.168.1.9:3002', 'https://165.227.7.212', 'https://www.designbright.org', 'https://192.168.33.129:3002'];
 
