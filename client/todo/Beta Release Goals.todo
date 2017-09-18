@@ -41,6 +41,7 @@ Edit Campaigns:
   ✔ Disable save button after save and re-enabled after changes. @low @done (2017-9-16 13:37:10)
   ☐ Add Bold, Italic, Underlined, Lists and Movies to the edit campaign functionality. @high
   ☐ Create delete campaign fallback if error. @low
+  ☐ Require one paragraph and one main image. @low
 
 Manage Campaigns:
   ☐ Create search and pagination. @low

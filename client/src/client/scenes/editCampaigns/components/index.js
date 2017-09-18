@@ -223,9 +223,12 @@ class mngCampaigns extends React.Component {
     }
   }
 
-  onChangeEditorData(editorData) {
+  onChangeEditorData(editorData, campaignSaved) {
     this.setState(
-      { editorData },
+      {
+        editorData,
+        campaignSaved,
+      },
       () => {
         if (this.validate()) {
           this.setState({ valid: true });

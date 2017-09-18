@@ -26,6 +26,29 @@ const defaultBlock = {
 
 const schema = {
   nodes: {
+    header: props =>
+      <h2 {...props.attributes}>
+        <span className="underlined">
+          {props.children}
+        </span>
+      </h2>,
+    paragraph: props =>
+      <p {...props.attributes}>
+        {props.children}
+      </p>,
+    bold: props => <strong>{props.children}</strong>,
+    italic: props => <em>{props.children}</em>,
+    underlined: props => <span className="underlined">{props.children}</span>,
+    bulletedList: props => <ul>{props.children}</ul>,
+    listItem: props => <li>{props.children}</li>,
+    numberedList: props => <ol>{props.children}</ol>,
+    link: (props) => {
+      const url = props.node.data.get('url');
+      return <a
+        href={url} {...props.attributes}>
+        {props.children}
+      </a>;
+    },
     image: (props) => {
       const { node, state } = props;
       const active = state.isFocused && state.selection.hasEdgeIn(node);
@@ -41,23 +64,6 @@ const schema = {
           attributes={props.attributes}
           alt={alt} />
       );
-    },
-    paragraph: props =>
-      <p {...props.attributes}>
-        {props.children}
-      </p>,
-    header: props =>
-      <h2 {...props.attributes}>
-        <span className="underlined">
-          {props.children}
-        </span>
-      </h2>,
-    link: (props) => {
-      const url = props.node.data.get('url');
-      return <a
-        href={url} {...props.attributes}>
-        {props.children}
-      </a>;
     },
   },
   rules: [
@@ -102,7 +108,7 @@ class CampaignEditor extends React.Component {
             nodes: [
               {
                 kind: 'text',
-                text: 'We recommend that you follow the following format for you campaign. This is where you would write your initial introduction for your campaign. This will also serve as the description on the search and browse pages. Anything over X characters will be cut off.',
+                text: 'We recommend that you follow the following format for you campaign. This is where you would write your initial introduction for your campaign. This will also serve as the description on the search and browse pages. If you don\'t put the paragraph here the next paragraph will be your description.',
               },
             ],
           },
@@ -132,7 +138,7 @@ class CampaignEditor extends React.Component {
             nodes: [
               {
                 kind: 'text',
-                text: 'You should delete the image above and replace it with your own.',
+                text: 'You should delete the image above and replace it with your own. This will serve as the image in the campaign list. If you don\'t put one here we will use the first main image you insert.',
               },
             ],
           },
@@ -220,16 +226,18 @@ class CampaignEditor extends React.Component {
     this.onChangeInput = this.onChangeInput.bind(this);
     this.cancelCreateLink = this.cancelCreateLink.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.onClickInline = this.onClickInline.bind(this);
+    this.isInline = this.isInline.bind(this);
   }
 
   componentDidMount() {
-    this.onChangeEditor(this.state.editorState);
+    this.onChangeEditor(this.state.editorState, true);
   }
 
-  onChangeEditor(editorState) {
+  onChangeEditor(editorState, campaignSaved) {
     this.setState(
       { editorState },
-      this.props.onChangeEditorData(Raw.serialize(editorState)),
+      this.props.onChangeEditorData(Raw.serialize(editorState), campaignSaved),
     );
   }
 
@@ -450,10 +458,32 @@ class CampaignEditor extends React.Component {
     });
   }
 
+  isInline() {
+    const { editorState } = this.state;
+    return editorState.inlines.some(inline => ['bold', 'italic', 'underlined'].indexOf(inline.type) !== -1);
+  }
+
+  onClickInline(e, type) {
+    e.preventDefault();
+    const { editorState } = this.state;
+    let newEditorState = editorState;
+    if (this.isInline()) {
+      newEditorState = newEditorState.transform().unwrapInline().apply();
+      if (editorState.isExpanded) {
+        newEditorState = newEditorState.transform().wrapInline(type).collapseToEnd().apply();
+      }
+    } else if (editorState.isExpanded) {
+      newEditorState = newEditorState.transform().wrapInline(type).collapseToEnd().apply();
+    }
+
+    return this.onChangeEditor(newEditorState);
+  }
+
   render() {
     return (
       <div id="campaignEditor">
         <Toolbar
+          onClickInline={this.onClickInline}
           onAddImage={this.onAddImage}
           onNewLink={this.onNewLink}
           onChangeFormat={this.onChangeFormat}

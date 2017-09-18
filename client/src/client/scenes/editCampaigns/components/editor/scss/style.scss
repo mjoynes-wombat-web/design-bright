@@ -46,10 +46,11 @@ $error-red: #ff5800;
       display: inline-block;
       color: #333333;
       font-size: 1rem;
-      padding: 0.75rem;
+      padding: 0.5rem;
       line-height: initial;
       border-radius: 0.0675rem;
       text-shadow: 0 0 0.125rem #fffbef;
+      min-width: 2rem;
     }
 
     button.active span.icon {
@@ -62,15 +63,14 @@ $error-red: #ff5800;
       margin: 0;
       background-color: transparent;
       border: none;
-      padding: 0.25rem 1rem 0.5rem 1rem;
-      margin-right: 10%;
+      padding: 0.3125rem 0.5rem 0.4375rem 0.5rem;
       line-height: initial;
       color: #333333;
       font-family: 'Lato', sans-serif;
       font-weight: 300;
       font-size: 1.25rem;
       height: auto;
-      background-image: url('/assets/img/sort.svg');
+      background-image: url('/assets/img/sort-drk.svg');
       background-position: right 58%;
       background-size: auto 1rem;
       cursor: pointer;
@@ -82,15 +82,15 @@ $error-red: #ff5800;
       }
     }
 
+    div.shrink.columns {
+      padding: 0;
+    }
+    
     button {
       display: inline-block;
       width: auto;
       margin: 0;
       padding: 0;
-
-      &:not(:last-of-type) {
-        margin-right: 0.25rem;
-      }
     }
 
     button:hover, select:hover {
