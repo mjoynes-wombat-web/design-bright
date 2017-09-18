@@ -6,7 +6,6 @@ import cors from 'cors';
 import BodyParser from 'body-parser';
 import fs from 'fs';
 import https from 'https';
-import compression from 'compression';
 
 // Import Routes
 import users from './routes/users';
@@ -26,8 +25,6 @@ const app = express();
 if (STATUS !== undefined) {
   app.use(logger(STATUS));
 }
-
-app.use(compression());
 
 const whitelist = [
   'https://192.168.86.200:3002',
