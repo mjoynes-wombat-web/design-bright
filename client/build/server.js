@@ -28,6 +28,10 @@ var _https = require('https');
 
 var _https2 = _interopRequireDefault(_https);
 
+var _compression = require('compression');
+
+var _compression2 = _interopRequireDefault(_compression);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _dotenv$config$parsed = _dotenv2.default.config().parsed,
@@ -47,6 +51,7 @@ if (STATUS !== undefined) {
   app.use((0, _morgan2.default)(STATUS));
 }
 
+app.use((0, _compression2.default)());
 app.use(_express2.default.static(_path2.default.join(__dirname, '../build/dist')));
 
 app.get('/', function (req, res) {
