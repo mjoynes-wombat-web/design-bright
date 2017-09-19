@@ -292,7 +292,8 @@ class mngCampaigns extends React.Component {
                       {this.state.campaignInfo.startDate
                         ? (
                           <p className="message small-12 columns">
-                            {this.state.campaignInfo.endDate
+                            {((new Date(Date.parse(this.state.campaignInfo.endDate))).getTime()
+      <= (new Date()).getTime())
                               ? 'This campaign has already ended so only it\'s content can be modified.'
                               : 'This campaign has already started so only it\'s content can be modified.'}
                           </p>
