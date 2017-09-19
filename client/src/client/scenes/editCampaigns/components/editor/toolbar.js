@@ -46,9 +46,9 @@ const Toolbar = (props) => {
           <button className="image" onMouseDown={props.onAddImage} type="button">
             <span className="icon"></span>
           </button>
-          <button className="movie" type="button">
+          {/* <button className="movie" type="button">
             <span className="icon"></span>
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
