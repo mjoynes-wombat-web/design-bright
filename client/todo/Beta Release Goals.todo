@@ -39,7 +39,9 @@ Edit Campaigns:
   ✔ Fix image select radial issue. @critical @done (2017-9-15 14:42:36)
   ✔ FIx campaign edit page display nothing issue when not logged in. @critical @done (2017-9-15 14:33:16)
   ✔ Disable save button after save and re-enabled after changes. @low @done (2017-9-16 13:37:10)
-  ☐ Add Bold, Italic, Underlined, Lists and Movies to the edit campaign functionality. @high
+  ✔ Add Bold, Italic, Underlined, and Lists to the edit campaign functionality. @high @done (2017-9-18 22:24:55)
+  ☐ Add Movies to edit campaign functionality. @low
+  ☐ Fix no connection campaign successfully saved message. @critical 
   ☐ Create delete campaign fallback if error. @low
   ☐ Require one paragraph and one main image. @low
 

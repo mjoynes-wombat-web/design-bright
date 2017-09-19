@@ -202,7 +202,7 @@ const createContent = exports.createContent = (campaignId, content, success, err
           isVoid: block.isVoid,
           type: block.type
         };
-        if (['paragraph', 'header'].includes(block.type)) {
+        if (['paragraph', 'header', 'numberedList', 'bulletedList'].includes(block.type)) {
           formattedBlock.nodes = JSON.stringify(block.nodes);
           newBlocks.text.push(formattedBlock);
           return newBlocks;

@@ -36,9 +36,6 @@ const schema = {
       <p {...props.attributes}>
         {props.children}
       </p>,
-    bold: props => <strong>{props.children}</strong>,
-    italic: props => <em>{props.children}</em>,
-    underlined: props => <span className="underlined">{props.children}</span>,
     bulletedList: props => <ul>{props.children}</ul>,
     listItem: props => <li>{props.children}</li>,
     numberedList: props => <ol>{props.children}</ol>,
@@ -64,6 +61,17 @@ const schema = {
           attributes={props.attributes}
           alt={alt} />
       );
+    },
+  },
+  marks: {
+    bold: {
+      fontWeight: 'bold',
+    },
+    italic: {
+      fontStyle: 'italic',
+    },
+    underlined: {
+      textDecoration: 'underline',
     },
   },
   rules: [
@@ -227,7 +235,7 @@ class CampaignEditor extends React.Component {
     this.cancelCreateLink = this.cancelCreateLink.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.onClickInline = this.onClickInline.bind(this);
-    this.isInline = this.isInline.bind(this);
+    this.onClickList = this.onClickList.bind(this);
   }
 
   componentDidMount() {
@@ -337,7 +345,7 @@ class CampaignEditor extends React.Component {
       newAlt: '',
       newImageType: 'main',
     },
-    this.onChangeEditor(newEditorState));
+      this.onChangeEditor(newEditorState));
   }
 
   onChangeFormat(e) {
@@ -458,25 +466,55 @@ class CampaignEditor extends React.Component {
     });
   }
 
-  isInline() {
-    const { editorState } = this.state;
-    return editorState.inlines.some(inline => ['bold', 'italic', 'underlined'].indexOf(inline.type) !== -1);
-  }
-
   onClickInline(e, type) {
     e.preventDefault();
     const { editorState } = this.state;
+
+    const transform = editorState.transform();
+    const isHeader = editorState.blocks.some(
+      block => block.type === 'header',
+    );
+    editorState.marks.forEach(
+      mark => (mark.type !== type ? transform.removeMark(mark) : null),
+      this,
+    );
+
+    if (!isHeader) {
+      transform.toggleMark(type);
+    }
+    const newEditorState = transform.apply();
+    return this.onChangeEditor(newEditorState);
+  }
+
+  onClickList(e, type) {
+    e.preventDefault();
+    const { editorState } = this.state;
     let newEditorState = editorState;
-    if (this.isInline()) {
-      newEditorState = newEditorState.transform().unwrapInline().apply();
-      if (editorState.isExpanded) {
-        newEditorState = newEditorState.transform().wrapInline(type).collapseToEnd().apply();
-      }
-    } else if (editorState.isExpanded) {
-      newEditorState = newEditorState.transform().wrapInline(type).collapseToEnd().apply();
+
+
+    // Handle the extra wrapping required for list buttons.
+    const isList = this.isBlock('listItem');
+    const isType = editorState.blocks.some(
+      block => !!newEditorState.document.getClosest(block.key, parent => parent.type === type),
+    );
+
+    if (isList && isType) {
+      newEditorState = newEditorState.transform()
+        .setBlock(defaultBlock)
+        .unwrapBlock('bulletedList')
+        .unwrapBlock('numberedList');
+    } else if (isList) {
+      newEditorState = newEditorState.transform()
+        .unwrapBlock(type === 'bulletedList' ? 'numberedList' : 'bulletedList')
+        .wrapBlock(type);
+    } else {
+      newEditorState = newEditorState.transform()
+        .setBlock('listItem')
+        .wrapBlock(type);
     }
 
-    return this.onChangeEditor(newEditorState);
+    newEditorState = newEditorState.apply();
+    this.onChangeEditor(newEditorState);
   }
 
   render() {
@@ -484,6 +522,7 @@ class CampaignEditor extends React.Component {
       <div id="campaignEditor">
         <Toolbar
           onClickInline={this.onClickInline}
+          onClickList={this.onClickList}
           onAddImage={this.onAddImage}
           onNewLink={this.onNewLink}
           onChangeFormat={this.onChangeFormat}

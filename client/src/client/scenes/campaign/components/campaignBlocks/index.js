@@ -1,32 +1,72 @@
 /* eslint-env browser */
 import React from 'react';
 
-const CampaignBlocks = ({ buttonAction, content, campaignInfo, isEnded }) => {
+const formatInline = (range, i) => {
+  if (range.marks.length > 0) {
+    switch (range.marks[0].type) {
+      case 'bold':
+        return <strong key={i}>{range.text}</strong>;
+      case 'italic':
+        return <em key={i}>{range.text}</em>;
+      case 'underlined':
+        return <span className={range.marks[0].type} key={i}>{range.text}</span>;
+      default:
+        return <span key={i}>{range.text}</span>;
+    }
+  }
+  return <span key={i}>{range.text}</span>;
+};
+
+const formatListItem = (node, i) => {
+  if ('type' in node) {
+    switch (node.type) {
+      case 'listItem':
+        return (
+          <li key={i}>
+            {node.nodes.map((nestNode, ii) => {
+              if ('type' in nestNode) {
+                switch (nestNode.type) {
+                  case 'link':
+                    return (
+                      <a key={ii} href={nestNode.data.url}>
+                        {nestNode.nodes[0].ranges.map((range, iii) => formatInline(range, iii))}
+                      </a>
+                    );
+                  default:
+                    return <span key={ii}>{nestNode.nodes[0].ranges[0].text}</span>;
+                }
+              }
+              return nestNode.ranges.map((range, iii) => formatInline(range, iii));
+            })}
+          </li>
+        );
+      default:
+        return null;
+    }
+  }
+  return null;
+};
+
+const CampaignBlocks = ({ buttonAction, content, isEnded }) => {
   switch (content.type) {
     case 'paragraph':
       return (
         <p>
-          {content.nodes.reduce((partialContent, node) => {
+          {content.nodes.map((node, i) => {
             if ('type' in node) {
-              if (node.type === 'link') {
-                return (
-                  <span>
-                    {partialContent}
-                    <a href={node.data.url}>
-                      {node.nodes[0].ranges[0].text}
+              switch (node.type) {
+                case 'link':
+                  return (
+                    <a key={i} href={node.data.url}>
+                      {node.nodes[0].ranges.map((range, ii) => formatInline(range, ii))}
                     </a>
-                  </span>
-                );
+                  );
+                default:
+                  return <span key={i}>{node.nodes[0].ranges[0].text}</span>;
               }
             }
-            return (
-              <span>
-                {partialContent}
-                {node.ranges[0].text}
-              </span>
-            );
-          },
-          '')}
+            return node.ranges.map((range, ii) => formatInline(range, ii));
+          })}
         </p>
       );
     case 'header':
@@ -34,6 +74,18 @@ const CampaignBlocks = ({ buttonAction, content, campaignInfo, isEnded }) => {
         <h2>
           <span className="underlined">{content.nodes[0].ranges[0].text}</span>
         </h2>
+      );
+    case 'bulletedList':
+      return (
+        <ul>
+          {content.nodes.map((node, i) => formatListItem(node, i))}
+        </ul>
+      );
+    case 'numberedList':
+      return (
+        <ol>
+          {content.nodes.map((node, i) => formatListItem(node, i))}
+        </ol>
       );
     case 'image':
       switch (content.data.imageType) {
