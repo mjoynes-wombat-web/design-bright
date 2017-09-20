@@ -30,9 +30,9 @@ General:
   ☐ Link underline and heading underline aren't different enough. @low
   ☐ Use Gatsby for prerendering and auth-caching. @low
   ✔ Setup modal for advisor, and login. @high @done (2017-9-17 19:32:27)
-  ☐ Reorganize folder structure. @high 
+  ✔ Reorganize folder structure. @high @done (2017-9-19 22:03:23)
   ☐ Optimize code. @low 
-  ☐ Coment code. @high
+  ☐ Comment code. Continue at campaign list. @high
   ☐ Add references for images. @critical 
 
 Edit Campaigns:

@@ -1,9 +1,22 @@
 /* eslint-env browser */
+// IMPORT DEPENDENCIES
 import React from 'react';
 import { CardNumberElement, CardExpiryElement, CardCVCElement, PostalCodeElement } from 'react-stripe-elements';
+
+// IMPORT HELPERS
 import { validEmail } from '../../../../../../helpers';
 
-const DonationForm = ({ makeDonation, inputs, onChange, stripeStyle, cancelDonation, valid }) => (
+// DONATION FORM
+// Accepts the makeDonation function, inputs state, onChangeInptus function,
+// Stripe.JS styling, cancelDonations function, and valid variable.
+const DonationForm = ({
+  makeDonation,
+  inputs,
+  onChangeInputs,
+  stripeStyle,
+  cancelDonation,
+  valid,
+}) => (
   <div className="small-12 medium-10 large-8 columns">
     <h2>
       <span className="underlined">
@@ -26,7 +39,7 @@ const DonationForm = ({ makeDonation, inputs, onChange, stripeStyle, cancelDonat
           </label>
           <input
             value={`$${(inputs.donation.slice(0, inputs.donation.length - 2))}.${inputs.donation.slice(-2)}`}
-            onChange={onChange}
+            onChange={onChangeInputs}
             name="donation"
             id="donation"
             type="text"
@@ -43,7 +56,7 @@ const DonationForm = ({ makeDonation, inputs, onChange, stripeStyle, cancelDonat
           </label>
           <input
             value={inputs.cardHolder}
-            onChange={onChange}
+            onChange={onChangeInputs}
             name="cardHolder"
             id="cardHolder"
             type="text"
@@ -59,7 +72,7 @@ const DonationForm = ({ makeDonation, inputs, onChange, stripeStyle, cancelDonat
             </div>
           </label>
           <CardNumberElement
-            onChange={onChange}
+            onChange={onChangeInputs}
             style={stripeStyle}
             id="paymentCard" />
           <label
@@ -73,35 +86,35 @@ const DonationForm = ({ makeDonation, inputs, onChange, stripeStyle, cancelDonat
             </div>
           </label>
           <CardExpiryElement
-            onChange={onChange}
+            onChange={onChangeInputs}
             style={stripeStyle}
             id="cardExpiration" />
           <label
             className="row"
             htmlFor="CVC">
             <div className="small-12 columns">
-            Security Code (CVC): <span className="required">*</span>
+              Security Code (CVC): <span className="required">*</span>
             </div>
             <div className=" small-12 columns">
               <span className='error'>Please enter a valid security code (CVC).</span>
             </div>
           </label>
           <CardCVCElement
-            onChange={onChange}
+            onChange={onChangeInputs}
             style={stripeStyle}
             id="CVC" />
           <label
             className="row"
             htmlFor="billingZip">
             <div className="small-12 columns">
-            Billing Zip: <span className="required">*</span>
+              Billing Zip: <span className="required">*</span>
             </div>
             <div className=" small-12 columns">
               <span className='error'>Please enter a valid zip code.</span>
             </div>
           </label>
           <PostalCodeElement
-            onChange={onChange}
+            onChange={onChangeInputs}
             style={stripeStyle}
             id="billingZip" />
           <label htmlFor="email" className={`row ${validEmail(inputs.email) || inputs.email.length === 0 ? '' : ' invalid'}`}>
@@ -114,7 +127,7 @@ const DonationForm = ({ makeDonation, inputs, onChange, stripeStyle, cancelDonat
           </label>
           <input
             value={inputs.email}
-            onChange={onChange}
+            onChange={onChangeInputs}
             name="email"
             id="email"
             type="email" />

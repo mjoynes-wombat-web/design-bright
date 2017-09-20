@@ -1,6 +1,8 @@
 /* eslint-env browser */
+// IMPORT DEPENDENCIES
 import React from 'react';
 
+// Returns the inline content of a block based on it's marks attributes.
 const formatInline = (range, i) => {
   if (range.marks.length > 0) {
     switch (range.marks[0].type) {
@@ -17,6 +19,7 @@ const formatInline = (range, i) => {
   return <span key={i}>{range.text}</span>;
 };
 
+// Returns the list items of a node.
 const formatListItem = (node, i) => {
   if ('type' in node) {
     switch (node.type) {
@@ -47,6 +50,8 @@ const formatListItem = (node, i) => {
   return null;
 };
 
+// CAMPAIGN BLOCKS
+// Returns the various block elements of a campaign.
 const CampaignBlocks = ({ buttonAction, content, isEnded }) => {
   switch (content.type) {
     case 'paragraph':

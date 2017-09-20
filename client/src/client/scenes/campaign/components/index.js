@@ -1,15 +1,21 @@
 /* eslint-env browser */
+// IMPORT DEPENDENCIES
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
+// IMPORT PARTIALS
+import { LoginModal, Message } from '../../../partials';
+
+// IMPORT COMPONENTS
 import CampaignBlocks from './campaignBlocks';
 import Donate from './donate';
 import CampaignHeader from './campaignHeader';
-import { LoginModal, Message } from '../../../partials';
 
+// IMPORT STYLING
 import './scss/style.scss';
 
+// CAMPAIGN PAGE COMPONENT
 class Campaign extends React.Component {
   // Sets up state and props and binds this to the class methods.
   constructor(props) {
@@ -39,6 +45,7 @@ class Campaign extends React.Component {
     this.updateCampaignDonations = this.updateCampaignDonations.bind(this);
   }
 
+  // Before the component mounts get the campaign info and content from the server.
   componentWillMount() {
     const campaignId = this.props.match.params.id;
     this.setState({ campaignId });
@@ -86,6 +93,7 @@ class Campaign extends React.Component {
       });
   }
 
+  // Update the campaign donations. This happens when a user donates.
   updateCampaignDonations(newAmount) {
     const campaignInfo = this.state.campaignInfo;
     campaignInfo.donationsMade = newAmount;
@@ -103,6 +111,8 @@ class Campaign extends React.Component {
       <= (new Date()).getTime());
   }
 
+  // When the donate button is clicked it either changes the state that allows the donation modal
+  // to be show or it returns an error if the campaign hasn't started.
   showDonationModal() {
     if (this.state.campaignInfo.startDate) {
       document.body.style.overflow = 'hidden';

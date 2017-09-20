@@ -1,9 +1,13 @@
 /* eslint-env browser */
+// IMPORT DEPENDENCIES
 import React from 'react';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 
+// IMPORT COMPONENTS
 import DonateComponent from './components';
 
+// DONATE COMPONENT
+// Donate form and confirmation component using Stripe.JS.
 const Donate = ({
   userInfo,
   cancelDonation,

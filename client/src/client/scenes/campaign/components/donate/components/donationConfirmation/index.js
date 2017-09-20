@@ -1,8 +1,12 @@
 /* eslint-env browser */
+// IMPORT DEPENDENCIES
 import React from 'react';
 
+// IMPORT STYLE
 import './scss/style.scss';
 
+// CARD ICONS
+// Returns the font awesome card icon depending on the card type.
 const cardIcon = (cardType) => {
   switch (cardType) {
     case 'Visa':
@@ -22,6 +26,9 @@ const cardIcon = (cardType) => {
   }
 };
 
+// DONATION CONFIRMATION COMPONENT
+// Accepts the inputs state, card token information, confirmDonation function,
+// editDonation function and cancelDonation function.
 const DonationConfirmation = ({
   inputs,
   token,

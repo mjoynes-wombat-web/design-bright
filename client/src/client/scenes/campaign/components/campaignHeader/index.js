@@ -1,19 +1,12 @@
 /* eslint-env browser */
+// IMPORT DEPENDENCIES
 import React from 'react';
 
-const determineTimeLeft = (isEnded, campaignInfo) => {
-  if (isEnded()) {
-    return 'This campaign has ended.';
-  } else if (campaignInfo.startDate === null) {
-    return 'This campaign hasn\'t started yet.';
-  } else if (campaignInfo.timeRemaining > 1) {
-    return `${Math.round(campaignInfo.timeRemaining)} Days Left`;
-  } else if ((campaignInfo.timeRemaining * 24) > 1) {
-    return `${Math.round(campaignInfo.timeRemaining * 24)} Hours Left`;
-  }
-  return 'Less than an Hour left';
-};
+// IMPORT HELPERS
+import { campaignTimeLeft } from '../../../../helpers';
 
+// CAMPAIGN HEADER COMPONENT
+// The header for the campaign page.
 const CampaignHeader = ({ campaignInfo, isEnded }) => (
   <div className="columns small-12">
     <section className="row">
@@ -39,7 +32,7 @@ const CampaignHeader = ({ campaignInfo, isEnded }) => (
           </div>
           <div className="shrink columns">
             <p className="details">
-              {determineTimeLeft(isEnded, campaignInfo)}
+              {campaignTimeLeft(isEnded, campaignInfo)}
             </p>
           </div>
           <div className="shrink columns">

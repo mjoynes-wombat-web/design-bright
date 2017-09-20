@@ -45,6 +45,7 @@ class Advisor extends React.Component {
     this.currentInputValid = this.currentInputValid.bind(this);
   }
 
+  // Makes changes to state when inputs change.
   onChangeInputs(e) {
     const target = e.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -56,6 +57,7 @@ class Advisor extends React.Component {
     );
   }
 
+  // Checks if the input passed is valid based on the name.
   currentInputValid(name) {
     switch (name) {
       case 'firstName':
@@ -77,6 +79,7 @@ class Advisor extends React.Component {
     }
   }
 
+  // Loops through the inputs and validates each one.
   validate() {
     const inputs = Object.keys(this.state.inputs);
     for (let i = 0; i < inputs.length; i += 1) {
@@ -87,6 +90,7 @@ class Advisor extends React.Component {
     return true;
   }
 
+  // Sends the form info to the database and returns an error or success message to the uers.
   onSubmit(e) {
     e.preventDefault();
     if (this.state.valid) {
@@ -164,6 +168,7 @@ class Advisor extends React.Component {
     }
   }
 
+  // Renders the advisor form.
   render() {
     document.title = 'Become an Advisor - Design Bright';
     return (

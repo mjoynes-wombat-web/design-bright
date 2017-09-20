@@ -1,16 +1,24 @@
 /* eslint-env browser */
+// IMPORT DEPENDENCIES
 import React from 'react';
 import { injectStripe } from 'react-stripe-elements';
 import axios from 'axios';
 
+// IMPORT PARTIALS
 import { OverlayModal } from '../../../../../partials';
+
+// IMPORT HELPERS
+import { validEmail } from '../../../../../helpers';
+
+// IMPORT COMPONENTS
 import CampaignHeader from '../../campaignHeader';
 import DonationForm from './donationForm';
 import DonationConfirmation from './donationConfirmation';
-import { validEmail } from '../../../../../helpers';
 
+// IMPORT STYLING
 import './scss/style.scss';
 
+// Returns the stripe styling based on the window's inner width.
 const stripeStyle = () => {
   if (window.innerWidth >= 640) {
     return {
@@ -48,6 +56,7 @@ const stripeStyle = () => {
   };
 };
 
+// DONATION COMPONENT
 class DonateComponent extends React.Component {
   // Sets up state and props and binds this to the class methods.
   constructor(props) {
@@ -66,13 +75,15 @@ class DonateComponent extends React.Component {
     };
 
     this.makeDonation = this.makeDonation.bind(this);
-    this.onChange = this.onChange.bind(this);
+    this.onChangeInputs = this.onChangeInputs.bind(this);
     this.componentWillMount = this.componentWillMount.bind(this);
     this.confirmDonation = this.confirmDonation.bind(this);
     this.editDonation = this.editDonation.bind(this);
     this.cancelConfirmation = this.cancelConfirmation.bind(this);
   }
 
+  // When the component is about to mount set the stripe styling and set it again every time
+  // the window resizes.
   componentWillMount() {
     this.setState({
       stripeStyle: stripeStyle(),
@@ -83,7 +94,8 @@ class DonateComponent extends React.Component {
     });
   }
 
-  onChange(e) {
+  // When an input changes change it's state.
+  onChangeInputs(e) {
     if ('preventDefault' in e) {
       e.preventDefault();
 
@@ -91,6 +103,7 @@ class DonateComponent extends React.Component {
       const { name } = target;
       let value;
 
+      // If it's the donation input format the input.
       if (name === 'donation') {
         value = target.value.replace(/\.|,|[^0-9.]/g, '');
         if (isNaN(value)) {
@@ -111,6 +124,7 @@ class DonateComponent extends React.Component {
 
       this.setState({ inputs });
 
+      // Delay on validation due to delay from Stripe's validation.
       setTimeout(() => {
         if (this.validate()) {
           return this.setState({
@@ -122,6 +136,7 @@ class DonateComponent extends React.Component {
         });
       }, 100);
     }
+    // Delay on validation due to delay from Stripe's validation.
     setTimeout(() => {
       if (this.validate()) {
         return this.setState({
@@ -134,19 +149,24 @@ class DonateComponent extends React.Component {
     }, 100);
   }
 
+  // Runs when the donation form is submitted. Cancels and returns error if it fails.
+  // This gets  a token from stripe to be used at confirmation.
   makeDonation(e) {
     e.preventDefault();
-    console.log('Handle messages here.');
     this.props.stripe.createToken({ name: this.state.inputs.cardHolder })
       .then((results) => {
         if ('token' in results) {
           this.setState({ token: results.token });
         } else if ('error' in results) {
           const { error } = results;
+          this.props.onNewError(error.message);
+          this.cancelDonation();
         }
       });
   }
 
+  // When donation is confirmed send the token from stripe and donation information to the server
+  // to be charged. Returns an error or message to the user.
   confirmDonation() {
     const { token, inputs } = this.state;
     axios.post(
@@ -172,10 +192,13 @@ class DonateComponent extends React.Component {
       });
   }
 
+  // When the user decides to edit the donation remove the token.
+  // This also returns them to the form.
   editDonation() {
     this.setState({ token: null });
   }
 
+  // Validate the inputs.
   validate() {
     const stripeElements = document.getElementsByClassName('StripeElement');
     let stripeValid = true;
@@ -202,6 +225,7 @@ class DonateComponent extends React.Component {
     return false;
   }
 
+  // If the user cancels the confirmation clear the token and inputs.
   cancelConfirmation() {
     this.setState({
       token: null,
@@ -238,7 +262,7 @@ class DonateComponent extends React.Component {
             : <DonationForm
               makeDonation={this.makeDonation}
               inputs={this.state.inputs}
-              onChange={this.onChange}
+              onChangeInputs={this.onChangeInputs}
               stripeStyle={this.state.stripeStyle}
               cancelDonation={this.props.cancelDonation}
               valid={this.state.valid} />}
