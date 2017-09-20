@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { requireAuth } from '../../../../actions';
+import { requireAuth } from '../../../../store/actions';
 import Register from './components';
 
 const mapStateToProps = state => ({

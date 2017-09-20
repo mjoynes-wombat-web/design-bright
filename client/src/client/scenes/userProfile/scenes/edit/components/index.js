@@ -3,9 +3,8 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-import states from '../../../../../helpers/states';
-import validEmail from '../../../../../helpers/validEmail';
-import Message from '../../../../../partials/message';
+import { states, validEmail } from '../../../../../helpers';
+import { Message } from '../../../../../partials';
 
 import './scss/style.scss';
 
@@ -19,7 +18,8 @@ const isNumber = (num) => {
 };
 const numLength = (num, length) => String(num).length === length;
 
-class editProfile extends React.Component {
+class EditProfile extends React.Component {
+  // Sets up state and props and binds this to the class methods.
   constructor(props) {
     super(props);
     this.state = {
@@ -34,6 +34,7 @@ class editProfile extends React.Component {
       userType: this.props.userInfo.userType,
       zip: String(this.props.userInfo.zip),
       valid: true,
+      profileSaved: true,
       userPostResults: {},
       message: {
         type: '',
@@ -62,7 +63,10 @@ class editProfile extends React.Component {
     const name = target.name;
 
     this.setState(
-      { [name]: value },
+      {
+        [name]: value,
+        profileSaved: false,
+      },
       () => {
         if (this.validate()) {
           this.setState({ valid: true });
@@ -339,10 +343,10 @@ class editProfile extends React.Component {
                 </div>
                 <div className="row align-center">
                   <button
-                    className={`primary small-11 medium-10 large-8 columns${this.state.valid ? '' : ' disabled'}`}
-                    disabled={!this.state.valid}
+                    className={`primary small-11 medium-10 large-8 columns${this.state.valid ? '' : ' disabled'}${this.state.profileSaved ? ' disabled' : ''}`}
+                    disabled={!this.state.valid || this.state.profileSaved}
                     type="submit">
-                    Submit Request
+                    {this.state.profileSaved ? 'No Changes Made' : 'Save Changes'}
                   </button>
                   <span className='error small-12'>
                     Please make sure you've entered all your information.
@@ -363,4 +367,4 @@ class editProfile extends React.Component {
   }
 }
 
-export default editProfile;
+export default EditProfile;

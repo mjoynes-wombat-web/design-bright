@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
-import { requireAuth } from '../../actions';
-import mngCampaigns from './components';
+import { requireAuth } from '../../store/actions';
+import MngCampaigns from './components';
 
 const mapStateToProps = state => ({
   userAuth: state.userAuth,
@@ -16,4 +16,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(mngCampaigns);
+export default connect(mapStateToProps, mapDispatchToProps)(MngCampaigns);

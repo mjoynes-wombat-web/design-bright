@@ -2,7 +2,7 @@
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 
-import appReducer from '../reducers';
+import appReducer from './reducers';
 import jsonState from './initialState.json';
 
 const storeFactory = (initialState = {}) =>

@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import React from 'react';
 import { CardNumberElement, CardExpiryElement, CardCVCElement, PostalCodeElement } from 'react-stripe-elements';
-import validEmail from '../../../../../../helpers/validEmail';
+import { validEmail } from '../../../../../../helpers';
 
 const DonationForm = ({ makeDonation, inputs, onChange, stripeStyle, cancelDonation, valid }) => (
   <div className="small-12 medium-10 large-8 columns">

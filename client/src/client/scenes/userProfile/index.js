@@ -1,24 +1,7 @@
-import { connect } from 'react-redux';
+import EditProfile from './scenes/edit';
+import ViewProfile from './scenes/view';
 
-import { getUserInfo, requireAuth } from '../../actions';
-import Profile from './components';
-
-const mapStateToProps = state => ({
-  userAuth: state.userAuth,
-  userInfo: state.userInfo,
-});
-
-const mapDispatchToProps = dispatch => ({
-  onGetUserInfo(callback) {
-    dispatch(
-      getUserInfo(callback),
-    );
-  },
-  onRequireAuth() {
-    return dispatch(
-      requireAuth(),
-    );
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export {
+  EditProfile,
+  ViewProfile,
+};

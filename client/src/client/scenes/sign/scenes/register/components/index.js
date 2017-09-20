@@ -20,6 +20,7 @@ const isNumber = (num) => {
 const numLength = (num, length) => String(num).length === length;
 
 class Register extends React.Component {
+  // Sets up state and props and binds this to the class methods.
   constructor(props) {
     super(props);
     this.state = {

@@ -3,11 +3,12 @@ import React from 'react';
 
 import ContactForm from './components/contactForm';
 import FAQ from './components/faq';
-import Message from '../../partials/message';
+import { Message } from '../../partials';
 
 import './scss/style.scss';
 
 class Help extends React.Component {
+  // Sets up state and props and binds this to the class methods.
   constructor(props) {
     super(props);
     this.state = {
@@ -38,14 +39,14 @@ class Help extends React.Component {
                 <h1>
                   <span className="underlined">
                     How Can We Help?
-                </span>
+                  </span>
                 </h1>
                 <p>
                   We’d love to help you. Design Bright’s goal is to make your experience simple and
                 pleasant. Please view our <a href="#FAQ">Frequently Asked Questions</a> for the most
                 common problems that people run into. If those don’t help you feel free
                 to <a href="#contact">Contact Us</a> below.
-              </p>
+                </p>
               </section>
               <FAQ />
             </div>

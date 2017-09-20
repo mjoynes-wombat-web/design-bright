@@ -3,11 +3,11 @@ import React from 'react';
 import { injectStripe } from 'react-stripe-elements';
 import axios from 'axios';
 
-import OverlayModal from '../../../../../partials/overlayModal';
+import { OverlayModal } from '../../../../../partials';
 import CampaignHeader from '../../campaignHeader';
 import DonationForm from './donationForm';
 import DonationConfirmation from './donationConfirmation';
-import validEmail from '../../../../../helpers/validEmail';
+import { validEmail } from '../../../../../helpers';
 
 import './scss/style.scss';
 
@@ -49,6 +49,7 @@ const stripeStyle = () => {
 };
 
 class DonateComponent extends React.Component {
+  // Sets up state and props and binds this to the class methods.
   constructor(props) {
     super(props);
 

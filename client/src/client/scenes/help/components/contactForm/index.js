@@ -3,12 +3,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import validEmail from '../../../../helpers/validEmail';
+import { validEmail } from '../../../../helpers';
 
 import './scss/style.scss';
 
 
 class ContactForm extends React.Component {
+  // Sets up state and props and binds this to the class methods.
   constructor(props) {
     super(props);
     this.state = {

@@ -9,7 +9,8 @@ import Message from '../../../partials/message';
 
 import './scss/style.scss';
 
-class mngCampaigns extends React.Component {
+class MngCampaigns extends React.Component {
+  // Sets up state and props and binds this to the class methods.
   constructor(props) {
     super(props);
     this.state = {
@@ -262,4 +263,4 @@ class mngCampaigns extends React.Component {
   }
 }
 
-export default mngCampaigns;
+export default MngCampaigns;

@@ -33,6 +33,7 @@ General:
   ☐ Reorganize folder structure. @high 
   ☐ Optimize code. @low 
   ☐ Coment code. @high
+  ☐ Add references for images. @critical 
 
 Edit Campaigns:
   ✔ Fix campaign image edit issue. @critical @done (2017-9-10 23:56:08)

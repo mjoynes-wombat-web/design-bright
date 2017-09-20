@@ -1,15 +1,22 @@
 /* eslint-env browser */
+// IMPORT DEPENDENCIES
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import validEmail from '../../helpers/validEmail';
-import Message from '../../partials/message';
+// IMPORT HELPER FUNCTIONS
+import { validEmail } from '../../helpers';
 
+// IMPORT PARTIAL COMPONENTS
+import { Message } from '../../partials';
+
+// IMPORT STYLING
 import './scss/style.scss';
 
-
+// ADVISOR COMPONENT
+// The advisor component for the advisor page.
 class Advisor extends React.Component {
+  // Sets up state and props and binds this to the class methods.
   constructor(props) {
     super(props);
     this.state = {
@@ -32,13 +39,13 @@ class Advisor extends React.Component {
       valid: false,
     };
 
-    this.onChange = this.onChange.bind(this);
+    this.onChangeInputs = this.onChangeInputs.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.validate = this.validate.bind(this);
     this.currentInputValid = this.currentInputValid.bind(this);
   }
 
-  onChange(e) {
+  onChangeInputs(e) {
     const target = e.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
@@ -182,7 +189,7 @@ class Advisor extends React.Component {
                 </label>
                 <input
                   value={this.state.inputs.firstName}
-                  onChange={this.onChange}
+                  onChange={this.onChangeInputs}
                   type="text"
                   name="firstName"
                   id="firstName"
@@ -192,7 +199,7 @@ class Advisor extends React.Component {
                 </label>
                 <input
                   value={this.state.inputs.lastName}
-                  onChange={this.onChange}
+                  onChange={this.onChangeInputs}
                   type="text"
                   name="lastName"
                   id="lastName"
@@ -207,7 +214,7 @@ class Advisor extends React.Component {
                 </label>
                 <input
                   value={this.state.inputs.email}
-                  onChange={this.onChange}
+                  onChange={this.onChangeInputs}
                   type="email"
                   name="email"
                   required
@@ -217,7 +224,7 @@ class Advisor extends React.Component {
                 </label>
                 <input
                   value={this.state.inputs.position}
-                  onChange={this.onChange}
+                  onChange={this.onChangeInputs}
                   type="text"
                   name="position"
                   id="position"
@@ -227,7 +234,7 @@ class Advisor extends React.Component {
                 </label>
                 <input
                   value={this.state.inputs.yearsExperience}
-                  onChange={this.onChange}
+                  onChange={this.onChangeInputs}
                   type="number"
                   name="yearsExperience"
                   id="yearsExperience"
@@ -238,7 +245,7 @@ class Advisor extends React.Component {
               <label htmlFor="terms" className="small-12 columns terms">
                 <input
                   checked={this.state.inputs.agreed}
-                  onChange={this.onChange}
+                  onChange={this.onChangeInputs}
                   type="checkbox"
                   name="agreed"
                   id="terms"

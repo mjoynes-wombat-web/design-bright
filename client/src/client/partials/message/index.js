@@ -1,8 +1,14 @@
 /* eslint-env browser */
+// IMPORT DEPENDENCIES
 import React from 'react';
 
+// IMPORT STYLING
 import './scss/style.scss';
 
+// MESSAGE COMPONENT
+// This displays errors and messages on the page. It accepts an error object,
+// message object, clear error and clear message function. 
+// Errors are prioritized over messages.
 const Message = ({ error, message, onClearError, onClearMessage }) => {
   if (error.message !== '' || message.message !== '') {
     return (

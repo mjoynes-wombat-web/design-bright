@@ -6,12 +6,12 @@ import axios from 'axios';
 import CampaignBlocks from './campaignBlocks';
 import Donate from './donate';
 import CampaignHeader from './campaignHeader';
-import Message from '../../../partials/message';
-import LoginModal from '../../../partials/loginForm/modal';
+import { LoginModal, Message } from '../../../partials';
 
 import './scss/style.scss';
 
 class Campaign extends React.Component {
+  // Sets up state and props and binds this to the class methods.
   constructor(props) {
     super(props);
     this.state = {
@@ -75,6 +75,7 @@ class Campaign extends React.Component {
       })
       .catch((error) => {
         if (error) {
+          console.log(error);
           this.setState({
             fetched: {
               complete: true,

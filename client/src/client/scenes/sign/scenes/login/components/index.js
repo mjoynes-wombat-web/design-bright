@@ -3,10 +3,10 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';
 
-import LoginForm from '../../../../../partials/loginForm';
-import Message from '../../../../../partials/message';
+import { LoginForm, Message } from '../../../../../partials';
 
 class Login extends React.Component {
+  // Sets up state and props and binds this to the class methods.
   constructor(props) {
     super(props);
     this.state = {

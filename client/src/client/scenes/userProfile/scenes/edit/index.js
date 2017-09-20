@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
-import { getUserInfo, requireAuth } from '../../../../actions';
-import editProfile from './components';
+import { getUserInfo, requireAuth } from '../../../../store/actions';
+import EditProfile from './components';
 
 const mapStateToProps = state => ({
   userAuth: state.userAuth,
@@ -21,4 +21,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(editProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
