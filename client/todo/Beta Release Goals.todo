@@ -5,6 +5,7 @@ Browse:
 
 Search:
   ✔ Create Search campaigns page. @high @done (2017-9-15 11:31:54)
+  ☐ Add ascending and descending. @low
 
 Advisor:
   ✔ Create Become Advisor page. @high @done (2017-9-15 13:26:31)
@@ -59,6 +60,8 @@ Register:
   ☐ Move form to single column. @low
   ☐ Add additional content to entice user to register. @low
   ☐ Limit width of inputs. Possibly based on length of expected input. @low
+  ☐ Redirect after register. @low
+  ☐ Require stronger passwords. @low
 
 Profile:
   View:
