@@ -33,6 +33,7 @@ const whitelist = [
   'https://192.168.1.9:3002',
   'https://165.227.7.212',
   'https://www.designbright.org',
+  'https://designbright.org',
   'https://192.168.33.129:3002',
 ];
 
