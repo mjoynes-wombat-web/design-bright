@@ -48,7 +48,7 @@ const Home = () => {
       </section>
       <section className="row">
         <div className="column small-12 medium-4">
-          <h2><Link to="/browse">Find a Cause</Link></h2>
+          <h2><Link to="/campaigns/browse">Find a Cause</Link></h2>
           <p>
             Want to help out a great cause?
           </p>
