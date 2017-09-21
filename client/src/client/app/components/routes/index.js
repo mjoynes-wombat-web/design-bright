@@ -82,15 +82,15 @@ const Routes = () => (
         exact
         path='/campaign/:id'
         component={gaTracker(Campaign)} />
-      {/* CAMPAIGNS LIST ROUTE */}
-      {/* Shows the first page of the campaign list based on the view when no page is specified. */}
-      <Route
-        path='/campaigns/:view'
-        component={gaTracker(CampaignsList)} />
       {/* CAMPAIGNS LIST PAGE ROUTE */}
       {/* Shows the campaign listed based on the view and the page. */}
       <Route
         path='/campaigns/:view/:page'
+        component={gaTracker(CampaignsList)} />
+      {/* CAMPAIGNS LIST ROUTE */}
+      {/* Shows the first page of the campaign list based on the view when no page is specified. */}
+      <Route
+        path='/campaigns/:view'
         component={gaTracker(CampaignsList)} />
       {/* ADVISORS ROUTE */}
       {/* Shows the form to become an advisor. */}

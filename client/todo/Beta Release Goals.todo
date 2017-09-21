@@ -29,6 +29,7 @@ General:
   ☐ Optimize page speed with google page speed. @high
   ☐ Link underline and heading underline aren't different enough. @low
   ☐ Use Gatsby for prerendering and auth-caching. @low
+  ☐ Work on color and background contrast. @low
   ✔ Setup modal for advisor, and login. @high @done (2017-9-17 19:32:27)
   ✔ Reorganize folder structure. @high @done (2017-9-19 22:03:23)
   ☐ Optimize code. @low 
