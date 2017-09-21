@@ -14,7 +14,10 @@ const Footer = () => (
       <div className="columns small-6"><Link to="/advisor">Become an Advisor</Link></div>
       <div className="columns small-6"><Link to="/help">Need Help?</Link></div>
       <div className="columns small-12">
-        <p>© 2017 by Simeon Smith</p>
+        <p>
+          <span>© 2017 by Simeon Smith</span>
+          <Link to="/references">Image and Content References</Link>
+        </p>
       </div>
     </div>
   </footer>

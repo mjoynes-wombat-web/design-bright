@@ -13,6 +13,7 @@ import {
   CampaignsList,
   Help,
   Home,
+  References,
   Register,
   Login,
   EditProfile,
@@ -101,6 +102,11 @@ const Routes = () => (
       <Route
         path='/help'
         component={gaTracker(Help)} />
+      {/* REFERENCES ROUTE */}
+      {/* Shows the image and content references. */}
+      <Route
+        path='/references'
+        component={gaTracker(References)} />
     </Switch>
   </div>
 );

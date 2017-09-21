@@ -33,7 +33,7 @@ General:
   ✔ Reorganize folder structure. @high @done (2017-9-19 22:03:23)
   ☐ Optimize code. @low 
   ☐ Comment code. Continue at campaign list. @high
-  ☐ Add references for images. @critical 
+  ✔ Add references for images. @critical @done (2017-9-20 19:35:45)
 
 Edit Campaigns:
   ✔ Fix campaign image edit issue. @critical @done (2017-9-10 23:56:08)
@@ -83,3 +83,9 @@ CSS:
 
 Campaign Page:
   ☐ Look into implementing symantic urls. @low
+
+References:
+  ☐ Clean up references page design. @low
+
+Terms and Conditions:
+  ☐ Create terms and conditions page. @low
