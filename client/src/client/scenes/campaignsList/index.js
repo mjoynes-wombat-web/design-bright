@@ -1,4 +1,5 @@
 /* eslint-env browser */
+// IMPORT DEPENDENCIES
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';

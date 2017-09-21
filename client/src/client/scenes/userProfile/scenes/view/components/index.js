@@ -107,13 +107,13 @@ class ViewProfile extends React.Component {
             { 'Content-Type': 'multipart/form-data' },
           },
         )
-          .then(() => {
+          .then((postImgResponse) => {
             this.setState({
-              error: {
-                type: 'profile image',
-                message: 'There was an error uploading your profile photo.',
-              },
               message: {
+                type: 'profile image',
+                message: postImgResponse.data.message,
+              },
+              error: {
                 type: '',
                 message: '',
               },

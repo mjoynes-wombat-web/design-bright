@@ -87,7 +87,7 @@ router.patch('/upload/photo', upload.single('file'), (req, res) => {
             {
               user_metadata: {
                 picture: uploadSuccess.secure_url,
-              }
+              },
             },
             editUserRes => jsonResponse(
               editUserRes.status,

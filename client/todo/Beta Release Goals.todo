@@ -60,6 +60,8 @@ Register:
   ☐ Limit width of inputs. Possibly based on length of expected input. @low
 
 Profile:
+  View:
+    ☐ Allow more than one image to uploaded without a refresh. @high
   Edit:
     ✔ Create more robust error handling for the edit functionality. @high @done (2017-9-17 15:27:24)
   
