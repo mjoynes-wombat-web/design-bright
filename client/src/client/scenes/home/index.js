@@ -33,7 +33,7 @@ const Home = () => {
           </p>
           <p>
             Our goal is to help non-profits have a voice. Unlike other crowd funding platforms we
-            connects non-profits with marketing “advisors” to help them from the inception of
+            connects non-profits with marketing advisors to help them from the inception of
             their campaign. This helps the non-profits get off on the right foot from the
             beginning.
           </p>
