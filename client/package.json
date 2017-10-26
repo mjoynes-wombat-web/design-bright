@@ -11,7 +11,9 @@
     "build": "npm run clean && npm run build-server && npm run build-client",
     "start": "node ./build/server.js",
     "dev-build": "webpack && babel-node ./src/server.js",
-    "dev": "nodemon --ignore build/dist --exec npm run dev-build"
+    "dev": "nodemon --ignore build/dist --exec npm run dev-build",
+    "storybook": "start-storybook -p 6006 -s ./build/dist",
+    "build-storybook": "build-storybook"
   },
   "author": "Simeon Smith",
   "license": "UNLICENSED",
@@ -38,9 +40,13 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "slate": "^0.21.4",
-    "smartlook-client": "^2.2.0"
+    "smartlook-client": "^2.2.0",
+    "styled-components": "^2.2.2"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^3.2.13",
+    "@storybook/addon-links": "^3.2.13",
+    "@storybook/react": "^3.2.13",
     "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
