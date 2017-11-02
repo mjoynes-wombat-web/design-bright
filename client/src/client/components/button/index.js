@@ -1,24 +1,8 @@
-import React from 'react';
-import styled, { injectGlobal } from 'styled-components';
+import styled from 'styled-components';
 
-const global = injectGlobal`
-@import url('https://fonts.googleapis.com/css?family=Lato:300,400');
-`;
+import { colors, screenBreaks, globalStyle } from '../styleConsts';
 
-const colors = {
-  lightGraphite: '#999999',
-  mauiOrange: '#ffaa00',
-  graphite: '#808080',
-  errorRed: '#ff5800',
-  blueHydrangea: '#4097ff',
-};
-
-const screenBreaks = {
-  medium: '40em',
-  large: '64em',
-  xlarge: '90em',
-  xxlarge: '120em',
-};
+globalStyle();
 
 const buttonType = (props) => {
   if (props.primary) {
@@ -73,7 +57,6 @@ const buttonType = (props) => {
 
 export const Button = styled.button`
   background-size: 100% 100%;
-  font-family: 'Lato', sans-serif;
   font-weight: 300;
   cursor: pointer;
   -webkit-appearance: none;
