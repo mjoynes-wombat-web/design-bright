@@ -17,11 +17,6 @@ if (STATUS !== undefined) {
 
 app.use(compression());
 app.use(express.static(path.join(__dirname, '../build/dist')));
-app.use(express.static(path.join(__dirname, '../styleguide')));
-
-app.get('/styleguide', (req, res) => {
-  res.sendFile(path.join(__dirname, '../styleguide', 'index.html'));
-});
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../build/dist', 'index.html'));

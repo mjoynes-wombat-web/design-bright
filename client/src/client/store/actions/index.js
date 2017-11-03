@@ -54,15 +54,14 @@ export const requireAuth = () => (dispatch, getState) => {
   ));
   const currentDate = new Date();
   if (Object.keys(userAuth).length > 0) {
-    if (userAuth.accessToken
-      && userAuth.accessToken.length === 16) {
+    if (userAuth.accessToken) {
       if (expireDate > currentDate) {
         return true;
       }
-      dispatch(logout());
+      // dispatch(logout());
       return false;
     }
-    dispatch(logout());
+    // dispatch(logout());
     return false;
   }
   return false;
@@ -72,6 +71,7 @@ export const requireAuth = () => (dispatch, getState) => {
 // Gets the user information from Auth0 and dispatches it to the store.
 export const getUserInfo = () =>
   (dispatch, getState) => {
+    console.log('This ran');
     const currentState = getState();
     if (dispatch(requireAuth())) {
       const webAuth = new auth0.WebAuth({
@@ -153,13 +153,13 @@ export const login = (loginInfo, callback) => (dispatch) => {
 
     const authorization = authResults;
     authorization.date = new Date();
-    dispatch(
+    return dispatch(
       {
         type: C.USER_AUTH,
         payload: authorization,
       },
+      getUserInfo(),
       callback(),
     );
-    return dispatch(getUserInfo());
   });
 };

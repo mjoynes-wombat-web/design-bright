@@ -53,11 +53,6 @@ if (STATUS !== undefined) {
 
 app.use((0, _compression2.default)());
 app.use(_express2.default.static(_path2.default.join(__dirname, '../build/dist')));
-app.use(_express2.default.static(_path2.default.join(__dirname, '../styleguide')));
-
-app.get('/styleguide', function (req, res) {
-  res.sendFile(_path2.default.join(__dirname, '../styleguide', 'index.html'));
-});
 
 app.get('/', function (req, res) {
   res.sendFile(_path2.default.join(__dirname, '../build/dist', 'index.html'));

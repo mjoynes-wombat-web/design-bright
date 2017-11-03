@@ -10,7 +10,7 @@
     "build-client": "webpack -p",
     "build": "npm run clean && npm run build-server && npm run build-client",
     "start": "node ./build/server.js",
-    "dev-build": "webpack && babel-node ./src/server.js",
+    "dev-build": "webpack -d && babel-node ./src/server.js",
     "dev": "nodemon --ignore build/dist --exec npm run dev-build",
     "storybook": "start-storybook -p 6006 -s ./build/dist",
     "build-storybook": "build-storybook"

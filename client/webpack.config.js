@@ -10,6 +10,8 @@ module.exports = {
   },
   output: {
     path: path.resolve('build/dist/assets/js'),
+    sourceMapFilename: 'bundle.js.map',
+    pathinfo: true,
     filename: 'bundle.js',
     publicPath: '/assets',
   },
