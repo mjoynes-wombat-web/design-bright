@@ -5,7 +5,7 @@ import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
 import { Button } from '../src/client/components/button';
-import { Input, Select } from '../src/client/components/forms';
+import { Input, Select, RadioFieldset, Checkbox } from '../src/client/components/forms';
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
@@ -17,8 +17,76 @@ storiesOf('Buttons', module)
   .add('Cancel Button', () => <Button cancel onClick={ action('button-click') }>Cancel</Button>);
 
 storiesOf('Inputs', module)
-  .add('Plain Input', () => <Input onChange={action('Plain Input Changed')} type='text' inputLabel='Plain Input:' id='plainInput'/>)
-  .add('Required Input', () => <Input onChange={action('Required Input Changed')} type='text' inputLabel='Required Input:' id='requiredInput' required/>)
-  .add('Input With Error', () => <Input onChange={action('Errored Input Changed')} type='text' inputLabel='Errored Input:' id='erroredInput' required error='There is an error on this input.' />)
-  .add('Select List', () => <Select onChange={action('Select Changed')} type='text' inputLabel='Select List:' id='selectList' required options={[{ name: 'First Item', value: 'first-item' }, { name: 'Second Item', value: 'second-item' }]} />);
+  .add(
+    'Plain Input',
+    () => <Input
+      onChange={action('Plain Input Changed')}
+      type='text'
+      inputLabel='Plain Input'
+      id='plainInput'/>)
+  .add(
+    'Required Input',
+    () => <Input
+      onChange={action('Required Input Changed')}
+      type='text'
+      inputLabel='Required Input'
+      id='requiredInput'
+      required/>)
+  .add(
+    'Input With Error',
+    () => <Input
+      onChange={action('Errored Input Changed')}
+      type='text'
+      inputLabel='Errored Input'
+      id='erroredInput'
+      required
+      error='There is an error on this input.' />)
+  .add(
+    'Select List',
+    () => <Select
+      onChange={action('Select Changed')}
+      type='text'
+      inputLabel='Select List'
+      id='selectList'
+      required
+      options={
+        [
+          { name: 'First Item', value: 'first-item' },
+          { name: 'Second Item', value: 'second-item' },
+        ]
+      }
+    />)
+  .add(
+    'Radio Fieldset',
+    () => <RadioFieldset
+      fieldsetName='radioFieldset'
+      fieldsetLegend='Radio Fieldset'
+      required
+      onChange={action('Radio Fieldset Item Selected')}
+      fields={
+        [
+          {
+            id: 'firstItem',
+            name: 'First Itemg',
+            value: 'firstItem',
+            checked: true,
+          },
+          {
+            id: 'secondItem',
+            name: 'Second Item',
+            value: 'secondItem',
+            checked: false,
+          },
+        ]
+      }
+    />)
+  .add(
+    'Checkbox',
+    () => <Checkbox
+      id={'checkbox'}
+      onChange={action('Checkbox Selected')}
+      required
+      checked={false}
+      text='This is a checkbox input.' />,
+  );
 
