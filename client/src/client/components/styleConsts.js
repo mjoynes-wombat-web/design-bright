@@ -6,6 +6,7 @@ export const colors = {
   graphite: '#404040',
   errorRed: '#ff5800',
   blueHydrangea: '#4097ff',
+  darkBlueHydrangea: '#0063db',
 };
 
 export const screenBreaks = {
@@ -24,5 +25,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 1rem;
+}
+
+a {
+  :link{
+    color: ${colors.blueHydrangea};
+    text-decoration: none;
+    border-bottom: 0.0625rem solid;
+  }
+
+  :visited {
+    color: ${colors.blueHydrangea};
+  }
+
+  :hover {
+    color: ${colors.darkBlueHydrangea};
+  }
 }
 `;

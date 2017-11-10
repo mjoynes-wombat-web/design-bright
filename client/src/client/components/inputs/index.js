@@ -79,6 +79,7 @@ input:not([type="radio"]):not([type="checkbox"]), select {
   box-sizing: border-box;
   border: 0.0625rem solid ${colors.lightGraphite};
   border-radius: 0.1875rem;
+  color: ${colors.lightGraphite};
   padding: 0.375rem;
   appearance: none;
   font-weight: 400;
@@ -87,6 +88,10 @@ input:not([type="radio"]):not([type="checkbox"]), select {
   :focus {
     outline: none;
     box-shadow: #999 0 0 0.125rem;
+  }
+
+  :hover {
+    color: ${colors.graphite};
   }
 }
 
@@ -173,7 +178,7 @@ export const RadioFieldset = styled(
               const target = e.target;
               target.previousSibling.checked = true;
             }}></span>
-            {field.name}
+            {field.children || field.name}
           </label>
         ),
       )}
@@ -225,16 +230,21 @@ ${props => (
 `;
 
 export const Checkbox = styled(
-  ({ className, id, onChange, text, required, checked }) => (
+  ({ className, id, onChange, text, required, checked, children }) => (
     <div className={className}>
       <label htmlFor={id}>
         <input type="checkbox" id={id} onChange={onChange} required={required} checked={checked}/>
         <span onClick={(e) => {
           e.preventDefault();
           const target = e.target;
-          target.previousSibling.checked = true;
+          const input = target.previousSibling;
+          if (input.checked) {
+            input.checked = false;
+          } else {
+            input.checked = true;
+          }
         }}></span>
-        {text}
+        {text || children}
       </label>
     </div>
   ),

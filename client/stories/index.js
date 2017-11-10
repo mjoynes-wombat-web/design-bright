@@ -1,11 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
 import { Button } from '../src/client/components/button';
-import { Input, Select, RadioFieldset, Checkbox } from '../src/client/components/forms';
+import { Input, Select, RadioFieldset, Checkbox } from '../src/client/components/inputs';
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
@@ -40,7 +42,11 @@ storiesOf('Inputs', module)
       inputLabel='Errored Input'
       id='erroredInput'
       required
-      error='There is an error on this input.' />)
+      error={
+        <span>
+          There is an error on this input. <a href='#'>You can visit this link for more info.</a>
+        </span>
+      } />)
   .add(
     'Select List',
     () => <Select
@@ -67,9 +73,10 @@ storiesOf('Inputs', module)
         [
           {
             id: 'firstItem',
-            name: 'First Itemg',
+            name: 'First Item',
             value: 'firstItem',
             checked: true,
+            children: 'First Item Child',
           },
           {
             id: 'secondItem',
@@ -86,7 +93,7 @@ storiesOf('Inputs', module)
       id={'checkbox'}
       onChange={action('Checkbox Selected')}
       required
-      checked={false}
-      text='This is a checkbox input.' />,
+      checked={false}>
+        This is a checkbox input.
+    </Checkbox>,
   );
-
