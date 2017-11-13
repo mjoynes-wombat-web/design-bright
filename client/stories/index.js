@@ -1,15 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
-
+import { MemoryRouter } from 'react-router';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
+import Header from '../src/client/components/header';
 import { Button } from '../src/client/components/button';
 import { Input, Select, RadioFieldset, Checkbox } from '../src/client/components/inputs';
+import Loading from '../src/client/components/loading';
 
-storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
+storiesOf('Site Layout', module)
+  .addDecorator(story => (
+    <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+  ))
+  .add(
+    'Header',
+    () => <Header />,
+  );
 
 storiesOf('Buttons', module)
   .add('Primary Button', () => <Button primary onClick={ action('button-click') }>Primary</Button>)
@@ -96,4 +103,31 @@ storiesOf('Inputs', module)
       checked={false}>
         This is a checkbox input.
     </Checkbox>,
+  );
+
+storiesOf('Loading', module)
+  .add(
+    'Component Loading',
+    () => <div
+      style={
+        {
+          backgroundColor: 'grey',
+          width: '50%',
+          height: '200px',
+        }
+      }>
+      <Loading text='Loading Component' component/>
+    </div>,
+  ).add(
+    'Page Loading',
+    () => <div
+      style={
+        {
+          backgroundColor: 'grey',
+          width: '100%',
+          height: '600px',
+        }
+      }>
+      <Loading text='Loading Page' />
+    </div>,
   );
