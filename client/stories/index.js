@@ -3,15 +3,20 @@ import { MemoryRouter } from 'react-router';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
+import { Provider } from 'react-redux';
 
 import Header from '../src/client/components/header';
 import { Button } from '../src/client/components/button';
 import { Input, Select, RadioFieldset, Checkbox } from '../src/client/components/inputs';
 import Loading from '../src/client/components/loading';
+import Search from '../src/client/components/header/components/menu/search';
+import store from '../src/client/store';
 
 storiesOf('Site Layout', module)
   .addDecorator(story => (
-    <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+    </Provider>
   ))
   .add(
     'Header',

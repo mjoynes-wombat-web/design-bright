@@ -11,10 +11,10 @@ const Logo = styled(
     <div className={className}>
       <Link to="/">
         <img
-          srcSet="/assets/img/logo-retina.png 580w,
+          srcSet={`/assets/img/logo-retina.png 580w,
                         /assets/img/logo-large.png 435w,
                         /assets/img/logo-medium.png 290w,
-                        /assets/img/logo-small.png 145w"
+                        /assets/img/logo-small.png 145w`}
           sizes={`(min-width: ${screenBreaks.large}) 290px,
                         (min-width: ${screenBreaks.large}) 290px,
                         (min-with: ${screenBreaks.medium}) 90vw,
@@ -25,11 +25,21 @@ const Logo = styled(
     </div>
   ),
 )`
+
   a:link {
     border: none;
+    max-width: 100%;
+    width: 290px;
+    display: block;
+    margin: 0 auto;
+
+    @media screen and (min-width: ${screenBreaks.medium}) {
+      margin: 0;
+    }
     
     img {
-      max-width: 290px;
+      max-width: 100%;
+      width: 290px;
     }
   }
 `;

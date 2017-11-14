@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import { colors, screenBreaks, globalStyle } from '../styleConsts';
 import Logo from './components/logo';
+import Menu from './components/menu';
 
 // HEADER COMPONENT
 // Header component with state.
@@ -12,17 +13,18 @@ const Header = styled(
   ({ className }) => (
     <header className={`${className}${('ontouchstart' in document.documentElement) ? '' : ' no-touch'}`}>
       <Logo />
+      <Menu />
       <div className="orange-line"></div>
     </header>
   ),
 )`
 background-image: url(/assets/img/paper.png);
-padding: 1.125rem 0;
+padding: 1.125rem 0.75rem;
 position: relative;
 z-index: 200;
 
 @media screen and (min-width: ${screenBreaks.medium}) {
-  padding: 1.125rem 0 1.75rem;
+  padding: 1.125rem 1.125rem 1.75rem 1.125rem;
 }
 
 .orange-line {
@@ -34,6 +36,7 @@ z-index: 200;
   bottom: -.5625rem;
   background-repeat: no-repeat;
   background-size: cover;
+  left: 0;
 }
 `;
 
