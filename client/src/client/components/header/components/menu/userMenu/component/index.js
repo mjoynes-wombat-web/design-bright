@@ -2,12 +2,15 @@
 // IMPORT DEPENDENCIES
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+import { colors, screenBreaks, globalStyle } from '../../../../../styleConsts';
 
 // USER MENU COMPONENT
 // Stateless component for the user menu in the header.
 // Takes a requireAuth function for checking login, a userType login to determine
 // which menu type to show and an onLogout function to log the user out.
-const UserMenu = ({ onRequireAuth, userType, onLogout }) => {
+const UserMenuItems = ({ onRequireAuth, userType, onLogout }) => {
   console.log(onRequireAuth);
   if (onRequireAuth()) {
     if (userType === 'non-profit') {
@@ -39,5 +42,92 @@ const UserMenu = ({ onRequireAuth, userType, onLogout }) => {
     </ul>
   );
 };
+
+const UserMenu = styled(
+  ({ className, onRequireAuth, userType, onLogout }) => (
+    <div className={className}>
+      <span className="icon"></span>
+      <UserMenuItems
+        onRequireAuth={onRequireAuth}
+        userType={userType}
+        onLogout={onLogout} />
+    </div>
+  ),
+) `
+position: relative;
+line-height: 0rem;
+padding: 0px;
+
+span.icon {
+  background-image: url(/assets/img/user.svg);
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  background-size: 100% 400%;
+  padding: 0.45rem 0.5rem;
+  border-radius: 0.3rem;
+  transition: background-color 0.5s;
+  transition-timing-function: ease-in-out;
+}
+
+ul.user-menu {
+  position: absolute;
+  right: -1.125rem;
+  left: calc(1.125rem + 42px);
+  padding-top: calc((1.625rem) - 0.5rem);
+  top: 42px;
+  width: auto;
+  display: block;
+  transition: left 1s;
+  transition-timing-function: ease-in-out;
+
+  div {
+    background-color: ${colors.brightGraphite};
+    box-shadow: -0.0625rem 0.0625rem 0.25rem #777777;
+    border-radius: 0 0 0 0.3rem;
+    overflow: hidden;
+
+    li {
+      display: block;
+      text-align: center;
+
+      :not(:first-child) {
+        a:link {
+          padding-top: 0.75rem; 
+        }
+
+      :last-child {
+        border-radius: 0 0 0 0.3rem;
+      }
+      }
+      
+      a:link, a:visited {
+        color: white;
+        padding: 1rem 0.5rem 1rem 0.5rem;
+        display: block;
+        line-height: initial;
+        transition: background-color 0.5s, box-shadow 0.5s;
+        transition-timing-function: ease-in-out;
+        
+        :hover {
+          background-color: rgba(0, 0, 0, 0.25);
+        }
+      }
+    }
+  }
+}
+
+:hover {
+  span.icon {
+    background-position-y: 33%;
+    box-shadow: 0.0625rem 0.0625rem 0.25rem #777777;
+    background-color: ${colors.brightGraphite};
+  }
+
+  ul {
+    left: -15vw;
+  }
+}
+`;
 
 export default UserMenu;

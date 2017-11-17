@@ -7,12 +7,29 @@ globalStyle();
 const buttonType = (props) => {
   if (props.primary) {
     return `
-    background-image: url(/assets/img/blue-brush-btn.png);
     text-shadow: ${colors.blueHydrangea} 0 0 0.25rem;
     color: #fff;
     font-size: 1.25rem;
     padding: 1rem 1.25rem;
     width: 90%;
+    position: relative;
+
+    ::after {
+      content: "";
+      background: url(/assets/img/blue-brush-btn.png);
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background-size: 100% 100%;
+      position: absolute;
+      z-index: -1;
+      opacity: 0.75;
+      transition: opacity 0.5s;
+    }
+    :hover::after {
+      opacity: 1;
+    }
 
     @media screen and (min-width: ${screenBreaks.medium}) {
       font-size: 1.5rem;
@@ -20,27 +37,38 @@ const buttonType = (props) => {
       max-width: 50rem;
       padding: 1.25rem 1.5rem 1.5rem;
     }
-    :hover {
-      background-position-y: 100%;
-    }
     `;
   } else if (props.secondary) {
     return `
-    background-image: url(/assets/img/orange-brush-btn.png);
     text-shadow: ${colors.mauiOrange} 0 0 0.25rem;
     color: #fff;
     font-size: 1.125rem;
     padding: 0.875rem 1.125rem;
     width: 80%;
+    position: relative;  
+
+    ::after {
+      content: "";
+      background: url(/assets/img/orange-brush-btn.png);
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background-size: 100% 100%;
+      position: absolute;
+      z-index: -1;
+      opacity: 0.85;
+      transition: opacity 0.5s;
+    }
+    :hover::after {
+      opacity: 1;
+    }
 
     @media screen and (min-width: ${screenBreaks.medium}) {
       font-size: 1.25rem;
       width: 70%;
       max-width: 45rem;
       padding: 1rem 1.25rem 1.25rem;
-    }
-    :hover {
-      background-position-y: 100%;
     }
     `;
   } else if (props.cancel) {
@@ -70,14 +98,20 @@ export const Button = styled.button`
   display: block;
   outline: none;
   ${props => buttonType(props)}
+  position: relative;
 
   :disabled {
-    background-image: url(/assets/img/grey-brush-btn.png);
     text-shadow: ${colors.graphite} 0 0 0.25rem;
-    opacity: .5;
     cursor: not-allowed;
     background-size: 100% 100%;
-    text-shadow: 
+    filter: grayscale(100%);
+    
+    ::after {
+      opacity: 0.8;
+    }
+    :hover::after {
+      opacity: 0.8;
+    }
   }
 `;
 

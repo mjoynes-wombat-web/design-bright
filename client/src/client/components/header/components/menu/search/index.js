@@ -13,10 +13,16 @@ class SearchForm extends React.Component {
       search: 'Search',
       searchSubmitted: '',
     };
+    
+    this.componentWillMount = this.componentWillMount.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onSubmitSearch = this.onSubmitSearch.bind(this);
     this.onClickSearch = this.onClickSearch.bind(this);
     this.onBlurSearch = this.onBlurSearch.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({ searchSubmitted: '' });
   }
 
   onChangeSearch(e) {
@@ -61,7 +67,7 @@ class SearchForm extends React.Component {
     if (this.state.searchSubmitted !== '') {
       return <Redirect to={{
         pathname: '/campaigns/search',
-        search: `?search=${this.state.search}`,
+        search: `?search=${this.state.searchSubmitted}`,
       }} />;
     }
 
@@ -99,7 +105,7 @@ input {
   border-radius: 0.3rem;
   background: url(/assets/img/search.svg), rgba(255, 255, 255, 0.5);
   background-position-x: 100.4%;
-  background-position-y: 0;
+  background-position-y: 2%;
   background-repeat: no-repeat;
   background-size: 44px auto;
   transition: width 0.75s, background-color 0.5s, left 0.75s, box-shadow 0.75s;
@@ -113,7 +119,7 @@ input {
   :hover {
     color: ${colors.graphite};
     background-color: rgba(255, 255, 255, 0.7);
-    background-position-y: 48.82%;
+    background-position-y: 49%;
   }
 
   :active, :focus, :focus:hover {
@@ -121,7 +127,7 @@ input {
     background-color: ${colors.brightGraphite};
     box-shadow: 0.0625rem 0.0625rem 0.25rem #777777;
     background-image: url(/assets/img/search.svg);
-    background-position-y: 98%;
+    background-position-y: 97%;
     outline: none;
     width: 100%;
     left: 0;

@@ -6,10 +6,10 @@ import { linkTo } from '@storybook/addon-links';
 import { Provider } from 'react-redux';
 
 import Header from '../src/client/components/header';
+import Footer from '../src/client/components/footer';
 import { Button } from '../src/client/components/button';
 import { Input, Select, RadioFieldset, Checkbox } from '../src/client/components/inputs';
 import Loading from '../src/client/components/loading';
-import Search from '../src/client/components/header/components/menu/search';
 import store from '../src/client/store';
 
 storiesOf('Site Layout', module)
@@ -21,6 +21,9 @@ storiesOf('Site Layout', module)
   .add(
     'Header',
     () => <Header />,
+  ).add(
+    'Footer',
+    () => <Footer />,
   );
 
 storiesOf('Buttons', module)
