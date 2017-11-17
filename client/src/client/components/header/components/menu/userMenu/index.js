@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 // IMPORT ACTIONS
 import { logout, requireAuth } from '../../../../../store/actions';
-console.log(requireAuth);
 
 // IMPORT COMPONENTS
 import UserMenu from './component';

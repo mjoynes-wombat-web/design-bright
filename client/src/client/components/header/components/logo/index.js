@@ -26,6 +26,8 @@ const Logo = styled(
   ),
 )`
 
+align-self: flex-end;
+
   a:link {
     border: none;
     max-width: 100%;

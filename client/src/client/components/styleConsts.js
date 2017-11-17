@@ -4,6 +4,8 @@ export const colors = {
   lightGraphite: '#808080',
   mauiOrange: '#ffaa00',
   graphite: '#404040',
+  darkGraphite: '#101010',
+  brightGraphite: '#999999',
   errorRed: '#ff5800',
   blueHydrangea: '#4097ff',
   darkBlueHydrangea: '#0063db',

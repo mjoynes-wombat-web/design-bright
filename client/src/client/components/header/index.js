@@ -22,9 +22,11 @@ background-image: url(/assets/img/paper.png);
 padding: 1.125rem 0.75rem;
 position: relative;
 z-index: 200;
+display: flex;
+justify-content: space-between;
 
 @media screen and (min-width: ${screenBreaks.medium}) {
-  padding: 1.125rem 1.125rem 1.75rem 1.125rem;
+  padding: 1.125rem 1.125rem 1.375rem 1.125rem;
 }
 
 .orange-line {
@@ -37,6 +39,7 @@ z-index: 200;
   background-repeat: no-repeat;
   background-size: cover;
   left: 0;
+  pointer-events: none;
 }
 `;
 
