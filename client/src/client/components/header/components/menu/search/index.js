@@ -91,7 +91,7 @@ const Search = styled(
     <SearchForm className={className} />
   ),
 ) `
-padding: 1rem 0.875rem;
+padding: 0.625rem 0.875rem;
 transition: background-color 0.5s, box-shadow 0.5s;
 transition-timing-function: ease-in-out;
 

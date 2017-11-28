@@ -92,34 +92,50 @@ ul.user-menu {
   div {
     background-color: ${colors.brightGraphite};
     border-radius: 0 0 0 0.3rem;
-    overflow: hidden;
 
     @media screen and (min-width: ${screenBreaks.medium}) {
       box-shadow: -0.0625rem 0.0625rem 0.25rem #777777;
+      overflow: hidden;
     }
 
     li {
       display: block;
-      text-align: center;
 
       :not(:first-child) {
         a, a:link {
           padding-top: 0.75rem; 
         }
 
-      :last-child {
-        border-radius: 0 0 0 0.3rem;
-      }
+        &:last-child {
+          // Fix box shadow transitioning
+          box-shadow: 0 0.125rem 0.2rem #777777;
+          transition: box-shadow 0.5s;
+          transition-timing-function: ease-in-out;
+
+          @media screen and (min-width: ${screenBreaks.medium}) {
+            border-radius: 0 0 0 0.3rem;
+          }
+
+          a, a:link, a:visited {
+            padding-bottom: 0.875rem;
+          }
+        }
       }
       
       a, a:link, a:visited {
         cursor: pointer;
         color: white;
-        padding: 1rem 0.5rem 1rem 0.5rem;
+        padding: 0.75rem 1.375rem;
+        text-align: left;
         display: block;
         line-height: initial;
         transition: background-color 0.5s, box-shadow 0.5s;
         transition-timing-function: ease-in-out;
+
+        @media screen and (min-width: ${screenBreaks.medium}) {
+          padding: 1rem 0.5rem 1rem 0.5rem;
+          text-align: center;
+        }
         
         :hover {
           background-color: rgba(0, 0, 0, 0.25);
@@ -137,7 +153,11 @@ ul.user-menu {
   }
 
   ul {
-    left: -15vw;
+    left: -25vw;
+
+    @media screen and (min-width: ${screenBreaks.large}) {
+      left: -15vw;
+    }
   }
 }
 `;

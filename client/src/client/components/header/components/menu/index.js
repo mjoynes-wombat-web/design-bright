@@ -67,34 +67,42 @@ margin-bottom: 0.5rem;
       }
 
       > div  {
-        display: block;
-        position: absolute;
-        width: 100vw;
-        right: -1.125rem;
-
-        > li {
-          display: block;
+        @media screen and (max-width: ${screenBreaks.medium}) {
+          max-height: 1000px;
+          padding-bottom: 1rem;
         }
       }
     }
   }
   > div {
     padding-top: calc((2.125rem) - 0.5rem);
-    display: none;
+
+    @media screen and (max-width: ${screenBreaks.medium}) {
+      position: absolute;
+      width: 100vw;
+      right: -1.125rem;
+      max-height: 0;
+      transition: max-height 2s;
+      transition-timing-function: ease-in-out;
+      overflow: hidden;
+    }
+
     > li {
       font-size: 1.5rem;
       line-height: 1.625rem;
       font-weight: 300;
-      text-align: center;
-      display: inline-block;
+      display: block;
       background-color: ${colors.brightGraphite};
       
       @media screen and (min-width: ${screenBreaks.medium}) {
         background-color: transparent;
+        display: inline-block;
+        text-align: center;
       }
     }
 
     @media screen and (min-width: ${screenBreaks.medium}) {
+      height: auto;
       display: flex;
       justify-content: space-between;
       display: flex;

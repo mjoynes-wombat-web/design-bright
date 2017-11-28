@@ -14,7 +14,7 @@ const MenuItem = styled(
 vertical-align: middle;
 display: block;
 box-sizing: border-box;
-padding: 1rem 0.5rem 1rem 0.5rem;
+padding: 0.75rem 1.375rem;
 transition: background-color 0.5s, box-shadow 0.5s;
 transition-timing-function: ease-in-out;
 
