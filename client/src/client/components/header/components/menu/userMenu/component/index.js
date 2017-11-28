@@ -108,7 +108,7 @@ ul.user-menu {
 
         &:last-child {
           // Fix box shadow transitioning
-          box-shadow: 0 0.125rem 0.2rem #777777;
+          box-shadow: 0 0.13rem 0.2rem #777777;
           transition: box-shadow 0.5s;
           transition-timing-function: ease-in-out;
 

@@ -68,7 +68,7 @@ margin-bottom: 0.5rem;
 
       > div  {
         @media screen and (max-width: ${screenBreaks.medium}) {
-          max-height: 1000px;
+          max-height: 300px;
           padding-bottom: 1rem;
         }
       }
@@ -82,9 +82,10 @@ margin-bottom: 0.5rem;
       width: 100vw;
       right: -1.125rem;
       max-height: 0;
-      transition: max-height 2s;
+      transition: max-height 1s, padding 1s;
       transition-timing-function: ease-in-out;
       overflow: hidden;
+      box-sizing: border-box;
     }
 
     > li {
