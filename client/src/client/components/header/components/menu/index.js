@@ -12,44 +12,112 @@ const Menu = styled(
   ({ className }) => (
     <nav className={className}>
       <ul>
-        <li><MenuItem linkURL="/campaigns/browse" linkName="Explore" /></li>
-        <li><Search /></li>
-        <li>
-          <UserMenu />
-        </li>
+        <span className="icon"></span>
+        <div>
+          <li><MenuItem linkURL="/campaigns/browse" linkName="Explore" /></li>
+          <li><Search /></li>
+          <li>
+            <UserMenu />
+          </li>
+        </div>
       </ul>
     </nav>
   ),
 ) `
 align-self: flex-end;
 position: relative;
-width: 50%;
+min-width: 40px;
+margin-bottom: 0.5rem;
 
-ul {
-  width: 100%;
-  justify-content: space-between;
-  display: flex;
+@media screen and (min-width: ${screenBreaks.medium}) {
+  width: 50%;
 }
 
-> ul > li {
-  display: inline-block;
-  font-size: 1.5rem;
-  line-height: 1.625rem;
-  font-weight: 300;
-  text-align: center;
+> ul {
+  > span.icon {
+      background-image: url(/assets/img/bars.svg);
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      padding: 0.375rem 0.4rem;
+      background-size: 100% 200%;
+      border-radius: 0.3rem;
+      transition: background-color 0.5s;
+      transition-timing-function: ease-in-out;
+      cursor: pointer;
+
+      @media screen and (min-width: ${screenBreaks.small}) {
+        width: 26px;
+        height: 26px;
+        padding: 0.45rem 0.5rem;
+      }
+
+    @media screen and (min-width: ${screenBreaks.medium}) {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: ${screenBreaks.medium}) {
+    :hover, :focus {
+      outline: none;
+      > span.icon {
+        background-position-y: 100%;
+        box-shadow: 0.0625rem 0.0625rem 0.25rem #777777;
+        background-color: ${colors.brightGraphite};
+      }
+
+      > div  {
+        display: block;
+        position: absolute;
+        width: 100vw;
+        right: -1.125rem;
+
+        > li {
+          display: block;
+        }
+      }
+    }
+  }
+  > div {
+    padding-top: calc((2.125rem) - 0.5rem);
+    display: none;
+    > li {
+      font-size: 1.5rem;
+      line-height: 1.625rem;
+      font-weight: 300;
+      text-align: center;
+      display: inline-block;
+      background-color: ${colors.brightGraphite};
+      
+      @media screen and (min-width: ${screenBreaks.medium}) {
+        background-color: transparent;
+      }
+    }
+
+    @media screen and (min-width: ${screenBreaks.medium}) {
+      display: flex;
+      justify-content: space-between;
+      display: flex;
+    }
+  }
 }
 
 ul {
   margin: 0;
   padding: 0;
   list-style: none;
+  width: 100%;
 
   a:link, a:visited {
-    color: ${colors.lightGraphite};
+    color: white;
     border: none;
 
-    &:hover {
-      color: ${colors.graphite};
+    @media screen and (min-width: ${screenBreaks.medium}) {
+      color: ${colors.lightGraphite};
+  
+      &:hover {
+        color: ${colors.graphite};
+      }
     }
   }
 }

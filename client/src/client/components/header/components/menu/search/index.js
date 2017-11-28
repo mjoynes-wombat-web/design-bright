@@ -10,19 +10,21 @@ class SearchForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: 'Search',
-      searchSubmitted: '',
+      searchInput: 'Search',
+      searchSubmitted: false,
     };
-    
-    this.componentWillMount = this.componentWillMount.bind(this);
+
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.onSubmitSearch = this.onSubmitSearch.bind(this);
     this.onClickSearch = this.onClickSearch.bind(this);
     this.onBlurSearch = this.onBlurSearch.bind(this);
+    this.componentDidUpdate = this.componentDidUpdate.bind(this);
   }
 
-  componentWillMount() {
-    this.setState({ searchSubmitted: '' });
+  componentDidUpdate() {
+    if (this.state.searchSubmitted) {
+      this.setState({ searchInput: 'Search', searchSubmitted: false });
+    }
   }
 
   onChangeSearch(e) {
@@ -57,17 +59,14 @@ class SearchForm extends React.Component {
 
   onSubmitSearch(e) {
     e.preventDefault();
-    this.setState({
-      searchSubmitted: this.state.search,
-      search: 'Search',
-    });
+    this.setState({ searchSubmitted: true });
   }
 
   render() {
-    if (this.state.searchSubmitted !== '') {
+    if (this.state.searchSubmitted) {
       return <Redirect to={{
         pathname: '/campaigns/search',
-        search: `?search=${this.state.searchSubmitted}`,
+        search: `?search=${this.state.searchInput}`,
       }} />;
     }
 
@@ -75,9 +74,9 @@ class SearchForm extends React.Component {
       <form onSubmit={this.onSubmitSearch} className={this.props.className}>
         <input
           type="search"
-          name="search"
+          name="searchInput"
           id="search"
-          value={this.state.search}
+          value={this.state.searchInput}
           onChange={this.onChangeSearch}
           onClick={this.onClickSearch}
           onBlur={this.onBlurSearch} />
@@ -92,12 +91,26 @@ const Search = styled(
     <SearchForm className={className} />
   ),
 ) `
+padding: 1rem 0.875rem;
+transition: background-color 0.5s, box-shadow 0.5s;
+transition-timing-function: ease-in-out;
+
+:hover {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+@media screen and (min-width: ${screenBreaks.medium}) {
+  padding: 0;
+
+  :hover {
+    background-color: transparent;
+  }
+}
 
 input {
   font-size: 1.5rem;
   line-height: 1.625rem;
-  padding: .4rem 2.625rem .5rem .5rem;
-  position: absolute;
+  padding: .4rem 2.71rem .5rem .5rem;
   border: none;
   font-weight: 300;
   font-family: 'Lato', sans-serif;
@@ -105,16 +118,22 @@ input {
   border-radius: 0.3rem;
   background: url(/assets/img/search.svg), rgba(255, 255, 255, 0.5);
   background-position-x: 100.4%;
-  background-position-y: 2%;
+  background-position-y: 49%;
   background-repeat: no-repeat;
   background-size: 44px auto;
   transition: width 0.75s, background-color 0.5s, left 0.75s, box-shadow 0.75s;
   transition-timing-function: ease-in-out;
   display: block;
-  width: calc(100% - 136.56px - 1rem);
-  left: calc(94.56px + 0.5rem);
-  bottom: 0;
   z-index: 100;
+  width: 100%;
+  
+  @media screen and (min-width: ${screenBreaks.medium}) {
+    position: absolute;
+    width: calc(100% - 136.56px - 1rem);
+    bottom: 0;
+    left: calc(94.56px + 0.5rem);
+    background-position-y: 2%;
+  }
 
   :hover {
     color: ${colors.graphite};

@@ -11,7 +11,6 @@ import { colors, screenBreaks, globalStyle } from '../../../../../styleConsts';
 // Takes a requireAuth function for checking login, a userType login to determine
 // which menu type to show and an onLogout function to log the user out.
 const UserMenuItems = ({ onRequireAuth, userType, onLogout }) => {
-  console.log(onRequireAuth);
   if (onRequireAuth()) {
     if (userType === 'non-profit') {
       return (
@@ -60,7 +59,7 @@ padding: 0px;
 
 span.icon {
   background-image: url(/assets/img/user.svg);
-  display: inline-block;
+  display: none;
   width: 26px;
   height: 26px;
   background-size: 100% 400%;
@@ -68,31 +67,43 @@ span.icon {
   border-radius: 0.3rem;
   transition: background-color 0.5s;
   transition-timing-function: ease-in-out;
+  cursor: pointer;
+
+  @media screen and (min-width: ${screenBreaks.medium}) {
+    display: inline-block;
+  }
 }
 
 ul.user-menu {
-  position: absolute;
-  right: -1.125rem;
-  left: calc(1.125rem + 42px);
-  padding-top: calc((1.625rem) - 0.5rem);
-  top: 42px;
   width: auto;
   display: block;
   transition: left 1s;
   transition-timing-function: ease-in-out;
 
+  @media screen and (min-width: ${screenBreaks.medium}) {
+      background-color: transparent;
+      position: absolute;
+      right: -1.125rem;
+      left: calc(1.125rem + 42px);
+      padding-top: calc((2.125rem) - 0.5rem);
+      top: 42px;
+    }
+
   div {
     background-color: ${colors.brightGraphite};
-    box-shadow: -0.0625rem 0.0625rem 0.25rem #777777;
     border-radius: 0 0 0 0.3rem;
     overflow: hidden;
+
+    @media screen and (min-width: ${screenBreaks.medium}) {
+      box-shadow: -0.0625rem 0.0625rem 0.25rem #777777;
+    }
 
     li {
       display: block;
       text-align: center;
 
       :not(:first-child) {
-        a:link {
+        a, a:link {
           padding-top: 0.75rem; 
         }
 
@@ -101,7 +112,8 @@ ul.user-menu {
       }
       }
       
-      a:link, a:visited {
+      a, a:link, a:visited {
+        cursor: pointer;
         color: white;
         padding: 1rem 0.5rem 1rem 0.5rem;
         display: block;

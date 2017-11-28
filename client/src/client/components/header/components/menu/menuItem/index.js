@@ -11,9 +11,26 @@ const MenuItem = styled(
     <Link to={linkURL} className={className}>{linkName}</Link>
   ),
 )`
-padding: 0.4rem 0.5rem 0.5rem;
 vertical-align: middle;
-display: inline-block;
+display: block;
+box-sizing: border-box;
+padding: 1rem 0.5rem 1rem 0.5rem;
+transition: background-color 0.5s, box-shadow 0.5s;
+transition-timing-function: ease-in-out;
+
+:hover {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+@media screen and (min-width: ${screenBreaks.medium}) {
+  padding: 0.4rem 0.5rem 0.5rem;
+  width: auto;
+  display: inline-block;
+
+  :hover {
+    background-color: transparent;
+  }
+}
 `;
 
 export default MenuItem;

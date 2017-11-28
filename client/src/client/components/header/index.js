@@ -19,7 +19,7 @@ const Header = styled(
   ),
 )`
 background-image: url(/assets/img/paper.png);
-padding: 1.125rem 0.75rem;
+padding: 1.125rem 1.125rem 1.125rem 1rem;
 position: relative;
 z-index: 200;
 display: flex;

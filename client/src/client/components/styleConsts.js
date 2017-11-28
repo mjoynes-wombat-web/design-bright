@@ -12,6 +12,7 @@ export const colors = {
 };
 
 export const screenBreaks = {
+  small: '26em',
   medium: '40em',
   large: '64em',
   xlarge: '90em',

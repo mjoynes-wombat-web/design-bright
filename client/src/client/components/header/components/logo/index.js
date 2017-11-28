@@ -27,6 +27,12 @@ const Logo = styled(
 )`
 
 align-self: flex-end;
+max-width: 80%;
+margin-bottom: -0.125rem;
+
+@media screen and (min-width: ${screenBreaks.small}) {
+  margin-bottom: -0.25rem;
+}
 
   a:link {
     border: none;
