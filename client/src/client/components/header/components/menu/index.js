@@ -25,7 +25,6 @@ const Menu = styled(
         //   return mainMenu.classList.add('hover');
         // }}
         onClick={(e) => {
-          e.preventDefault();
           const mainMenu = document.getElementById('mainMenu');
           if (mainMenu.classList.contains('hover')) {
             if (e.target.id !== 'search') {
