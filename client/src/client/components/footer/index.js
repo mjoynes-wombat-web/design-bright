@@ -33,6 +33,10 @@ const Footer = styled(
   bottom:0;
   width: 100%;
 
+  @media screen and (min-width: ${screenBreaks.medium}) {
+    padding-top: 2rem;
+  }
+
   &.no-touch {
     a {
       &:link:hover, &visited:hover {
