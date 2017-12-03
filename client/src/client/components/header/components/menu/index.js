@@ -8,32 +8,44 @@ import MenuItem from './menuItem';
 import Search from './search';
 import UserMenu from './userMenu';
 
+const mouseLeaveMenu = id => document.getElementById(id).classList.remove('hover');
+const mouseOverMenu = (e, id) => {
+  const element = document.getElementById(id);
+  if (('ontouchstart' in document.documentElement)) {
+    return null;
+  }
+  return element.classList.add('hover');
+};
+
+const onClickMenu = (e, id) => {
+  const element = document.getElementById(id);
+  if (('ontouchstart' in document.documentElement)) {
+    if (element.classList.contains('hover')) {
+      if (e.target.id !== 'search') {
+        return element.classList.remove('hover');
+      }
+      return null;
+    }
+    element.classList.add('touch');
+    return element.classList.add('hover');
+  }
+
+  if (element.classList.contains('hover')) {
+    const targetId = e.target.id;
+    if (targetId !== 'search' && targetId.indexOf('Icon') === -1) {
+      return element.classList.remove('hover');
+    }
+    return null;
+  }
+};
+
 const Menu = styled(
   ({ className }) => (
-    <nav id="mainMenu" className={className}>
+    <nav id='mainMenu' className={className}>
       <ul
-        onMouseLeave={() => document.getElementById('mainMenu').classList.remove('hover')}
-        // Works great on mobile. Might not work on mobile with mouse. See start of solution below.
-        // onMouseOver={() => {
-        //   const mainMenu = document.getElementById('mainMenu');
-        //   if (mainMenu.classList.contains('hover')) {
-        //     if (e.target.id !== 'search') {
-        //       return document.getElementById('mainMenu').classList.remove('hover');
-        //     }
-        //     return null;
-        //   }
-        //   return mainMenu.classList.add('hover');
-        // }}
-        onClick={(e) => {
-          const mainMenu = document.getElementById('mainMenu');
-          if (mainMenu.classList.contains('hover')) {
-            if (e.target.id !== 'search') {
-              return document.getElementById('mainMenu').classList.remove('hover');
-            }
-            return null;
-          }
-          return mainMenu.classList.add('hover');
-        }}
+        onMouseLeave={() => mouseLeaveMenu('mainMenu')}
+        onMouseOver={e => mouseOverMenu(e, 'mainMenu')}
+        onClick={e => onClickMenu(e, 'mainMenu')}
       >
         <svg version="1.1" id="menuIcon"
           xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 306 306"
@@ -45,7 +57,7 @@ const Menu = styled(
           <li><MenuItem linkURL="/campaigns/browse" linkName="Explore" /></li>
           <li><Search /></li>
           <li>
-            <UserMenu />
+            <UserMenu mouseLeaveMenu={mouseLeaveMenu} mouseOverMenu={mouseOverMenu} onClickMenu={onClickMenu} />
           </li>
         </div>
       </ul>
@@ -61,26 +73,39 @@ margin-bottom: 0.5rem;
   width: 50%;
 }
 
-&.hover > ul {
-  @media screen and (max-width: ${screenBreaks.medium}) {
-    outline: none;
-    > svg#menuIcon {
-      background-color: ${colors.brightGraphite};
-
-      .bars {
-        opacity: 0;
+&.hover {
+  > ul {
+    @media screen and (max-width: ${screenBreaks.medium}) {
+      outline: none;
+      > svg#menuIcon {
+        background-color: ${colors.brightGraphite};
+        
+        .bars {
+          fill: white;
+        }
       }
 
-      .close {
-        opacity: 1;
+      > div  {
+        max-height: 300px;
+        padding-bottom: 1rem;
       }
     }
+  }
 
-    > div  {
-      max-height: 300px;
-      padding-bottom: 1rem;
+  &.touch {
+    > ul {
+      @media screen and (max-width: ${screenBreaks.medium}) {
+        > svg#menuIcon {
+          .bars {
+            opacity: 0;
+          }
+          .close {
+            opacity: 1;
+          }
+        }
+      }
     }
-}
+  }
 }
 
 > ul {
@@ -92,6 +117,10 @@ margin-bottom: 0.5rem;
       transition: background-color 0.5s;
       transition-timing-function: ease-in-out;
       cursor: pointer;
+
+      > * {
+        pointer-events: none;
+      }
 
       .bars {
         opacity: 1;

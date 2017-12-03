@@ -32,7 +32,7 @@ body {
   font-size: 0.875rem;
   position: relative;
   min-height: 100%;
-  padding-bottom:9rem;
+  padding-bottom:6rem;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -126,10 +126,6 @@ main {
         border-color: darken($light-hydrangea, 10);
       }
     }
-  }
-
-  section:not(:last-child) {
-    margin-bottom: 2rem;
   }
 
   button, button[type='submit'], .button {

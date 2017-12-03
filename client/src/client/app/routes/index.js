@@ -18,10 +18,10 @@ import {
   Login,
   EditProfile,
   ViewProfile,
-} from '../../../scenes';
+} from '../../scenes';
 
 // Import Google Analytics tracker.
-import { gaTracker } from '../../../helpers';
+import { gaTracker } from '../../helpers';
 
 
 // ROUTE COMPONENT

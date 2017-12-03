@@ -7,13 +7,13 @@ const Home = () => {
   document.title = 'Home - Design Bright';
   return (
     <main id="index">
-      <section className="main-image">
+      <section id="mainImage">
         <img src="assets/img/sunset-marsh.jpg" alt="Sunset over the marsh." />
         <div className="orange-line"></div>
         <div className="white-block"></div>
       </section>
-      <section className="row">
-        <div className="columns small-12">
+      <section id="pageContent">
+        <section id="intro">
           <h1><span className="underlined">Who are We?</span></h1>
           <p>
             There are more than&nbsp;
@@ -29,51 +29,51 @@ const Home = () => {
               top 100 receive over $100 million
             </a>
             &nbsp;in annual donations. However, very few people can name more than a
-            handful. Even fewer can name the most impactful non-profits in their community.
+          handful. Even fewer can name the most impactful non-profits in their community.
           </p>
           <p>
             Our goal is to help non-profits have a voice. Unlike other crowd funding platforms we
-            connect non-profits with marketing advisors to help them from the inception of
-            their campaign. This helps the non-profits get off on the right foot from the
-            beginning.
+          connect non-profits with marketing advisors to help them from the inception of
+          their campaign. This helps the non-profits get off on the right foot from the
+          beginning.
           </p>
           <p>
             We connect passionate donors and the non-profits that fight for the causes that
-            matters to them.
+          matters to them.
           </p>
           <p>
             Help us create a voice for the causes that matter to you and design a bright future.
           </p>
-        </div>
-      </section>
-      <section className="row">
-        <div className="column small-12 medium-4">
-          <h2><Link to="/campaigns/browse">Find a Cause</Link></h2>
-          <p>
-            Want to help out a great cause?
-          </p>
-          <p>
-            Donate today to a cause that matters to you and help give them a voice.
-          </p>
-        </div>
-        <div className="column small-12 medium-4">
-          <h2><Link to="/register">Start a Campaign</Link></h2>
-          <p>
-            Are you a nonprofit?
-          </p>
-          <p>
-            Start a campaign today to fund the marketing needed to voice your cause.
-          </p>
-        </div>
-        <div className="column small-12 medium-4">
-          <h2><Link to="/advisor">Become an Advisor</Link></h2>
-          <p>
-          Do you have the experience and insight to help spread a cause?
-          </p>
-          <p>
-            Sign up to be an advisor today!
-          </p>
-        </div>
+        </section>
+        <section id="cta">
+          <div>
+            <h2><Link to="/campaigns/browse">Find a Cause</Link></h2>
+            <p>
+              Want to help out a great cause?
+            </p>
+            <p>
+              Donate today to a cause that matters to you and help give them a voice.
+            </p>
+          </div>
+          <div>
+            <h2><Link to="/register">Start a Campaign</Link></h2>
+            <p>
+              Are you a nonprofit?
+            </p>
+            <p>
+              Start a campaign today to fund the marketing needed to voice your cause.
+            </p>
+          </div>
+          <div>
+            <h2><Link to="/advisor">Become an Advisor</Link></h2>
+            <p>
+              Do you have the experience and insight to help spread a cause?
+            </p>
+            <p>
+              Sign up to be an advisor today!
+            </p>
+          </div>
+        </section>
       </section>
     </main>
   );

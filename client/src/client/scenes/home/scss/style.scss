@@ -1,6 +1,20 @@
-main#index {
+$light-graphite: #999999;
+$maui-orange: #ffaa00;
+$graphite: #808080;
+$error-red: #ff5800;
+$blue-hydrangea: #4097ff;
+
+$medium-break: 40em;
+$large-break: 64em;
+$xlarge-break: 90em;
+$xxlarge-break: 120em;
+
+#index {
   position: relative;
-  section.main-image {
+  box-sizing: border-box;
+
+  #mainImage {
+      width: 100%;
       overflow: hidden;
       position: relative;
       z-index: -10;
@@ -8,10 +22,10 @@ main#index {
       display: flex;
       align-items: center;
       padding: 0;
-      margin: 0;
       margin-bottom: 2rem;
       width: 100%;
       height: 40vw;
+
       img {
         width: 100%;
       }
@@ -36,6 +50,50 @@ main#index {
         width: 100%;
         height: 0.29rem;
         z-index: 100;
+    }
+  }
+
+
+  #pageContent {
+    display: flex;
+    flex-wrap: wrap;
+
+    @media screen and (min-width: $medium-break) {
+      flex-wrap: nowrap;
+    }
+
+    > * {
+      padding: 0 1.5rem 1.5rem 1.5rem;
+
+      @media screen and (min-width: $medium-break) {
+        padding: 0 2rem 2rem 2rem;
       }
     }
+
+    #intro {
+      width: 100%;
+      
+        @media screen and (min-width: $medium-break) {
+          width: 61.8%;
+        }
+
+      h1 {
+        margin-top: 0;
+      }
+    }
+
+    #cta {
+      width: 100%;
+
+      @media screen and (min-width: $medium-break) {
+        width: 38.2%;
+      }
+
+      div:first-child {
+        h2 {
+          margin-top: 0;
+        }
+      }
+    }
+  }
 }

@@ -26,7 +26,6 @@ const Footer = styled(
   background-position-x: calc(100% - 50%);
   background-size: auto 120%;
   color: white;
-  margin-top: 3rem;
   padding-top: 1.5rem;
   height: auto;
   background-repeat: none;

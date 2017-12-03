@@ -4,7 +4,7 @@ import React from 'react';
 
 // IMPORT COMPONENTS
 import Header from '../components/header';
-import Routes from './components/routes';
+import Routes from './routes';
 import Footer from '../components/footer';
 
 // IMPORT CSS STYLING
