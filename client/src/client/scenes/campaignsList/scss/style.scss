@@ -13,6 +13,18 @@ $xxlarge-break: 120em;
 #campaignsPage {
   > section {
     margin: 0 auto;
+    padding-bottom: 2rem;
+
+    @media screen and (min-width: $medium-break) {
+      padding: 0 2rem 2rem 2rem;
+    }
+  }
+  > section:first-child {
+    padding: 0 2rem;
+
+    > h1:first-child {
+      margin-top: 0;
+    }
   }
   h1, h2 {
     line-height: initial;

@@ -54,7 +54,7 @@ const Footer = styled(
 
   nav {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     p {
       
       margin: 0;

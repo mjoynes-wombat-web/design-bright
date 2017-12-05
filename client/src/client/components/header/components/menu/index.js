@@ -44,12 +44,15 @@ const Menu = styled(
     <nav id='mainMenu' className={className}>
       <ul
         onMouseLeave={() => mouseLeaveMenu('mainMenu')}
-        onMouseOver={e => mouseOverMenu(e, 'mainMenu')}
         onClick={e => onClickMenu(e, 'mainMenu')}
       >
         <svg version="1.1" id="menuIcon"
-          xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 306 306"
-          style={{ enableBackground: 'new 0 0 306 306' }}>
+          xmlns="http://www.w3.org/2000/svg"
+          x="0px"
+          y="0px"
+          viewBox="0 0 306 306"
+          style={{ enableBackground: 'new 0 0 306 306' }}
+          onMouseOver={e => mouseOverMenu(e, 'mainMenu')}>
           <path className="bars" d="M249.8,90H56.2c-1.5,0-2.7-1.2-2.7-2.7V76.6c0-1.5,1.2-2.7,2.7-2.7h193.6c1.5,0,2.7,1.2,2.7,2.7v10.7C252.4,88.8,251.2,90,249.8,90z M249.8,161H56.2c-1.5,0-2.7-1.2-2.7-2.7v-10.6c0-1.5,1.2-2.7,2.7-2.7h193.6c1.5,0,2.7,1.2,2.7,2.7v10.6C252.4,159.8,251.2,161,249.8,161z M249.8,232H56.2c-1.5,0-2.7-1.2-2.7-2.7v-10.7c0-1.5,1.2-2.7,2.7-2.7h193.6c1.5,0,2.7,1.2,2.7,2.7v10.7C252.4,230.8,251.2,232,249.8,232z" />
           <path className="close" d="M166.1,153l70.6-70.6c2.4-2.4,2.4-6.3,0-8.7l-4.4-4.4c-2.4-2.4-6.3-2.4-8.7,0L153,139.9L82.4,69.4c-2.4-2.4-6.3-2.4-8.7,0l-4.4,4.4c-2.4,2.4-2.4,6.3,0,8.7l70.6,70.5l-70.5,70.6c-2.4,2.4-2.4,6.3,0,8.7l4.4,4.4c2.4,2.4,6.3,2.4,8.7,0l70.5-70.6l70.6,70.6c2.4,2.4,6.3,2.4,8.7,0l4.4-4.4c2.4-2.4,2.4-6.3,0-8.7L166.1,153z" />
         </svg>
@@ -157,7 +160,6 @@ margin-bottom: 0.5rem;
       transition: max-height 1s, padding 1s;
       transition-timing-function: ease-in-out;
       overflow: hidden;
-      box-sizing: border-box;
     }
 
     > li {

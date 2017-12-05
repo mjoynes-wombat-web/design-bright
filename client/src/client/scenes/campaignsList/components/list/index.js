@@ -87,13 +87,13 @@ class List extends React.Component {
     if (this.state.fetched) {
       if (this.state.resultsErr) {
         return (
-          <section className="row" id="campaignsList">
-            <h2 className="small-12 columns" id="List">{this.state.resultsErr}</h2>
+          <section id="campaignsList">
+            <h2 id="List">{this.state.resultsErr}</h2>
           </section>
         );
       }
       return (
-        <section className="row" id="campaignsList">
+        <section id="campaignsList">
           {this.state.campaigns.map(
             (campaign, i) => <CampaignItem
               campaign={campaign} key={i} />,
@@ -105,8 +105,8 @@ class List extends React.Component {
       );
     }
     return (
-      <section className="row" id="campaignsList">
-        <h2 className="small-12 columns" id="List">Loading</h2>
+      <section id="campaignsList">
+        <h2 id="List">Loading</h2>
       </section>
     );
   }

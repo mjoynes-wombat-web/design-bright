@@ -76,7 +76,6 @@ input {
 }
 input:not([type="radio"]):not([type="checkbox"]), select {
   min-width: 15rem;
-  box-sizing: border-box;
   border: 0.0625rem solid ${colors.lightGraphite};
   border-radius: 0.1875rem;
   color: ${colors.lightGraphite};

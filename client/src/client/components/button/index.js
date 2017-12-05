@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { colors, screenBreaks, globalStyle } from '../styleConsts';
 
-globalStyle();
+// globalStyle();
 
 const buttonType = (props) => {
   if (props.primary) {

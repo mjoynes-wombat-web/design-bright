@@ -1,6 +1,7 @@
 /* eslint-env browser */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from '../../../../components/button';
 
 const SortOptions = ({ state, cancelSort }) => {
   const pageUrl = `/campaigns/${state.view}`;
@@ -45,12 +46,11 @@ const SortOptions = ({ state, cancelSort }) => {
             </Link>
           </li>
           <li>
-            <button
-              className="cancel columns small-12"
-              onClick={cancelSort}
-              type='button'>
+            <Button
+              cancel
+              onClick={cancelSort}>
               Cancel
-            </button>
+            </Button>
           </li>
         </ul>
         <hr />
